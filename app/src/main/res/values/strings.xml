@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
+
+
+
+    <!-- Gps Tracking Strings-->
+    <string name="btn_begin_gpstracking">Begin Tracking</string>
 </resources>
