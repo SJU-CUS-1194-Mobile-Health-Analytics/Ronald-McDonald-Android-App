@@ -8,25 +8,92 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main3Activity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/PracModeTitle"
+        android:text="Practice Mode"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:background="#9E9E9E"
+        android:textColor="#B71C1C"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pmMilesRun"
+        android:text="Miles Run: "
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="#B71C1C"
+        android:layout_marginStart="11dp"
+        android:layout_below="@+id/PracModeTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="176dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Ready"
-        android:text="READY TO RUN?"
-        android:textSize="30dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:id="@+id/pmTime"
+        android:text="Time Elapsed: "
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="#B71C1C"
+        android:layout_below="@+id/pmMilesRun"
+        android:layout_alignStart="@+id/pmMilesRun"
+        android:layout_marginTop="15dp" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe"
-        android:text="START TRACKING ME NOW"
-        android:textSize="40dp"
-        android:layout_marginTop="54dp"
-        android:layout_below="@+id/Ready"
-        android:layout_alignParentStart="true" />
+        android:id="@+id/pmPace"
+        android:text="Current Pace: "
+        android:textSize="25dp"
+        android:textAlignment="center"
+        android:textColor="#B71C1C"
+        android:layout_below="@+id/pmTime"
+        android:layout_alignStart="@+id/pmTime"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pmTrack"
+        android:text = "Start Tracking"
+        android:background = "#000000"
+        android:textColor="#FFFFFF"
+        android:textSize="35dp"
+        android:fontFamily="sans-serif-smallcaps"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pmMilesG"
+        android:text ="Mile Goal:"
+        android:textSize="25dp"
+        android:textColor="#757575"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/PracModeTitle"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/pmTimeG"
+        android:text ="Time Goal:"
+        android:textSize="25dp"
+        android:textColor="#757575"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/pmMilesG"
+        android:layout_centerHorizontal="true" />
+
+
+
 </RelativeLayout>
