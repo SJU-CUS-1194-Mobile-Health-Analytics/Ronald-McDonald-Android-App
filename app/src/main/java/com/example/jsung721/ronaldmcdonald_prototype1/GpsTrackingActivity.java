@@ -1,6 +1,7 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -25,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 
 public class GpsTrackingActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, OnConnectionFailedListener {
     protected GoogleApiClient mGoogleApiClient;
+    protected Location myLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,8 @@ public class GpsTrackingActivity extends AppCompatActivity implements GoogleApiC
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        TextView mLatitudeText = (TextView) findViewById(R.id.text_latitude);
+        TextView mLongitudeText = (TextView) findViewById(R.id.text_longitude);
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
@@ -108,6 +113,7 @@ public class GpsTrackingActivity extends AppCompatActivity implements GoogleApiC
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
+                myLocation = location;
                 makeUseOfNewLocation(location);
             }
 
@@ -127,6 +133,15 @@ public class GpsTrackingActivity extends AppCompatActivity implements GoogleApiC
 
     public void makeUseOfNewLocation(Location location) {
         // TODO: do something
+    }
+
+    public void openMap(View view){
+        Intent launchGoogleMap = new Intent(this, MapsActivity.class);
+        launchGoogleMap.putExtra("Longitude", myLocation.getLongitude());
+        launchGoogleMap.putExtra("Latitude", myLocation.getLatitude());
+
+        startActivity(launchGoogleMap);
+
     }
 
 }
