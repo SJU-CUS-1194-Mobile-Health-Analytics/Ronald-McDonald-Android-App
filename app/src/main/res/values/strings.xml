@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
-    <string name="Runner_Stats_View">Choose a View</string>
-    <string-array name="StatsViews">
-        <item>Overall Progress View</item>
+    <string name="Select_Time"> Select Time</string>
+    <string name="Select_Stat"> Select Stat</string>
+    <string name="Select_StatType">Select Stat Type</string>
+    <string-array name="Times">
         <item>Yearly View</item>
         <item>Monthly View</item>
         <item>Weekly View</item>
