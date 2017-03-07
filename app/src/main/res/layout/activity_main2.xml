@@ -15,7 +15,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/UserProfPic"
-        android:src="@drawable/UserPlaceholder"
+        android:src="@drawable/user_placeholder"
         android:layout_marginTop="33dp"
         android:layout_below="@+id/RHTitle"
         android:layout_centerHorizontal="true" />
@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
         android:entries="@array/StatsViews"
-        android:prompt="@string/Choose View"
         android:layout_below="@+id/ViewOptions"
         android:layout_centerHorizontal="true" />
 
