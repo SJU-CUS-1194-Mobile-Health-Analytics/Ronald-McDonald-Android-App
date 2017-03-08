@@ -19,9 +19,9 @@
         <activity android:name=".Main3Activity" />
         <activity android:name=".Main4Activity" />
         <activity android:name=".Main5Activity" />
-        <activity android:name=".Main6Activity"/>
-        <activity android:name=".TestSendDataActivity">
-        </activity>
+        <activity android:name=".Main6Activity" />
+        <activity android:name=".TestSendDataActivity"></activity>
+        <activity android:name=".SignInActivity"></activity>
     </application>
 
 </manifest>
