@@ -24,5 +24,14 @@ public class Main4Activity extends AppCompatActivity {
 
             }
         });
+
+        Button StartTrackingButton = (Button) findViewById(R.id.rmTrack);
+        StartTrackingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Main4Activity.this, TestSendDataActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
