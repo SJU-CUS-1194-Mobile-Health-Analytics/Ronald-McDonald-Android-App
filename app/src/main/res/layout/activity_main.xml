@@ -8,37 +8,65 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#B71C1C"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.MainActivity">
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Runner Tracker"
-        android:textSize="35dp"
+        android:text="Stride"
+        android:textSize="100dp"
+        android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
+        android:id="@+id/AppTitle"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="18dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="64dp"
-        android:id="@+id/textView" />
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/RunnerB"
-        android:text="I am a Runner"
+        android:id="@+id/Settings"
+        android:text="Settings"
         android:textSize="35dp"
-        android:layout_below="@+id/textView"
+        android:textColor="#9E9E9E"
+        android:background="#000000"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="99dp" />
+        android:layout_marginBottom="8dp" />
 
     <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TrackMe"
+        android:text="Track Me"
+        android:textSize="35dp"
+        android:textColor="#9E9E9E"
+        android:background="#000000"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@+id/Settings"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ViewProf"
+        android:text="View Profile"
+        android:textSize="35dp"
+        android:textColor="#9E9E9E"
+        android:background="#000000"
+        android:layout_above="@+id/TrackMe"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp" />
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/SpectatorB"
-        android:text="I am a Spectator"
-        android:textSize="35dp"
-        android:layout_marginTop="15dp"
-        android:layout_below="@+id/RunnerB"
-        android:layout_alignParentEnd="true" />
-
+        android:scaleType="fitXY"
+        android:src ="@drawable/app_logo"
+        android:id="@+id/imageButton"
+        android:layout_above="@+id/ViewProf"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp" />
 </RelativeLayout>

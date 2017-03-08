@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "263451768676",
+    "firebase_url": "https://myfitnesstracker-4c9c0.firebaseio.com",
+    "project_id": "myfitnesstracker-4c9c0",
+    "storage_bucket": "myfitnesstracker-4c9c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263451768676:android:e43c4cd231bd2901",
+        "android_client_info": {
+          "package_name": "com.example.jsung721.ronaldmcdonald_prototype1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "263451768676-l58md03dv1j5pr3d60no8teo3l1cgrvt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jsung721.ronaldmcdonald_prototype1",
+            "certificate_hash": "e6b78a93f001cb738ac7c8c5917af5ea2b70d593"
+          }
+        },
+        {
+          "client_id": "263451768676-4mlgdtlu7mvf1l6edc7mu44kt0tjoccb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jsung721.ronaldmcdonald_prototype1",
+            "certificate_hash": "8309ee90223cef66b31f1204a3afa8461e4deae4"
+          }
+        },
+        {
+          "client_id": "263451768676-vqsipi60g57n6osbtreo0f5tu312m0ap.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUi_2Owxm1vfoSQpBx_NQGtinZOz0URlA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "263451768676-vqsipi60g57n6osbtreo0f5tu312m0ap.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
