@@ -8,23 +8,123 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main2Activity">
-<TextView
+
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/UserProfPic"
+        android:text = "Photo Not Available"
+        android:gravity="center"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/RHTitle"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/Thankyou"
-    android:text="Thank you for supporting the Ronald Mcdonald House!"
-    android:fontFamily="cursive"
-    android:textSize="35dp"
-    android:gravity="center_horizontal"/>
+    android:id="@+id/RHTitle"
+    android:text="[User]'s Run History"
+    android:fontFamily="sans-serif-smallcaps"
+    android:textSize="30dp"
+        android:textColor="#B71C1C"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TotalMiles"
+        android:text="Total Miles: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="102dp"
+        android:layout_below="@+id/UserProfPic"
+        android:layout_alignEnd="@+id/TotalTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Miles1"
+        android:hint = "Miles"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/TotalMiles"
+        android:layout_alignBottom="@+id/TotalMiles"
+        android:layout_alignEnd="@+id/Time1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TotalTime"
+        android:text="Total Time: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/TotalMiles"
+        android:layout_alignStart="@+id/AvgPace" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Time1"
+        android:hint = "Time"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/TotalTime"
+        android:layout_alignBottom="@+id/TotalTime"
+        android:layout_alignEnd="@+id/UserProfPic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/AvgPace"
+        android:text="Average Pace: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/TotalTime"
+        android:layout_toEndOf="@+id/uhMainMenu" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Pace1"
+        android:hint = "Pace"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/AvgPace"
+        android:layout_alignBottom="@+id/AvgPace"
+        android:layout_alignEnd="@+id/Time1" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graph"
+        android:text="See Graph"
+        android:background="#000000"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ChooseRace"
-        android:text="Choose Your Race"
-        android:textSize="35dp"
-        android:layout_below="@+id/Thankyou"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="94dp" />
+        android:id="@+id/uhMainMenu"
+        android:text="@string/Back"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/RHTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DailyLog"
+        android:text="Daily Log"
+        android:textSize="25dp"
+        android:layout_below="@+id/UserProfPic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp" />
+
 </RelativeLayout>

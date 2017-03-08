@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
+    <string name="Select_Time"> Select Time</string>
+    <string name="Select_Stat"> Select Stat</string>
+    <string name="Select_StatType">Select Stat Type</string>
+    <string name="Back"> Back </string>
+    <string-array name="Times">
+        <item>Yearly View</item>
+        <item>Monthly View</item>
+        <item>Weekly View</item>
+        <item>Daily Calendar View</item>
+    </string-array>
 </resources>
