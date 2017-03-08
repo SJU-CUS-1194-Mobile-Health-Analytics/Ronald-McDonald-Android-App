@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
+    <string name="Runner_Stats_View">Choose a View</string>
+    <string-array name="StatsViews">
+        <item>Overall Progress View</item>
+        <item>Yearly View</item>
+        <item>Monthly View</item>
+        <item>Weekly View</item>
+        <item>Daily Calendar View</item>
+    </string-array>
 </resources>

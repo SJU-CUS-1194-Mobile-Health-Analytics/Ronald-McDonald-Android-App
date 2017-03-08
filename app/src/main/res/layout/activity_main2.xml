@@ -8,23 +8,141 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main2Activity">
-<TextView
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/UserProfPic"
+        android:src="@drawable/user_placeholder"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/RHTitle"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/Thankyou"
-    android:text="Thank you for supporting the Ronald Mcdonald House!"
-    android:fontFamily="cursive"
-    android:textSize="35dp"
-    android:gravity="center_horizontal"/>
+    android:id="@+id/RHTitle"
+    android:text="[User]'s Run History"
+    android:fontFamily="sans-serif-smallcaps"
+    android:textSize="30dp"
+        android:textColor="#B71C1C"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
-    <Button
+    <Spinner
+        android:id="@+id/Views"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ChooseRace"
-        android:text="Choose Your Race"
-        android:textSize="35dp"
-        android:layout_below="@+id/Thankyou"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="94dp" />
+        android:spinnerMode="dialog"
+        android:entries="@array/StatsViews"
+        android:layout_below="@+id/ViewOptions"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ViewOptions"
+        android:text="Choose a View: "
+        android:textColor="#B71C1C"
+        android:layout_below="@+id/UserProfPic"
+        android:layout_alignStart="@+id/UserProfPic"
+        android:layout_marginTop="13dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Date"
+        android:text="Date of Run: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/Views"
+        android:layout_toStartOf="@+id/Views" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Date1"
+        android:hint = "Date"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/Date"
+        android:layout_alignBottom="@+id/Date"
+        android:layout_toEndOf="@+id/AvgPace" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TotalMiles"
+        android:text="Total Miles: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/Date"
+        android:layout_alignEnd="@+id/Date" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Miles1"
+        android:hint = "Miles"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/TotalMiles"
+        android:layout_alignBottom="@+id/TotalMiles"
+        android:layout_alignStart="@+id/Date1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TotalTime"
+        android:text="Total Time: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/TotalMiles"
+        android:layout_alignStart="@+id/TotalMiles" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Time1"
+        android:hint = "Time"
+        android:textSize="20dp"
+        android:layout_above="@+id/AvgPace"
+        android:layout_alignEnd="@+id/Date1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/AvgPace"
+        android:text="Average Pace: "
+        android:textSize="20dp"
+        android:textColor="#B71C1C"
+        android:layout_below="@+id/TotalTime"
+        android:layout_alignStart="@+id/TotalTime"
+        android:layout_marginTop="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Pace1"
+        android:hint = "Pace"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/AvgPace"
+        android:layout_alignBottom="@+id/AvgPace"
+        android:layout_alignEnd="@+id/Miles1" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/DailyGraph"
+        android:text="See Graph"
+        android:background="#000000"
+        android:textColor="#FFFFFF"
+        android:textSize="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
