@@ -60,6 +60,16 @@
         android:layout_above="@+id/TrackMe"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="13dp" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src ="@drawable/app_logo"
+        android:id="@+id/imageButton"
+        android:layout_above="@+id/ViewProf"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp" />
+
 
 
 

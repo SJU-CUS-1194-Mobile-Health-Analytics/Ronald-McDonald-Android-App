@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ViewP.setOnClickListener(new View.OnClickListener()
+        Sett.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)

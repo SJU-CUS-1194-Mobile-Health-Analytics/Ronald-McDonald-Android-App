@@ -19,7 +19,7 @@ public class Main5Activity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent intent15 = new Intent(Main5Activity.this, Main5Activity.class);
+                Intent intent15 = new Intent(Main5Activity.this, MainActivity.class);
                 startActivity(intent15);
 
             }

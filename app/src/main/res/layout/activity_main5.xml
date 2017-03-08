@@ -71,4 +71,13 @@
         android:layout_below="@+id/SettingsTitle"
         android:layout_toStartOf="@+id/EditUser"
         android:layout_marginTop="27dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/SettingsLogo"
+        android:src="@drawable/app_logo"
+        android:layout_below="@+id/SettingsTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp" />
 </RelativeLayout>

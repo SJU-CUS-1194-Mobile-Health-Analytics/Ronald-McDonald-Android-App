@@ -87,7 +87,7 @@
         android:id="@+id/SelectStatType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="39dp"
-        android:layout_centerVertical="true"
+        android:layout_marginEnd="66dp"
+        android:layout_alignBottom="@+id/SpinnerStatType"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>
