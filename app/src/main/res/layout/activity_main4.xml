@@ -19,9 +19,9 @@
         android:textAlignment="center"
         android:textSize="30dp"
         android:background="#B71C1C"
+        android:layout_marginStart="16dp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/rmMainMenu"
-        android:layout_marginStart="27dp" />
+        android:layout_toEndOf="@+id/rmMainMenu" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -74,9 +74,9 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/rmMainMenu"
-        android:text="<-"
-        android:textSize="40dp"
+        android:id="@+id/tmBack"
+        android:text="@string/Back"
+        android:textSize="20dp"
         android:textColor="#FFFFFF"
         android:background="#000000"
         android:layout_alignBaseline="@+id/rmTitle"

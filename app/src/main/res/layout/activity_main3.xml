@@ -20,16 +20,15 @@
         android:textAlignment="center"
         android:background="#9E9E9E"
         android:textColor="#B71C1C"
-        android:layout_marginStart="69dp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/pmMainMenu" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pmMainMenu"
-        android:text="<-"
-        android:textSize="40dp"
+        android:id="@+id/GBack"
+        android:text="@string/Back"
+        android:textSize="20dp"
         android:textColor="#000000"
         android:background="#FFFFFF"
         android:layout_alignBaseline="@+id/GraphsTitle"
@@ -43,17 +42,17 @@
         android:text="@string/Select_Time"
         android:textSize="15dp"
         android:textColor="#B71C1C"
-        android:layout_alignBaseline="@+id/SelectTime"
-        android:layout_alignBottom="@+id/SelectTime"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="51dp"
+        android:layout_below="@+id/GraphsTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="27dp" />
     <Spinner
         android:id="@+id/SelectTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:layout_below="@+id/pmMainMenu"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="58dp" />
+        android:layout_alignBaseline="@+id/SpinnerTime"
+        android:layout_alignBottom="@+id/SpinnerTime"
+        android:layout_alignStart="@+id/SelectStatType" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,7 +61,7 @@
         android:text="@string/Select_Stat"
         android:textSize="15dp"
         android:textColor="#B71C1C"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="35dp"
         android:layout_below="@+id/SelectTime"
         android:layout_alignEnd="@+id/SpinnerTime" />
 
@@ -81,15 +80,14 @@
         android:text="@string/Select_StatType"
         android:textSize="15dp"
         android:textColor="#B71C1C"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/SelectStat"
+        android:layout_centerVertical="true"
         android:layout_alignStart="@+id/SpinnerStat" />
 
     <Spinner
         android:id="@+id/SelectStatType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/SpinnerStatType"
-        android:layout_alignBottom="@+id/SpinnerStatType"
-        android:layout_alignStart="@+id/SelectStat" />
+        android:layout_marginEnd="39dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

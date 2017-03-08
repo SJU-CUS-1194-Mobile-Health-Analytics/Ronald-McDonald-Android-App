@@ -6,21 +6,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Main4Activity extends AppCompatActivity {
+public class Main6Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main4);
-        Button TMBack = (Button) findViewById(R.id.tmBack);
+        setContentView(R.layout.activity_main6);
 
-        TMBack.setOnClickListener(new View.OnClickListener()
+        Button BackDL = (Button) findViewById(R.id.DLBack);
+
+        BackDL.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent8 = new Intent(Main4Activity.this, MainActivity.class);
-                startActivity(intent8);
+                Intent intent10 = new Intent(Main6Activity.this, Main2Activity.class);
+                startActivity(intent10);
 
             }
         });

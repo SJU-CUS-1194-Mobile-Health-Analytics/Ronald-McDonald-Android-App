@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main6Activity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DailyLogMain"
+        android:text="  Daily Log   "
+        android:textSize="40dp"
+        android:gravity="center"
+        android:background="#FFFFFF"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="29dp"
+        android:layout_marginStart="21dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/DLBack" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DLBack"
+        android:text="@string/Back"
+        android:textSize="25dp"
+        android:background="#FFFFFF"
+        android:textColor="#B71C1C"
+        android:layout_marginStart="26dp"
+        android:layout_alignBaseline="@+id/DailyLogMain"
+        android:layout_alignBottom="@+id/DailyLogMain"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

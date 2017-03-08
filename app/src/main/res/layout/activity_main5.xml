@@ -61,20 +61,14 @@
         android:layout_marginTop="31dp"
         android:layout_below="@+id/Delete"
         android:layout_alignStart="@+id/EditUser" />
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/SettingsLogo"
-        android:src="@drawable/AppLogo"
-        android:layout_below="@+id/SettingsTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/SettingsBack"
-        android:text="Back"
+        android:text="@string/Back"
         android:textSize="20dp"
-        android:layout_alignTop="@+id/SettingsLogo"
-        android:layout_toStartOf="@+id/EditUser" />
+        android:layout_below="@+id/SettingsTitle"
+        android:layout_toStartOf="@+id/EditUser"
+        android:layout_marginTop="27dp" />
 </RelativeLayout>
