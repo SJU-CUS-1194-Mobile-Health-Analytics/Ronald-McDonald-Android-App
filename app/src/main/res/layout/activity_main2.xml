@@ -11,11 +11,12 @@
     android:background="#FFFFFF"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main2Activity">
 
-    <ImageView
+    <TextView
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:id="@+id/UserProfPic"
-        android:src="@drawable/user_placeholder"
+        android:text = "Photo Not Available"
+        android:gravity="center"
         android:layout_marginTop="33dp"
         android:layout_below="@+id/RHTitle"
         android:layout_centerHorizontal="true" />
@@ -32,46 +33,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <Spinner
-        android:id="@+id/Views"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        android:entries="@array/StatsViews"
-        android:layout_below="@+id/ViewOptions"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ViewOptions"
-        android:text="Choose a View: "
-        android:textColor="#B71C1C"
-        android:layout_below="@+id/UserProfPic"
-        android:layout_alignStart="@+id/UserProfPic"
-        android:layout_marginTop="13dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Date"
-        android:text="Date of Run: "
-        android:textSize="20dp"
-        android:textColor="#B71C1C"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/Views"
-        android:layout_toStartOf="@+id/Views" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/Date1"
-        android:hint = "Date"
-        android:textSize="20dp"
-        android:layout_alignBaseline="@+id/Date"
-        android:layout_alignBottom="@+id/Date"
-        android:layout_toEndOf="@+id/AvgPace" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,9 +40,9 @@
         android:text="Total Miles: "
         android:textSize="20dp"
         android:textColor="#B71C1C"
-        android:layout_marginTop="14dp"
-        android:layout_below="@+id/Date"
-        android:layout_alignEnd="@+id/Date" />
+        android:layout_marginTop="102dp"
+        android:layout_below="@+id/UserProfPic"
+        android:layout_alignEnd="@+id/TotalTime" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,7 +52,7 @@
         android:textSize="20dp"
         android:layout_alignBaseline="@+id/TotalMiles"
         android:layout_alignBottom="@+id/TotalMiles"
-        android:layout_alignStart="@+id/Date1" />
+        android:layout_alignEnd="@+id/Time1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -100,9 +61,9 @@
         android:text="Total Time: "
         android:textSize="20dp"
         android:textColor="#B71C1C"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="26dp"
         android:layout_below="@+id/TotalMiles"
-        android:layout_alignStart="@+id/TotalMiles" />
+        android:layout_alignStart="@+id/AvgPace" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,8 +71,9 @@
         android:id="@+id/Time1"
         android:hint = "Time"
         android:textSize="20dp"
-        android:layout_above="@+id/AvgPace"
-        android:layout_alignEnd="@+id/Date1" />
+        android:layout_alignBaseline="@+id/TotalTime"
+        android:layout_alignBottom="@+id/TotalTime"
+        android:layout_alignEnd="@+id/UserProfPic" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -120,9 +82,9 @@
         android:text="Average Pace: "
         android:textSize="20dp"
         android:textColor="#B71C1C"
+        android:layout_marginTop="28dp"
         android:layout_below="@+id/TotalTime"
-        android:layout_alignStart="@+id/TotalTime"
-        android:layout_marginTop="18dp" />
+        android:layout_toEndOf="@+id/uhMainMenu" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -132,17 +94,37 @@
         android:textSize="20dp"
         android:layout_alignBaseline="@+id/AvgPace"
         android:layout_alignBottom="@+id/AvgPace"
-        android:layout_alignEnd="@+id/Miles1" />
+        android:layout_alignEnd="@+id/Time1" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/DailyGraph"
+        android:id="@+id/Graph"
         android:text="See Graph"
         android:background="#000000"
         android:textColor="#FFFFFF"
         android:textSize="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uhMainMenu"
+        android:text="@string/Back"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/RHTitle"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/DailyLog"
+        android:text="Daily Log"
+        android:textSize="25dp"
+        android:layout_below="@+id/UserProfPic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp" />
 
 </RelativeLayout>

@@ -11,14 +11,16 @@
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main4Activity">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rmTitle"
         android:textColor="#000000"
-        android:text="Race Mode"
+        android:text="      Race Mode     "
         android:textAlignment="center"
         android:textSize="30dp"
-        android:background="#B71C1C"/>
+        android:background="#B71C1C"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,4 +69,16 @@
         android:layout_above="@+id/rmTrack"
         android:layout_alignStart="@+id/rmTime"
         android:layout_marginBottom="40dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tmBack"
+        android:text="@string/Back"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:background="#000000"
+        android:layout_alignBaseline="@+id/rmTitle"
+        android:layout_alignBottom="@+id/rmTitle"
+        android:layout_alignStart="@+id/rmMilesRun"/>
 </RelativeLayout>
