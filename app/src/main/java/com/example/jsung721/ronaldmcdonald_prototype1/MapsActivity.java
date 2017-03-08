@@ -14,6 +14,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
+    // receive coordinates from GpsTrackingActivity
     private double myLatitude;
     private double myLongitude;
 
