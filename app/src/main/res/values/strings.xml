@@ -15,4 +15,11 @@
     <!-- Gps Tracking Strings-->
     <string name="btn_begin_gpstracking">Begin Tracking</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="gpstrackingactivity_label_latitude">Latitude</string>
+    <string name="gpstrackingactivity_label_longitude">Longitude</string>
+    <string name="last_update_time_label">Last location update time</string>
+    <string name="gpstrackingactivity_btn_start_updates">Start updates</string>
+    <string name="gpstrackingactivity_btn_stop_updates">Stop updates</string>
+    <string name="gpstrackingactivity_text_latitude"></string>
 </resources>

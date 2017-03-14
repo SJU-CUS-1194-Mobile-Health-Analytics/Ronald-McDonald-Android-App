@@ -86,10 +86,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             mMap.setMyLocationEnabled(true);
         }
 
-//        //Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("My Position"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(sydney).title("My Position"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Toast.makeText(this,"map ready, default location: Sydney (lat:"
+                + mCurrLocationMarker.getPosition().latitude
+                +",long:"+mCurrLocationMarker.getPosition().longitude+")",
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -103,6 +107,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+        Toast.makeText(this, "connected: current location:", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -118,6 +123,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     public void onLocationChanged(Location location) {
+        Toast.makeText(this, "Location changed",Toast.LENGTH_SHORT).show();
+
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
             mCurrLocationMarker.remove();
@@ -130,6 +137,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         markerOptions.title("Current Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
+
+        Toast.makeText(this,"current location: (lat:"
+                        + mCurrLocationMarker.getPosition().latitude
+                        +",long:"+mCurrLocationMarker.getPosition().longitude+")",
+                Toast.LENGTH_SHORT).show();
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
