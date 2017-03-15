@@ -1,13 +1,28 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
-    <string name="Select_Time"> Select Time</string>
-    <string name="Select_Stat"> Select Stat</string>
-    <string name="Select_StatType">Select Stat Type</string>
+    <string name="Select_Time"> Select Time Frame:</string>
+    <string name="Select_Stat"> Select Statistic </string>
+    <string name="Select_Measure">Select Measure</string>
     <string name="Back"> Back </string>
+
     <string-array name="Times">
-        <item>Yearly View</item>
-        <item>Monthly View</item>
-        <item>Weekly View</item>
-        <item>Daily Calendar View</item>
+        <item>By Year</item>
+        <item>By Month</item>
+        <item>By Week</item>
+        <item>By Day</item>
     </string-array>
+    <string-array name="Stats">
+        <item>Miles Run</item>
+        <item> Time </item>
+        <item> Pace </item>
+    </string-array>
+    <string-array name="Measure">
+        <item>Total</item>
+        <item>Average</item>
+    </string-array>
+    <string-array name="Track_Mode">
+        <item>Race Mode</item>
+        <item>Pracice Mode</item>
+    </string-array>
+
 </resources>

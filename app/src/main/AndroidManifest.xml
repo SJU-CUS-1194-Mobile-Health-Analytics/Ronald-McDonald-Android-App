@@ -8,18 +8,18 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
-        <activity android:name=".MainActivity">
+        <activity android:name=".StrideMainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity" />
-        <activity android:name=".Main3Activity" />
-        <activity android:name=".Main4Activity" />
-        <activity android:name=".Main5Activity" />
-        <activity android:name=".Main6Activity" />
+        <activity android:name=".UserHistoryActivity" />
+        <activity android:name=".GraphsActivity" />
+        <activity android:name=".TrackMeActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".DailyLogActivity" />
         <activity android:name=".TestSendDataActivity"></activity>
         <activity android:name=".SignInActivity"></activity>
     </application>

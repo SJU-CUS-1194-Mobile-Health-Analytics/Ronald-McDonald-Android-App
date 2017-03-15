@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity {
+public class StrideMainMenuActivity extends AppCompatActivity {
 
     private String mUserName;
 
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.Stride_Main_Menu);
 
         mUserName = "anonymous";
 
@@ -40,38 +40,38 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), "Logged in as: " + mUserName, Toast.LENGTH_LONG).show();
 
-        Button ViewP = (Button) findViewById(R.id.ViewProf);
-        Button TrackM = (Button) findViewById(R.id.TrackMe);
-        Button Sett = (Button) findViewById(R.id.Settings);
+        Button MainMenuViewProfile_Button = (Button) findViewById(R.id.MainMenu_ViewProfile_Button);
+        Button MainMenuTrackMe_Button = (Button) findViewById(R.id.MainMenu_TrackMe_Button);
+        Button MainMenuSettings_Button = (Button) findViewById(R.id.MainMenu_Settings_Button);
 
-        ViewP.setOnClickListener(new View.OnClickListener()
+        MainMenuViewProfile_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent1 = new Intent(MainActivity.this, Main2Activity.class);
+                Intent intent1 = new Intent(StrideMainMenuActivity.this, UserHistoryActivity.class);
                 startActivity(intent1);
 
             }
         });
 
-        TrackM.setOnClickListener(new View.OnClickListener()
+        MainMenuTrackMe_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent2 = new Intent(MainActivity.this, Main4Activity.class);
+                Intent intent2 = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
                 startActivity(intent2);
 
             }
         });
 
-        Sett.setOnClickListener(new View.OnClickListener()
+        MainMenuSettings_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent3 = new Intent(MainActivity.this, Main5Activity.class);
+                Intent intent3 = new Intent(StrideMainMenuActivity.this, SettingsActivity.class);
                 startActivity(intent3);
 
             }

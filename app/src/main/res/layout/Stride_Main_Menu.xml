@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#B71C1C"
-    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.MainActivity">
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.StrideMainMenuActivity">
 
 
     <TextView
@@ -19,7 +19,7 @@
         android:textSize="100dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
-        android:id="@+id/AppTitle"
+        android:id="@+id/MainMenu_Title"
         android:textColor="#FFFFFF"
         android:layout_marginTop="18dp"
         android:layout_alignParentTop="true"
@@ -28,7 +28,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/Settings"
+        android:id="@+id/MainMenu_Settings_Button"
         android:text="Settings"
         android:textSize="35dp"
         android:textColor="#9E9E9E"
@@ -40,24 +40,24 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe"
+        android:id="@+id/MainMenu_TrackMe_Button"
         android:text="Track Me"
         android:textSize="35dp"
         android:textColor="#9E9E9E"
         android:background="#000000"
         android:layout_marginBottom="16dp"
-        android:layout_above="@+id/Settings"
+        android:layout_above="@+id/MainMenu_Settings_Button"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ViewProf"
+        android:id="@+id/MainMenu_ViewProfile_Button"
         android:text="View Profile"
         android:textSize="35dp"
         android:textColor="#9E9E9E"
         android:background="#000000"
-        android:layout_above="@+id/TrackMe"
+        android:layout_above="@+id/MainMenu_TrackMe_Button"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="13dp" />
     <ImageView
@@ -65,8 +65,8 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:src ="@drawable/app_logo"
-        android:id="@+id/imageButton"
-        android:layout_above="@+id/ViewProf"
+        android:id="@+id/MainMenu_AppLogo"
+        android:layout_above="@+id/MainMenu_ViewProfile_Button"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22dp" />
 </RelativeLayout>
