@@ -11,7 +11,7 @@ public class UserHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.User_Run_History);
+        setContentView(R.layout.user_run_history);
         Button HistoryBack_Button = (Button) findViewById(R.id.History_Back_Button);
         Button HistoryGraph_Button = (Button) findViewById(R.id.HistoryGraph_Button);
         Button HistoryDailyLog_Button = (Button) findViewById(R.id.HistoryDailyLog_Button);

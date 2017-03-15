@@ -11,7 +11,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.Settings);
+        setContentView(R.layout.settings);
         Button SettingsBack_Button = (Button) findViewById(R.id.Settings_Back_Button);
 
         SettingsBack_Button.setOnClickListener(new View.OnClickListener()

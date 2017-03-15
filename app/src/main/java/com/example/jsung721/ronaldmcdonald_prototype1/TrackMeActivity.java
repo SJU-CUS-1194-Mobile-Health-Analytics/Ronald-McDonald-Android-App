@@ -15,7 +15,7 @@ public class TrackMeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.Track_Me);
+        setContentView(R.layout.track_me);
 
         Button TrackMeBack_Button = (Button) findViewById(R.id.TrackMe_Back_Button);
 
