@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main6Activity">
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.DailyLogActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DailyLogMain"
-        android:text="  Daily Log   "
+        android:id="@+id/DailyLog_Title"
+        android:text="Daily Log"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:textSize="40dp"
         android:gravity="center"
         android:background="#FFFFFF"
@@ -18,18 +20,18 @@
         android:layout_marginTop="29dp"
         android:layout_marginStart="21dp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/DLBack" />
+        android:layout_toEndOf="@+id/DailyLog_Back_Button" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DLBack"
+        android:id="@+id/DailyLog_Back_Button"
         android:text="@string/Back"
         android:textSize="25dp"
         android:background="#FFFFFF"
         android:textColor="#B71C1C"
         android:layout_marginStart="26dp"
-        android:layout_alignBaseline="@+id/DailyLogMain"
-        android:layout_alignBottom="@+id/DailyLogMain"
+        android:layout_alignBaseline="@id/DailyLog_Title"
+        android:layout_alignBottom="@id/DailyLog_Title"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>

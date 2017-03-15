@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#FFFFFF"
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.GraphsActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Title"
+        android:text="Graph"
+        android:paddingLeft="40dp"
+        android:paddingRight="40dp"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:background="#9E9E9E"
+        android:textColor="#B71C1C"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/Graphs_Back_Button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Back_Button"
+        android:text="@string/Back"
+        android:textSize="20dp"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Time_Title"
+        android:text="@string/Select_Time"
+        android:textSize="15dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="23dp"
+        android:layout_below="@+id/Graphs_Back_Button"
+        android:layout_alignParentStart="true" />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Time_Spinner"
+        android:spinnerMode="dropdown"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:entries="@array/Times"
+        android:layout_alignBottom="@+id/Graphs_Time_Title"
+        android:layout_toEndOf="@+id/Graphs_Time_Title"
+        android:layout_marginStart="17dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Stats_Title"
+        android:text="@string/Select_Stat"
+        android:textSize="15dp"
+        android:textColor="#B71C1C"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/Graphs_Time_Title"
+        android:layout_alignParentStart="true" />
+
+    <Spinner
+        android:id="@+id/Graphs_Stats_Spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:entries ="@array/Stats"
+        android:layout_alignBottom="@+id/Graphs_Stats_Title"
+        android:layout_alignEnd="@+id/Graphs_Time_Spinner" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/Graphs_Measure_Title"
+        android:text="@string/Select_Measure"
+        android:textSize="15dp"
+        android:textColor="#B71C1C"
+        android:layout_below="@+id/Graphs_Stats_Title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="24dp" />
+    <Spinner
+        android:id="@+id/Graphs_Measure_Spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:entries = "@array/Measure"
+        android:theme="@style/ThemeOverlay.AppCompat.Light"
+        android:layout_alignBottom="@+id/Graphs_Measure_Title"
+        android:layout_alignStart="@+id/Graphs_Time_Spinner"
+        android:layout_alignEnd="@+id/Graphs_Stats_Spinner" />
+</RelativeLayout>

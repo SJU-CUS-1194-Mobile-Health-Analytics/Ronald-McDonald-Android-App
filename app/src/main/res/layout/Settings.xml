@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.Main5Activity">
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.SettingsActivity">
 <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/SettingsTitle"
+    android:id="@+id/Settings_Title"
     android:text="Settings"
     android:textSize="45dp"
     android:background = "#000000"
@@ -20,7 +20,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/LogOut"
+        android:id="@+id/Settings_Log_Out_Button"
         android:text="LOG OUT"
         android:background = "#B71C1C"
         android:textColor="#FFFFFF"
@@ -31,53 +31,52 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/EditUser"
+        android:id="@+id/Settings_Edit_User_Button"
         android:text="Edit Account"
         android:background = "#EEEEEE"
         android:textColor="#000000"
         android:textSize="35dp"
-        android:layout_below="@+id/SettingsTitle"
+        android:layout_below="@+id/Settings_Title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="157dp" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Delete"
+        android:id="@+id/Settings_Delete_Button"
         android:text="Delete Account"
         android:background = "#EEEEEE"
         android:textColor="#000000"
         android:textSize="35dp"
         android:layout_marginTop="43dp"
-        android:layout_below="@+id/EditUser"
+        android:layout_below="@+id/Settings_Edit_User_Button"
         android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Clear"
+        android:id="@+id/Settings_Clear_History_Button"
         android:text="Clear History"
         android:background = "#EEEEEE"
         android:textColor="#000000"
         android:textSize="35dp"
         android:layout_marginTop="31dp"
-        android:layout_below="@+id/Delete"
-        android:layout_alignStart="@+id/EditUser" />
+        android:layout_below="@+id/Settings_Delete_Button"
+        android:layout_alignStart="@+id/Settings_Edit_User_Button" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/SettingsBack"
+        android:id="@+id/Settings_Back_Button"
         android:text="@string/Back"
         android:textSize="20dp"
-        android:layout_below="@+id/SettingsTitle"
-        android:layout_toStartOf="@+id/EditUser"
-        android:layout_marginTop="27dp" />
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/Settings_Title"
+        android:layout_toStartOf="@+id/Settings_Log_Out_Button" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/SettingsLogo"
         android:src="@drawable/app_logo"
-        android:layout_below="@+id/SettingsTitle"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp" />
+        android:layout_below="@+id/Settings_Title"
+        android:layout_toEndOf="@+id/Settings_Back_Button" />
 </RelativeLayout>

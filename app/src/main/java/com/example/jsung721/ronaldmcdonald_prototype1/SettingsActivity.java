@@ -6,22 +6,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Main6Activity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main6);
+        setContentView(R.layout.Settings);
+        Button SettingsBack_Button = (Button) findViewById(R.id.Settings_Back_Button);
 
-        Button BackDL = (Button) findViewById(R.id.DLBack);
-
-        BackDL.setOnClickListener(new View.OnClickListener()
+        SettingsBack_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent10 = new Intent(Main6Activity.this, Main2Activity.class);
-                startActivity(intent10);
+                Intent Settings_to_MainMenu = new Intent(SettingsActivity.this, StrideMainMenuActivity.class);
+                startActivity(Settings_to_MainMenu);
 
             }
         });
