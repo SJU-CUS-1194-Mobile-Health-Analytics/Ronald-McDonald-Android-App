@@ -16,7 +16,7 @@ public class GraphsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.graphs);
+        setContentView(R.layout.Graphs);
         Button GraphsBack_Button = (Button) findViewById(R.id.Graphs_Back_Button);
 
         GraphsTime_Spinner = (Spinner) findViewById(R.id.Graphs_Time_Spinner);
