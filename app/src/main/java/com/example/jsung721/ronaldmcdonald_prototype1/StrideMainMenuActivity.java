@@ -22,7 +22,7 @@ public class StrideMainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.Stride_Main_Menu);
+        setContentView(R.layout.stride_main_menu);
 
         mUserName = "anonymous";
 
@@ -49,8 +49,8 @@ public class StrideMainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent intent1 = new Intent(StrideMainMenuActivity.this, UserHistoryActivity.class);
-                startActivity(intent1);
+                Intent MainMenu_to_UserHistory = new Intent(StrideMainMenuActivity.this, UserHistoryActivity.class);
+                startActivity(MainMenu_to_UserHistory);
 
             }
         });
@@ -60,8 +60,8 @@ public class StrideMainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent intent2 = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
-                startActivity(intent2);
+                Intent MainMenu_to_TrackMe = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
+                startActivity(MainMenu_to_TrackMe);
 
             }
         });
@@ -71,8 +71,8 @@ public class StrideMainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent intent3 = new Intent(StrideMainMenuActivity.this, SettingsActivity.class);
-                startActivity(intent3);
+                Intent MainMenu_to_Settings = new Intent(StrideMainMenuActivity.this, SettingsActivity.class);
+                startActivity(MainMenu_to_Settings);
 
             }
         });

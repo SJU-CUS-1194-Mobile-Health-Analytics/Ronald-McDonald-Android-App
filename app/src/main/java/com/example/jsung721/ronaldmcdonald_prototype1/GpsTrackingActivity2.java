@@ -24,7 +24,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -41,25 +40,9 @@ import com.google.android.gms.location.LocationServices;
 import java.text.DateFormat;
 import java.util.Date;
 
-import android.location.Location;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-
-import java.text.DateFormat;
-import java.util.Date;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Getting Location Updates.
@@ -98,7 +81,7 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-
+    protected final static String LAST_UPDATED_DAY_STRING_KEY = "last-updated-time-string-key";
     /**
      * Provides the entry point to Google Play services.
      */
@@ -108,6 +91,13 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
      * Stores parameters for requests to the FusedLocationProviderApi.
      */
     protected LocationRequest mLocationRequest;
+
+    /**
+     * Stores the types of location services the client is interested in using. Used for checking
+     * settings to determine if the device has optimal location settings.
+     */
+    protected LocationSettingsRequest mLocationSettingsRequest;
+
 
     /**
      * Represents a geographical location.
@@ -125,6 +115,7 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
     protected String mLatitudeLabel;
     protected String mLongitudeLabel;
     protected String mLastUpdateTimeLabel;
+    protected String mLastUpdateDayLabel;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -136,6 +127,16 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
      * Time when the location was updated represented as a String.
      */
     protected String mLastUpdateTime;
+    protected String mLastUpdateDay;
+
+    /**
+     * Database connection variables
+     *
+     */
+    private DatabaseReference mDatabase;
+    private String date;
+    private String time;
+    private final String RUNNING_RECORDS = "running records";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -153,15 +154,18 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
         mLatitudeLabel = getResources().getString(R.string.gpstrackingactivity_label_latitude);
         mLongitudeLabel = getResources().getString(R.string.gpstrackingactivity_label_longitude);
         mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
+        mLastUpdateDayLabel = "Last location update day";
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = "";
+        mLastUpdateDay = "";
 
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
 
         // Kick off the process of building a GoogleApiClient and requesting the LocationServices
         // API.
+        checkLocationPermission();
         buildGoogleApiClient();
     }
 
@@ -192,6 +196,7 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
             // Update the value of mLastUpdateTime from the Bundle and update the UI.
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
+                mLastUpdateDay = savedInstanceState.getString(LAST_UPDATED_DAY_STRING_KEY);
             }
             updateUI();
         }
@@ -270,8 +275,13 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
     protected void startLocationUpdates() {
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        checkLocationPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
+        sendData(DateFormat.getTimeInstance().format(new Date()),
+                DateFormat.getDateInstance().format(new Date()),
+                mCurrentLocation.getLatitude(),
+                mCurrentLocation.getLongitude());
     }
 
     /**
@@ -311,7 +321,20 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
 
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+        sendData(DateFormat.getTimeInstance().format(new Date()),
+                DateFormat.getDateInstance().format(new Date()),
+                mCurrentLocation.getLatitude(),
+                mCurrentLocation.getLongitude());
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+    }
+
+    public void sendData(String time, String date, double latitude, double longitude) {
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(RUNNING_RECORDS);
+        RunningRecords r = new RunningRecords(time, date, latitude, longitude);
+        final DatabaseReference pushReference = myRef.push();
+        pushReference.setValue(r);
     }
 
     @Override
@@ -378,6 +401,7 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
             }
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+            mLastUpdateDay = DateFormat.getDateInstance().format(new Date());
             try{
                 updateUI();
             } catch (Exception e){
@@ -401,6 +425,10 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
         mCurrentLocation = location;
         mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
         updateUI();
+        sendData(mLastUpdateTime,
+                mLastUpdateDay,
+                mCurrentLocation.getLatitude(),
+                mCurrentLocation.getLongitude());
         Toast.makeText(this, "Location changed",
                 Toast.LENGTH_SHORT).show();
     }
@@ -428,69 +456,76 @@ public class GpsTrackingActivity2 extends AppCompatActivity implements
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
         savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
+        savedInstanceState.putString(LAST_UPDATED_DAY_STRING_KEY,mLastUpdateDay);
         super.onSaveInstanceState(savedInstanceState);
     }
 
-//    public boolean checkLocationPermission(){
-//        if (ContextCompat.checkSelfPermission(this,
-//                android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED) {
-//
-//            // Asking user if explanation is needed
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-//                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-//
-//                // Show an expanation to the user *asynchronously* -- don't block
-//                // this thread waiting for the user's response! After the user
-//                // sees the explanation, try again to request the permission.
-//
-//                //Prompt the user once explanation has been shown
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                        MY_PERMISSIONS_REQUEST_LOCATION);
-//
-//
-//            } else {
-//                // No explanation needed, we can request the permission.
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-//                        MY_PERMISSIONS_REQUEST_LOCATION);
-//            }
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-//        switch (requestCode) {
-//            case MY_PERMISSIONS_REQUEST_LOCATION: {
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                    // Permission was granted.
-//                    if (ContextCompat.checkSelfPermission(this,
-//                            android.Manifest.permission.ACCESS_FINE_LOCATION)
-//                            == PackageManager.PERMISSION_GRANTED) {
-//
-//                        if (mGoogleApiClient == null) {
-//                            buildGoogleApiClient();
-//                        }
-//                        mMap.setMyLocationEnabled(true);
-//                    }
-//
-//                } else {
-//
-//                    // Permission denied, Disable the functionality that depends on this permission.
-//                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
-//                }
-//                return;
-//            }
-//
-//            // other 'case' lines to check for other permissions this app might request.
-//            //You can add here other case statements according to your requirement.
-//        }
-//    }
+    public boolean checkLocationPermission(){
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Asking user if explanation is needed
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+                //Prompt the user once explanation has been shown
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+
+
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_LOCATION);
+            }
+            if (ContextCompat.checkSelfPermission(this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission was granted.
+                    if (ContextCompat.checkSelfPermission(this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            == PackageManager.PERMISSION_GRANTED) {
+
+                        if (mGoogleApiClient == null) {
+                            buildGoogleApiClient();
+                        }
+                        startLocationUpdates();
+                    }
+
+                } else {
+
+                    // Permission denied, Disable the functionality that depends on this permission.
+                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other permissions this app might request.
+            //You can add here other case statements according to your requirement.
+        }
+    }
 }
