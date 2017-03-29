@@ -21,4 +21,27 @@ public class RunningRecords {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public String toString() {
+        return "Date:"+this.getDate()+
+                "\nTime:"+this.getTime()+
+                "\nLatitude:"+this.getLatitude()+
+                "\nLongitude:"+this.getLongitude()+"\n";
+    }
 }
