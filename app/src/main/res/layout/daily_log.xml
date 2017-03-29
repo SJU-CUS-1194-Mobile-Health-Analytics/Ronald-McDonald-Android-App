@@ -9,29 +9,30 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DailyLog_Title"
+        android:id="@+id/text_daily_log"
         android:text="Daily Log"
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:textSize="40dp"
+        android:textColor="@color/maroon"
+        android:background="@color/white"
         android:gravity="center"
-        android:background="#FFFFFF"
-        android:textColor="#B71C1C"
         android:layout_marginTop="29dp"
         android:layout_marginStart="21dp"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/DailyLog_Back_Button" />
+        android:layout_toEndOf="@+id/button_daily_log_to_profile" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/DailyLog_Back_Button"
+        android:id="@+id/button_daily_log_to_profile"
         android:text="@string/Back"
         android:textSize="25dp"
-        android:background="#FFFFFF"
-        android:textColor="#B71C1C"
+        android:textColor="@color/maroon"
+        android:background="@color/white"
         android:layout_marginStart="26dp"
-        android:layout_alignBaseline="@+id/DailyLog_Title"
-        android:layout_alignBottom="@+id/DailyLog_Title"
+        android:layout_alignBaseline="@+id/text_daily_log"
+        android:layout_alignBottom="@+id/text_daily_log"
         android:layout_alignParentStart="true" />
 
 </RelativeLayout>

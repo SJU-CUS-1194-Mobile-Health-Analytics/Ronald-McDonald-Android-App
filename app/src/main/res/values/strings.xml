@@ -22,7 +22,7 @@
     </string-array>
     <string-array name="Track_Mode">
         <item>Race Mode</item>
-        <item>Pracice Mode</item>
+        <item>Practice Mode</item>
     </string-array>
 
 </resources>

@@ -12,15 +12,16 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-        Button SettingsBack_Button = (Button) findViewById(R.id.Settings_Back_Button);
+        Button settingsBackButton = (Button) findViewById(R.id.button_settings_to_menu);
 
-        SettingsBack_Button.setOnClickListener(new View.OnClickListener()
+        settingsBackButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent Settings_to_MainMenu = new Intent(SettingsActivity.this, StrideMainMenuActivity.class);
-                startActivity(Settings_to_MainMenu);
+                Intent settingsToMenuIntent = new Intent(SettingsActivity.this, StrideMainMenuActivity.class);
+                startActivity(settingsToMenuIntent);
+
 
             }
         });
