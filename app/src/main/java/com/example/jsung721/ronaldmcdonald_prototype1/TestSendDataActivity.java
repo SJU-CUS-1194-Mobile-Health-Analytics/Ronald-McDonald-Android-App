@@ -63,9 +63,9 @@ public class TestSendDataActivity extends AppCompatActivity {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(RUNNING_RECORDS);
-        RunningRecords r = new RunningRecords(date,time, distance);
+//        RunningRecords r = new RunningRecords(date,time, distance);
         final DatabaseReference pushReference = myRef.push();
-        pushReference.setValue(r);
+        pushReference.setValue(null);
 
 
     }

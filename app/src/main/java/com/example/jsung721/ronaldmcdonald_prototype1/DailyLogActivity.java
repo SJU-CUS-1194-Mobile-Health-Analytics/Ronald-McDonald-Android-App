@@ -11,7 +11,7 @@ public class DailyLogActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.daily_log);
+        setContentView(R.layout.activity_daily_log);
 
         Button DailyLogBack_Button = (Button) findViewById(R.id.button_daily_log_to_profile);
 
