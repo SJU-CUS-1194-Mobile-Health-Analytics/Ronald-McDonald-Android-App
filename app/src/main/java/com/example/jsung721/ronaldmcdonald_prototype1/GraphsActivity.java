@@ -10,7 +10,12 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-    public class GraphsActivity extends AppCompatActivity {
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+
+public class GraphsActivity extends AppCompatActivity {
     Spinner graphsTimeSpinner, graphsStatSpinner, graphsMeasureSpinner;
     ArrayAdapter <CharSequence> graphsTimeAdapter, graphsStatAdapter, graphsMeasureAdapter;
     @Override
@@ -33,6 +38,17 @@ import android.widget.TextView;
         graphsMeasureAdapter = ArrayAdapter.createFromResource(this,R.array.Measure,android.R.layout.simple_spinner_item);
         graphsMeasureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         graphsMeasureSpinner.setAdapter(graphsMeasureAdapter);
+
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
 
         graphsTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
