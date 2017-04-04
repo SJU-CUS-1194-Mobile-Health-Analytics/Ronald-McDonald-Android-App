@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/white"
+    tools:context="com.example.jsung721.ronaldmcdonald_prototype1.ProfileActivity">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/image_profile_picture"
+        android:src = "@drawable/portrait"
+        android:gravity="center"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/text_user_profile"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_user_profile"
+        android:text="[User]'s Run History"
+        android:textSize="30dp"
+        android:textColor="@color/maroon"
+        android:fontFamily="sans-serif-smallcaps"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_total_miles"
+        android:text="Total Miles: "
+        android:textSize="20dp"
+        android:textColor="@color/maroon"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/button_profile_to_daily_log"
+        android:layout_toStartOf="@+id/text_profile_total_miles_value"
+        android:layout_marginEnd="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_total_miles_value"
+        android:hint = "Miles"
+        android:textSize="20dp"
+        android:textColorHint="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_total_miles"
+        android:layout_alignBottom="@+id/text_profile_total_miles"
+        android:layout_alignEnd="@+id/button_profile_to_daily_log" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_total_time"
+        android:text="Total Time: "
+        android:textSize="20dp"
+        android:textColor="@color/maroon"
+        android:layout_marginTop="26dp"
+        android:layout_below="@+id/text_profile_total_miles"
+        android:layout_alignStart="@+id/text_profile_total_miles" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_total_time_value"
+        android:hint = "Time"
+        android:textSize="20dp"
+        android:textColorHint="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_total_time"
+        android:layout_alignBottom="@+id/text_profile_total_time"
+        android:layout_alignStart="@+id/text_profile_total_miles_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_avg_pace"
+        android:text="Average Pace: "
+        android:textSize="20dp"
+        android:textColor="@color/maroon"
+        android:layout_below="@+id/text_profile_total_time"
+        android:layout_toStartOf="@+id/text_profile_total_time_value"
+        android:layout_marginTop="24dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_avg_pace_value"
+        android:hint = "Pace"
+        android:textSize="20dp"
+        android:textColorHint="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_avg_pace"
+        android:layout_alignBottom="@+id/text_profile_avg_pace"
+        android:layout_alignEnd="@+id/button_profile_to_daily_log" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_profile_to_graphs"
+        android:text="See Graph"
+        android:textSize="30dp"
+        android:textColor="@color/white"
+        android:background="@color/black"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_profile_to_menu"
+        android:text="@string/Back"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:background="@color/white"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/text_user_profile"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_profile_to_daily_log"
+        android:text="Daily Log"
+        android:textSize="25dp"
+        android:layout_below="@+id/image_profile_picture"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp" />
+
+</RelativeLayout>

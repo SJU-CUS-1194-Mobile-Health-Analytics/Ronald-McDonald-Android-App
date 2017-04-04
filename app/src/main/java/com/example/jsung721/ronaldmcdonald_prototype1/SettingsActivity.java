@@ -6,21 +6,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Main5Activity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main5);
-        Button SettBack = (Button) findViewById(R.id.SettingsBack);
+        setContentView(R.layout.settings);
+        Button settingsBackButton = (Button) findViewById(R.id.button_settings_to_menu);
 
-        SettBack.setOnClickListener(new View.OnClickListener()
+        settingsBackButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent15 = new Intent(Main5Activity.this, MainActivity.class);
-                startActivity(intent15);
+                Intent settingsToMenuIntent = new Intent(SettingsActivity.this, StrideMainMenuActivity.class);
+                startActivity(settingsToMenuIntent);
+
 
             }
         });

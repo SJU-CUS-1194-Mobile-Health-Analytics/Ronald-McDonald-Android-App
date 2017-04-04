@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity {
+public class StrideMainMenuActivity extends AppCompatActivity {
 
     private String mUserName;
 
@@ -22,14 +22,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.stride_main_menu);
 
         mUserName = "anonymous";
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        if(mFirebaseUser == null) {
+      if(mFirebaseUser == null) {
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
@@ -40,39 +40,39 @@ public class MainActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), "Logged in as: " + mUserName, Toast.LENGTH_LONG).show();
 
-        Button ViewP = (Button) findViewById(R.id.ViewProf);
-        Button TrackM = (Button) findViewById(R.id.TrackMe);
-        Button Sett = (Button) findViewById(R.id.Settings);
+        Button menuToProfileButton = (Button) findViewById(R.id.button_menu_to_profile);
+        Button menuToTrackMeButton = (Button) findViewById(R.id.button_menu_to_track_me);
+        Button menuToSettingsButton = (Button) findViewById(R.id.button_menu_to_settings);
 
-        ViewP.setOnClickListener(new View.OnClickListener()
+        menuToProfileButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent1 = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(intent1);
+                Intent menuToProfileIntent = new Intent(StrideMainMenuActivity.this, ProfileActivity.class);
+                startActivity(menuToProfileIntent);
 
             }
         });
 
-        TrackM.setOnClickListener(new View.OnClickListener()
+        menuToTrackMeButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent2 = new Intent(MainActivity.this, Main4Activity.class);
-                startActivity(intent2);
+                Intent menuToTrackMeIntent = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
+                startActivity(menuToTrackMeIntent);
 
             }
         });
 
-        Sett.setOnClickListener(new View.OnClickListener()
+        menuToSettingsButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent3 = new Intent(MainActivity.this, Main5Activity.class);
-                startActivity(intent3);
+                Intent menuToSettingsIntent = new Intent(StrideMainMenuActivity.this, SettingsActivity.class);
+                startActivity(menuToSettingsIntent);
 
             }
         });

@@ -6,22 +6,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Main6Activity extends AppCompatActivity {
+public class DailyLogActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main6);
+        setContentView(R.layout.daily_log);
 
-        Button BackDL = (Button) findViewById(R.id.DLBack);
+        Button DailyLogBack_Button = (Button) findViewById(R.id.button_daily_log_to_profile);
 
-        BackDL.setOnClickListener(new View.OnClickListener()
+        DailyLogBack_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent10 = new Intent(Main6Activity.this, Main2Activity.class);
-                startActivity(intent10);
+                Intent DailyLog_to_History = new Intent(DailyLogActivity.this, ProfileActivity.class);
+                startActivity(DailyLog_to_History);
 
             }
         });
