@@ -95,8 +95,8 @@ public class GraphsActivity extends AppCompatActivity {
         });
     }
 
-    public void startTestSendDataActivity(View view) {
-        Intent launch = new Intent(this, TestSendDataActivity.class);
-        startActivity(launch);
-    }
+//    public void startTestSendDataActivity(View view) {
+//        Intent launch = new Intent(this, TestSendDataActivity.class);
+//        startActivity(launch);
+//    }
 }

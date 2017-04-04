@@ -36,7 +36,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private Marker mCurrLocationMarker;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    // receive coordinates from GpsTrackingActivity
+    // receive coordinates from
     private double myLatitude;
     private double myLongitude;
 

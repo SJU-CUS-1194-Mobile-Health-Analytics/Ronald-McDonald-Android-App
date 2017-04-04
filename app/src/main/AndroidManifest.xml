@@ -15,11 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity android:name=".StrideMainMenuActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -33,29 +33,26 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".GpsTrackingActivity">
-
-        </activity>
         <activity android:name=".ProfileActivity" />
         <activity android:name=".GraphsActivity" />
         <activity android:name=".TrackMeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DailyLogActivity" />
-        <activity android:name=".TestSendDataActivity"></activity>
         <activity android:name=".SignInActivity"></activity>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
-
         </activity>
-        <activity android:name=".DisplayMapsActivity">
 
-        </activity>
-        <activity android:name=".TestReceiveDataActivity">
+        <activity android:name=".TestSendDataActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".TestReceiveDataActivity">
         </activity>
     </application>
 
