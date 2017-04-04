@@ -58,7 +58,7 @@ import com.google.firebase.database.FirebaseDatabase;
  * uses Google Play services for authentication, see
  * https://github.com/googlesamples/android-google-accounts/tree/master/QuickStart.
  */
-public class GpsTrackingActivity2 extends AppCompatActivity implements
+public class DisplayMapsActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;

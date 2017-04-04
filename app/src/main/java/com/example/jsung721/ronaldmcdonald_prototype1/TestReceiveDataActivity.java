@@ -34,6 +34,7 @@ public class TestReceiveDataActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 RunningRecords runningRecords = dataSnapshot.getValue(RunningRecords.class);
+                // TODO: do something with running records
                 textView.setText(textView.getText()+
                         "\n"+runningRecords
                         +"\nPrevious Child Key:"+s);
