@@ -13,93 +13,102 @@
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:id="@+id/TrackMe_Mode_Spinner"
+        android:id="@+id/spinner_track_me_mode"
         android:spinnerMode="dropdown"
         android:entries = "@array/Track_Mode"
         android:layout_marginStart="44dp"
-        android:layout_alignBottom="@+id/TrackMe_Back_Button"
-        android:layout_toEndOf="@+id/TrackMe_Back_Button" />
+        android:layout_alignBottom="@+id/button_track_me_to_menu"
+        android:layout_toEndOf="@+id/button_track_me_to_menu" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Back_Button"
+        android:id="@+id/button_track_me_to_menu"
         android:text="@string/Back"
         android:textSize="20dp"
-        android:textColor="#FFFFFF"
-        android:background="#000000"
+        android:textColor="@color/white"
+        android:background="@color/black"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Miles_Title"
+        android:id="@+id/text_track_me_miles"
         android:text="Miles Run: "
         android:textSize="25dp"
+        android:textColor="@color/gray"
         android:textAlignment="center"
-        android:textColor="#9E9E9E"
         android:layout_marginStart="11dp"
         android:layout_marginBottom="169dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Miles_Value"
+        android:id="@+id/text_track_me_miles_value"
         android:hint="Miles Run"
         android:textSize="15dp"
-        android:layout_alignBaseline="@+id/TrackMe_Miles_Title"
-        android:layout_alignBottom="@+id/TrackMe_Miles_Title"
-        android:layout_alignEnd="@+id/TrackMe_Mode_Spinner" />
+        android:layout_alignBaseline="@+id/text_track_me_miles"
+        android:layout_alignBottom="@+id/text_track_me_miles"
+        android:layout_alignEnd="@+id/spinner_track_me_mode" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Time_Title"
+        android:id="@+id/text_track_me_time"
         android:text="Time Elapsed: "
         android:textSize="25dp"
+        android:textColor="@color/gray"
         android:textAlignment="center"
-        android:textColor="#9E9E9E"
-        android:layout_below="@+id/TrackMe_Miles_Value"
-        android:layout_alignStart="@+id/TrackMe_Miles_Title"
+        android:layout_below="@+id/text_track_me_miles_value"
+        android:layout_alignStart="@+id/text_track_me_miles"
         android:layout_marginTop="24dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Time_Value"
+        android:id="@+id/text_track_me_time_value"
         android:hint="Time"
         android:textSize="15dp"
-        android:layout_alignBaseline="@+id/TrackMe_Time_Title"
-        android:layout_alignBottom="@+id/TrackMe_Time_Title"
-        android:layout_alignStart="@+id/TrackMe_Miles_Value" />
+        android:layout_alignBaseline="@+id/text_track_me_time"
+        android:layout_alignBottom="@+id/text_track_me_time"
+        android:layout_alignStart="@+id/text_track_me_miles_value" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Pace_Title"
+        android:id="@+id/text_track_me_pace"
         android:text="Current Pace: "
         android:textSize="25dp"
+        android:textColor="@color/gray"
         android:textAlignment="center"
-        android:textColor="#9E9E9E"
-        android:layout_below="@+id/TrackMe_Time_Title"
-        android:layout_alignStart="@+id/TrackMe_Time_Title"
+        android:layout_below="@+id/text_track_me_time"
+        android:layout_alignStart="@+id/text_track_me_time"
         android:layout_marginTop="18dp" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Pace_Value"
+        android:id="@+id/text_track_me_pace_value"
         android:hint="Pace"
         android:textSize="15dp"
-        android:layout_alignBaseline="@+id/TrackMe_Pace_Title"
-        android:layout_alignBottom="@+id/TrackMe_Pace_Title"
-        android:layout_alignStart="@+id/TrackMe_Time_Value" />
+        android:layout_alignBaseline="@+id/text_track_me_pace"
+        android:layout_alignBottom="@+id/text_track_me_pace"
+        android:layout_alignStart="@+id/text_track_me_time_value" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TrackMe_Track_Button"
-        android:textColor="#000000"
+        android:id="@+id/button_track_me_start_tracking"
         android:text="Start Tracking"
-        android:textAlignment="center"
         android:textSize="35dp"
-        android:background="#FFFFFF"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        android:background="@color/white"
         android:fontFamily="sans-serif-smallcaps"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
 </RelativeLayout>

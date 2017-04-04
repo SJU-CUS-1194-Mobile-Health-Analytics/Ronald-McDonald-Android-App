@@ -8,19 +8,19 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#B71C1C"
+    android:background="@color/maroon"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.StrideMainMenuActivity">
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/text_menu"
         android:text="Stride"
         android:textSize="100dp"
+        android:textColor="@color/white"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center_horizontal"
-        android:id="@+id/MainMenu_Title"
-        android:textColor="#FFFFFF"
         android:layout_marginTop="18dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -28,11 +28,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/MainMenu_Settings_Button"
+        android:id="@+id/button_menu_to_settings"
         android:text="Settings"
         android:textSize="35dp"
-        android:textColor="#9E9E9E"
-        android:background="#000000"
+        android:textColor="@color/gray"
+        android:background="@color/black"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp" />
@@ -40,33 +40,35 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/MainMenu_TrackMe_Button"
+        android:id="@+id/button_menu_to_track_me"
         android:text="Track Me"
         android:textSize="35dp"
-        android:textColor="#9E9E9E"
-        android:background="#000000"
+        android:textColor="@color/gray"
+        android:background="@color/black"
         android:layout_marginBottom="16dp"
-        android:layout_above="@+id/MainMenu_Settings_Button"
+        android:layout_above="@+id/button_menu_to_settings"
         android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/MainMenu_ViewProfile_Button"
+        android:id="@+id/button_menu_to_profile"
         android:text="View Profile"
         android:textSize="35dp"
-        android:textColor="#9E9E9E"
-        android:background="#000000"
-        android:layout_above="@+id/MainMenu_TrackMe_Button"
+        android:textColor="@color/gray"
+        android:background="@color/black"
+        android:layout_above="@+id/button_menu_to_track_me"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="13dp" />
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/image_menu_logo"
         android:scaleType="fitXY"
         android:src ="@drawable/app_logo"
-        android:id="@+id/MainMenu_AppLogo"
-        android:layout_above="@+id/MainMenu_ViewProfile_Button"
+        android:layout_above="@+id/button_menu_to_profile"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="22dp" />
+
 </RelativeLayout>

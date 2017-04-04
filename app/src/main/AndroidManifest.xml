@@ -36,7 +36,7 @@
         <activity android:name=".GpsTrackingActivity">
 
         </activity>
-        <activity android:name=".UserHistoryActivity" />
+        <activity android:name=".ProfileActivity" />
         <activity android:name=".GraphsActivity" />
         <activity android:name=".TrackMeActivity" />
         <activity android:name=".SettingsActivity" />

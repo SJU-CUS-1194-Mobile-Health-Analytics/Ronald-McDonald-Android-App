@@ -10,21 +10,21 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 public class TrackMeActivity extends AppCompatActivity {
-    Spinner TrackMeMode_Spinner;
-    ArrayAdapter <CharSequence> TrackMeMode_Adapter;
+    Spinner trackMeModeSpinner;
+    ArrayAdapter <CharSequence> trackMeModeAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
-        Button TrackMeBack_Button = (Button) findViewById(R.id.TrackMe_Back_Button);
+        Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
 
-        TrackMeMode_Spinner = (Spinner)findViewById(R.id.TrackMe_Mode_Spinner);
-        TrackMeMode_Adapter = ArrayAdapter.createFromResource(this,R.array.Track_Mode,android.R.layout.simple_spinner_item);
-        TrackMeMode_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        TrackMeMode_Spinner.setAdapter(TrackMeMode_Adapter);
+        trackMeModeSpinner = (Spinner)findViewById(R.id.spinner_track_me_mode);
+        trackMeModeAdapter = ArrayAdapter.createFromResource(this,R.array.Track_Mode,android.R.layout.simple_spinner_item);
+        trackMeModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trackMeModeSpinner.setAdapter(trackMeModeAdapter);
 
-        TrackMeMode_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        trackMeModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -35,18 +35,18 @@ public class TrackMeActivity extends AppCompatActivity {
 
             }
         });
-        TrackMeBack_Button.setOnClickListener(new View.OnClickListener()
+        trackMeBackButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent TrackMe_to_MainMenu = new Intent(TrackMeActivity.this, StrideMainMenuActivity.class);
-                startActivity(TrackMe_to_MainMenu);
+                Intent trackMeToMenuIntent = new Intent(TrackMeActivity.this, StrideMainMenuActivity.class);
+                startActivity(trackMeToMenuIntent);
 
             }
         });
 
-        Button StartTrackingButton = (Button) findViewById(R.id.TrackMe_Track_Button);
+        Button StartTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
         StartTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

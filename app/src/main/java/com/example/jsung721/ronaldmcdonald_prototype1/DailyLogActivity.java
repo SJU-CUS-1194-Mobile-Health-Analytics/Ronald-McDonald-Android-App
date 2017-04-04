@@ -13,14 +13,14 @@ public class DailyLogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_log);
 
-        Button DailyLogBack_Button = (Button) findViewById(R.id.DailyLog_Back_Button);
+        Button DailyLogBack_Button = (Button) findViewById(R.id.button_daily_log_to_profile);
 
         DailyLogBack_Button.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent DailyLog_to_History = new Intent(DailyLogActivity.this, UserHistoryActivity.class);
+                Intent DailyLog_to_History = new Intent(DailyLogActivity.this, ProfileActivity.class);
                 startActivity(DailyLog_to_History);
 
             }

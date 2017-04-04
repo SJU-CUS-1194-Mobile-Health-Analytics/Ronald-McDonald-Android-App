@@ -10,31 +10,47 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+
 public class GraphsActivity extends AppCompatActivity {
-    Spinner GraphsTime_Spinner,GraphsStat_Spinner,GraphsMeasure_Spinner;
-    ArrayAdapter <CharSequence> GraphsTime_Adapter,GraphsStat_Adapter,GraphsMeasure_Adapter;
+    Spinner graphsTimeSpinner, graphsStatSpinner, graphsMeasureSpinner;
+    ArrayAdapter <CharSequence> graphsTimeAdapter, graphsStatAdapter, graphsMeasureAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphs);
-        Button GraphsBack_Button = (Button) findViewById(R.id.Graphs_Back_Button);
+        Button GraphsBack_Button = (Button) findViewById(R.id.button_graphs_to_profile);
 
-        GraphsTime_Spinner = (Spinner) findViewById(R.id.Graphs_Time_Spinner);
-        GraphsTime_Adapter = ArrayAdapter.createFromResource(this,R.array.Times,android.R.layout.simple_spinner_item);
-        GraphsTime_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        GraphsTime_Spinner.setAdapter(GraphsTime_Adapter);
+        graphsTimeSpinner = (Spinner) findViewById(R.id.spinner_graphs_time);
+        graphsTimeAdapter = ArrayAdapter.createFromResource(this,R.array.Times,android.R.layout.simple_spinner_item);
+        graphsTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        graphsTimeSpinner.setAdapter(graphsTimeAdapter);
 
-        GraphsStat_Spinner = (Spinner) findViewById(R.id.Graphs_Stats_Spinner);
-        GraphsStat_Adapter = ArrayAdapter.createFromResource(this,R.array.Stats,android.R.layout.simple_spinner_item);
-        GraphsStat_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        GraphsStat_Spinner.setAdapter(GraphsStat_Adapter);
+        graphsStatSpinner = (Spinner) findViewById(R.id.spinner_graphs_statistics);
+        graphsStatAdapter = ArrayAdapter.createFromResource(this,R.array.Stats,android.R.layout.simple_spinner_item);
+        graphsStatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        graphsStatSpinner.setAdapter(graphsStatAdapter);
 
-        GraphsMeasure_Spinner = (Spinner) findViewById(R.id.Graphs_Measure_Spinner);
-        GraphsMeasure_Adapter = ArrayAdapter.createFromResource(this,R.array.Measure,android.R.layout.simple_spinner_item);
-        GraphsMeasure_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        GraphsMeasure_Spinner.setAdapter(GraphsMeasure_Adapter);
+        graphsMeasureSpinner = (Spinner) findViewById(R.id.spinner_graphs_measure);
+        graphsMeasureAdapter = ArrayAdapter.createFromResource(this,R.array.Measure,android.R.layout.simple_spinner_item);
+        graphsMeasureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        graphsMeasureSpinner.setAdapter(graphsMeasureAdapter);
 
-        GraphsTime_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
+                new DataPoint(0, 1),
+                new DataPoint(1, 5),
+                new DataPoint(2, 3),
+                new DataPoint(3, 2),
+                new DataPoint(4, 6)
+        });
+        graph.addSeries(series);
+
+        graphsTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 TextView spinnerDialog = (TextView) view;
@@ -45,7 +61,7 @@ public class GraphsActivity extends AppCompatActivity {
 
             }
         });
-        GraphsStat_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        graphsStatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -56,7 +72,7 @@ public class GraphsActivity extends AppCompatActivity {
 
             }
         });
-        GraphsMeasure_Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        graphsMeasureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -72,8 +88,8 @@ public class GraphsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent Graphs_To_History = new Intent(GraphsActivity.this, UserHistoryActivity.class);
-                startActivity(Graphs_To_History);
+                Intent graphsToProfileIntent = new Intent(GraphsActivity.this, ProfileActivity.class);
+                startActivity(graphsToProfileIntent);
 
             }
         });
