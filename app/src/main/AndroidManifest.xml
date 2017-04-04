@@ -48,7 +48,7 @@
             android:label="@string/title_activity_maps">
 
         </activity>
-        <activity android:name=".GpsTrackingActivity2">
+        <activity android:name=".DisplayMapsActivity">
 
         </activity>
         <activity android:name=".TestReceiveDataActivity">
