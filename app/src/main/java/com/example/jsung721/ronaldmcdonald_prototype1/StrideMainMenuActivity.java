@@ -10,10 +10,15 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
+
 
 public class StrideMainMenuActivity extends AppCompatActivity {
 
     private String mUserName;
+
+    // Keys for intent
+    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -29,6 +34,7 @@ public class StrideMainMenuActivity extends AppCompatActivity {
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
       if(mFirebaseUser == null) {
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
@@ -62,6 +68,7 @@ public class StrideMainMenuActivity extends AppCompatActivity {
             {
 //                Intent menuToTrackMeIntent = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
 //                startActivity(menuToTrackMeIntent);
+
                 Intent menuToTrackMeSendDataActivity = new Intent(StrideMainMenuActivity.this, TrackMeSendDataActivity.class);
                 startActivity(menuToTrackMeSendDataActivity);
 

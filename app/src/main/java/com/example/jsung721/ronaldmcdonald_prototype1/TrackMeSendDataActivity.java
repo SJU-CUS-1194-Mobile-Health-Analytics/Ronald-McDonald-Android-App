@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +64,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class TrackMeSendDataActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
     // UI elements
     protected Spinner trackMeModeSpinner;
     protected ArrayAdapter<CharSequence> trackMeModeAdapter;
@@ -98,6 +100,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     protected final static String LAST_UPDATED_TIME_ELAPSED_STRING_KEY = "last-time-elapsed-string-key";
     protected final static String LAST_UPDATED_PACE = "last-updated-pace-string-key";
     protected final static String LAST_UPDATED_MILES_RUN = "last-updated-miles-run-key";
+    // Keys for intent
+    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
 
 
     /**
@@ -179,6 +183,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
             public void onClick(View v)
             {
                 Intent trackMeToMenuIntent = new Intent(TrackMeSendDataActivity.this, StrideMainMenuActivity.class);
+                trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
                 startActivity(trackMeToMenuIntent);
 
             }

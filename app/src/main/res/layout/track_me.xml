@@ -10,15 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.TrackMeActivity">
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:id="@+id/spinner_track_me_mode"
-        android:spinnerMode="dropdown"
-        android:entries = "@array/Track_Mode"
-        android:layout_marginStart="44dp"
-        android:layout_alignBottom="@+id/button_track_me_to_menu"
-        android:layout_toEndOf="@+id/button_track_me_to_menu" />
 
     <Button
         android:layout_width="wrap_content"
@@ -29,20 +20,24 @@
         android:textColor="@color/white"
         android:background="@color/black"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
-    <TextView
+    <Spinner
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/text_track_me_miles"
-        android:text="Miles Run: "
-        android:textSize="25dp"
-        android:textColor="@color/gray"
-        android:textAlignment="center"
-        android:layout_marginStart="11dp"
-        android:layout_marginBottom="169dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_height="150dp"
+        android:id="@+id/spinner_track_me_mode"
+        android:spinnerMode="dropdown"
+        android:entries = "@array/Track_Mode"
+        android:layout_marginStart="44dp"
+        android:layout_alignBottom="@id/button_track_me_to_menu"
+        android:layout_toEndOf="@+id/button_track_me_to_menu" />
+
+
+
+
+
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,5 +105,26 @@
         android:fontFamily="sans-serif-smallcaps"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_track_me_miles"
+        android:text="Miles Run: "
+        android:textSize="25dp"
+        android:textColor="@color/gray"
+        android:textAlignment="center"
+        android:layout_marginStart="11dp"
+        android:layout_marginBottom="169dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <fragment android:name="com.example.jsung721.ronaldmcdonald_prototype1.MapsActivity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/spinner_track_me_mode"
+        android:layout_above="@id/text_track_me_miles"
+        android:id="@+id/fragment_track_me_map"
+        />
 
 </RelativeLayout>

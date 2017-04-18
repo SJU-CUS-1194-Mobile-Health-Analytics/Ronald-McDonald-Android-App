@@ -1,5 +1,7 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.format.Time;
 
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.Date;
  * Created by yzhan265 on 3/7/2017.
  */
 
-public class RunningRecord {
+public class RunningRecord implements Parcelable{
 
     private long time;
     private double longitude;
@@ -22,6 +24,37 @@ public class RunningRecord {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
+
+    protected RunningRecord(Parcel in) {
+        time = in.readLong();
+        longitude = in.readDouble();
+        latitude = in.readDouble();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(time);
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<RunningRecord> CREATOR = new Creator<RunningRecord>() {
+        @Override
+        public RunningRecord createFromParcel(Parcel in) {
+            return new RunningRecord(in);
+        }
+
+        @Override
+        public RunningRecord[] newArray(int size) {
+            return new RunningRecord[size];
+        }
+    };
 
 
     public long getTime() {
@@ -41,4 +74,5 @@ public class RunningRecord {
                 "\nLatitude:"+this.getLatitude()+
                 "\nLongitude:"+this.getLongitude()+"\n";
     }
+
 }
