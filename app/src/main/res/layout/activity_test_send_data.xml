@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_width="100dp"
             android:gravity="center"
-            android:onClick="startUpdatesButtonHandler"
+
             android:text="@string/gpstrackingactivity_btn_start_updates" />
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_width="100dp"
             android:enabled="false"
             android:gravity="center"
-            android:onClick="stopUpdatesButtonHandler"
+
             android:text="@string/gpstrackingactivity_btn_stop_updates" />
     </LinearLayout>
 

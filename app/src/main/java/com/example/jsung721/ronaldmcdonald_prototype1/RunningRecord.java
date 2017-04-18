@@ -1,33 +1,31 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+import android.text.format.Time;
+
+import java.util.Date;
+
 /**
  * Created by yzhan265 on 3/7/2017.
  */
 
-public class RunningRecords {
+public class RunningRecord {
 
-    public String time;
-    public String date;
-    public double longitude;
-    public double latitude;
+    private long time;
+    private double longitude;
+    private double latitude;
 
-    public RunningRecords(){
-
+    public RunningRecord(){
     }
 
-    public RunningRecords(String time, String date, double latitude, Double longitude) {
+    public RunningRecord(long time, double latitude, double longitude) {
         this.time = time;
-        this.date = date;
         this.longitude = longitude;
         this.latitude = latitude;
     }
 
-    public String getTime() {
-        return time;
-    }
 
-    public String getDate() {
-        return date;
+    public long getTime() {
+        return time;
     }
 
     public double getLongitude() {
@@ -39,8 +37,7 @@ public class RunningRecords {
     }
 
     public String toString() {
-        return "Date:"+this.getDate()+
-                "\nTime:"+this.getTime()+
+        return  "\nTime:"+this.getTime()+
                 "\nLatitude:"+this.getLatitude()+
                 "\nLongitude:"+this.getLongitude()+"\n";
     }
