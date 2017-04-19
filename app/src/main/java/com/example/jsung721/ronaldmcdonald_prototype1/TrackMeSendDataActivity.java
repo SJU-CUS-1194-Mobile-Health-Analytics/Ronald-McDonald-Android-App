@@ -470,7 +470,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         super.onPause();
         // Stop location updates to save battery, but don't disconnect the GoogleApiClient object.
         if (mGoogleApiClient.isConnected()) {
-            stopLocationUpdates();
+            try{
+                stopLocationUpdates();
+            } catch (Exception e){
+
+            }
         }
     }
 
