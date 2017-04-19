@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
                 profileTotalMilesValueTextView.setText(""+ u.getDistance() + " Miles");
                 profileTotalTimeValueTextView.setText("" + u.getTime() + " Min");
                 profileAveragePaceTextView.setText("" + ((u.getDistance()/u.getTime()) + " Miles/Min"));
-                profileCaloriesBurnedValueTextView.setText("" + );
+                profileCaloriesBurnedValueTextView.setText("" +"100" );
 
             }
 
