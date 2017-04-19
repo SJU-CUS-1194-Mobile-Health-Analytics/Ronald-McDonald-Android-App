@@ -31,13 +31,12 @@ public class SignInSignOutActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     // Constants
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "SignInSignOutActivity";
     private static final int REQUEST_CODE_SIGN_IN = 9001;
 
     // Widgets
     private Button logInButton;
     private Button logOutButton;
-    private Button viewProfileButton;
     private TextView firebaseUserStatus;
 
     // Firebase Authentication
@@ -204,19 +203,8 @@ public class SignInSignOutActivity extends AppCompatActivity implements
         }
     }
 
-    /*private boolean isLoggedInWithGoogle() {
-        return mGoogleSignInAccount!=null;
-    }*/
-
     private boolean isLoggedInWithFirebase() {
         return mUser!=null;
-    }
-
-    private void viewProfile() {
-        if (isLoggedInWithFirebase()) {
-            Intent viewProfileIntent = new Intent(SignInSignOutActivity.this, ProfileActivity.class);
-            startActivity(viewProfileIntent);
-        }
     }
 
     @Override
