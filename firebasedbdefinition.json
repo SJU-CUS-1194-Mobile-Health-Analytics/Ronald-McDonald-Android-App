@@ -1,0 +1,25 @@
+ {
+ "users": {
+    "userkey1": {
+      "recordkey1": {
+        "total distance": -12,
+        "total time": -1
+      }
+    }
+  },
+  "running records": {
+	"recordkey1": [
+	  {
+		"lat": 1,
+		"long": 1,
+		"time": "recordkey1"
+	  },
+	  {
+		"lat": 2,
+		"long": 2,
+		"time": 1234
+	  }
+	]
+  }
+
+}
