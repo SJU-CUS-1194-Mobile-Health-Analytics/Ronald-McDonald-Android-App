@@ -1,5 +1,6 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -8,8 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -19,14 +24,28 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks,
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+
+public class MapsActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -40,23 +59,45 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private double myLatitude;
     private double myLongitude;
 
+    // database info
+    protected final String RUNNING_RECORDS = "running records";
+    protected final String USERS = "users";
+    protected String SAMPLE_USER_KEY = "userkey1";
+
+    // Keys for intent
+    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        Intent receivedIntent = getIntent();
 //        myLongitude = Double.parseDouble(receivedIntent.getExtras().getString("Longitude"));
 //        myLatitude = Double.parseDouble(receivedIntent.getExtras().getString("Latitude"));
 
-        setContentView(R.layout.activity_maps);
+//        setContentView(R.layout.activity_maps);
         checkLocationPermission();
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();
         }
+
+    }
+
+    public static MapsActivity newInstance(){
+        MapsActivity fragment = new MapsActivity();
+        return  fragment;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.activity_maps, null, false);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        return view;
     }
 
 
@@ -75,7 +116,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
         //Initialize Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 mMap.setMyLocationEnabled(true);
@@ -90,10 +131,17 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         LatLng sydney = new LatLng(-34, 151);
         mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(sydney).title("My Position"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        Toast.makeText(this,"map ready, default location: Sydney (lat:"
+        Toast.makeText(getActivity(),"map ready, default location: Sydney (lat:"
                 + mCurrLocationMarker.getPosition().latitude
                 +",long:"+mCurrLocationMarker.getPosition().longitude+")",
                 Toast.LENGTH_SHORT).show();
+        try{
+//            ArrayList<RunningRecord> runningRecordArrayList = (ArrayList<RunningRecord>) getIntent().getSerializableExtra(INTENT_RUNNING_RECORDS_KEY);
+//            addPolylinePath(runningRecordArrayList);
+
+        } catch (Exception e){
+
+        }
     }
 
     @Override
@@ -102,12 +150,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
-        Toast.makeText(this, "connected: current location:", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "connected: current location:", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -123,7 +170,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(this, "Location changed",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Location changed",Toast.LENGTH_SHORT).show();
 
         mLastLocation = location;
         if (mCurrLocationMarker != null) {
@@ -138,7 +185,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCurrLocationMarker = mMap.addMarker(markerOptions);
 
-        Toast.makeText(this,"current location: (lat:"
+        Toast.makeText(getActivity(),"current location: (lat:"
                         + mCurrLocationMarker.getPosition().latitude
                         +",long:"+mCurrLocationMarker.getPosition().longitude+")",
                 Toast.LENGTH_SHORT).show();
@@ -155,7 +202,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     }
 
     protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
@@ -164,12 +211,12 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     }
 
     public boolean checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(this,
+        if (ContextCompat.checkSelfPermission(getActivity(),
                android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Asking user if explanation is needed
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     android.Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an expanation to the user *asynchronously* -- don't block
@@ -177,14 +224,14 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 // sees the explanation, try again to request the permission.
 
                 //Prompt the user once explanation has been shown
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
 
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
@@ -203,7 +250,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // Permission was granted.
-                    if (ContextCompat.checkSelfPermission(this,
+                    if (ContextCompat.checkSelfPermission(getActivity(),
                             android.Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -216,7 +263,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 } else {
 
                     // Permission denied, Disable the functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
@@ -224,5 +271,18 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             // other 'case' lines to check for other permissions this app might request.
             //You can add here other case statements according to your requirement.
         }
+    }
+
+    protected void addPolylinePath(ArrayList<RunningRecord> runningRecordArrayList){
+        // Instantiates a new Polyline object and adds points to define a rectangle
+        final PolylineOptions pathOptions = new PolylineOptions();
+        for (RunningRecord r: runningRecordArrayList){
+            if(r.getLatitude()>0 && r.getLongitude()>0)
+                pathOptions.add(new LatLng(r.getLatitude(), r.getLongitude()));
+        }
+
+        // Get back the mutable Polyline
+        Polyline polyline = mMap.addPolyline(pathOptions);
+
     }
 }

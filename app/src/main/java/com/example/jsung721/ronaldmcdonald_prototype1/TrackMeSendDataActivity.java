@@ -19,15 +19,20 @@ package com.example.jsung721.ronaldmcdonald_prototype1;
  * limitations under the License.
  */
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +42,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.firebase.database.DatabaseReference;
@@ -58,9 +62,20 @@ import com.google.firebase.database.FirebaseDatabase;
  * uses Google Play services for authentication, see
  * https://github.com/googlesamples/android-google-accounts/tree/master/QuickStart.
  */
-public class TestSendDataActivity extends AppCompatActivity implements
+public class TrackMeSendDataActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    // UI elements
+    protected Spinner trackMeModeSpinner;
+    protected ArrayAdapter<CharSequence> trackMeModeAdapter;
+    protected Button startTrackingButton;
+    protected TextView milesValueTextView;
+    protected TextView timeValueTextView;
+    protected TextView paceValueTextView;
+    public final double METERS_TO_MILES_CONSTANT = 0.000621371;
+    protected Thread updateUiThread;
+
+    // permissions
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     protected static final String TAG = "location-updates-sample";
@@ -68,7 +83,7 @@ public class TestSendDataActivity extends AppCompatActivity implements
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000*10;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -81,7 +96,14 @@ public class TestSendDataActivity extends AppCompatActivity implements
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    protected final static String LAST_UPDATED_DAY_STRING_KEY = "last-updated-time-string-key";
+    // Keys for storing activity ui in Bundle
+    protected final static String LAST_UPDATED_TIME_ELAPSED_STRING_KEY = "last-time-elapsed-string-key";
+    protected final static String LAST_UPDATED_PACE = "last-updated-pace-string-key";
+    protected final static String LAST_UPDATED_MILES_RUN = "last-updated-miles-run-key";
+    // Keys for intent
+    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
+
+
     /**
      * Provides the entry point to Google Play services.
      */
@@ -104,18 +126,6 @@ public class TestSendDataActivity extends AppCompatActivity implements
      */
     protected Location mCurrentLocation;
 
-    // UI Widgets.
-    protected Button mStartUpdatesButton;
-    protected Button mStopUpdatesButton;
-    protected TextView mLastUpdateTimeTextView;
-    protected TextView mLatitudeTextView;
-    protected TextView mLongitudeTextView;
-
-    // Labels.
-    protected String mLatitudeLabel;
-    protected String mLongitudeLabel;
-    protected String mLastUpdateTimeLabel;
-    protected String mLastUpdateDayLabel;
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -126,8 +136,7 @@ public class TestSendDataActivity extends AppCompatActivity implements
     /**
      * Time when the location was updated represented as a String.
      */
-    protected String mLastUpdateTime;
-    protected String mLastUpdateDay;
+    protected long mLastUpdateTime;
 
     /**
      * Database connection variables
@@ -136,29 +145,70 @@ public class TestSendDataActivity extends AppCompatActivity implements
     private DatabaseReference mDatabase;
     private String date;
     private String time;
-    private final String RUNNING_RECORDS = "running records";
+    protected final String RUNNING_RECORDS = "running records";
+    protected final String USERS = "users";
+    protected String SAMPLE_USER_KEY = "userkey1";
+
+    protected ArrayList<RunningRecord> runningRecordArrayList;
+    protected long totalDistanceRun;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_send_data);
+//        setContentView(R.layout.activity_test_send_data);
 
-        // Locate the UI widgets.
-        mStartUpdatesButton = (Button) findViewById(R.id.start_updates_button);
-        mStopUpdatesButton = (Button) findViewById(R.id.stop_updates_button);
-        mLatitudeTextView = (TextView) findViewById(R.id.latitude_text);
-        mLongitudeTextView = (TextView) findViewById(R.id.longitude_text);
-        mLastUpdateTimeTextView = (TextView) findViewById(R.id.last_update_time_text);
+        setContentView(R.layout.track_me);
 
-        // Set labels.
-        mLatitudeLabel = getResources().getString(R.string.gpstrackingactivity_label_latitude);
-        mLongitudeLabel = getResources().getString(R.string.gpstrackingactivity_label_longitude);
-        mLastUpdateTimeLabel = getResources().getString(R.string.last_update_time_label);
-        mLastUpdateDayLabel = "Last location update day";
+        Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
+
+        trackMeModeSpinner = (Spinner)findViewById(R.id.spinner_track_me_mode);
+        trackMeModeAdapter = ArrayAdapter.createFromResource(this,R.array.Track_Mode,android.R.layout.simple_spinner_item);
+        trackMeModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trackMeModeSpinner.setAdapter(trackMeModeAdapter);
+
+        trackMeModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        trackMeBackButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent trackMeToMenuIntent = new Intent(TrackMeSendDataActivity.this, StrideMainMenuActivity.class);
+                trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
+                startActivity(trackMeToMenuIntent);
+
+            }
+        });
+
+        startTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
+        startTrackingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(TrackMeSendDataActivity.this, TrackMeSendDataActivity.class);
+//                startActivity(intent);
+                changeTrackingState();
+            }
+        });
+
+        milesValueTextView = (TextView)findViewById(R.id.text_track_me_miles_value);
+        timeValueTextView = (TextView) findViewById(R.id.text_track_me_time_value);
+        paceValueTextView = (TextView) findViewById(R.id.text_track_me_pace_value);
+
+
+
 
         mRequestingLocationUpdates = false;
-        mLastUpdateTime = "";
-        mLastUpdateDay = "";
+        mLastUpdateTime = 0;
+        runningRecordArrayList = new ArrayList<RunningRecord>();
 
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
@@ -182,7 +232,7 @@ public class TestSendDataActivity extends AppCompatActivity implements
             if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 mRequestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
-                setButtonsEnabledState();
+                changeTrackingState();
             }
 
             // Update the value of mCurrentLocation from the Bundle and update the UI to show the
@@ -195,10 +245,9 @@ public class TestSendDataActivity extends AppCompatActivity implements
 
             // Update the value of mLastUpdateTime from the Bundle and update the UI.
             if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
-                mLastUpdateTime = savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY);
-                mLastUpdateDay = savedInstanceState.getString(LAST_UPDATED_DAY_STRING_KEY);
+                mLastUpdateTime = Long.parseLong(savedInstanceState.getString(LAST_UPDATED_TIME_STRING_KEY));
             }
-            updateUI();
+
         }
     }
 
@@ -246,30 +295,6 @@ public class TestSendDataActivity extends AppCompatActivity implements
     }
 
     /**
-     * Handles the Start Updates button and requests start of location updates. Does nothing if
-     * updates have already been requested.
-     */
-    public void startUpdatesButtonHandler(View view) {
-        if (!mRequestingLocationUpdates) {
-            mRequestingLocationUpdates = true;
-            setButtonsEnabledState();
-            startLocationUpdates();
-        }
-    }
-
-    /**
-     * Handles the Stop Updates button, and requests removal of location updates. Does nothing if
-     * updates were not previously requested.
-     */
-    public void stopUpdatesButtonHandler(View view) {
-        if (mRequestingLocationUpdates) {
-            mRequestingLocationUpdates = false;
-            setButtonsEnabledState();
-            stopLocationUpdates();
-        }
-    }
-
-    /**
      * Requests location updates from the FusedLocationApi.
      */
     protected void startLocationUpdates() {
@@ -278,10 +303,11 @@ public class TestSendDataActivity extends AppCompatActivity implements
         checkLocationPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-        sendData(DateFormat.getTimeInstance().format(new Date()),
-                DateFormat.getDateInstance().format(new Date()),
-                mCurrentLocation.getLatitude(),
-                mCurrentLocation.getLongitude());
+        runningRecordArrayList = new ArrayList<RunningRecord>();
+        totalDistanceRun = 0;
+        mLastUpdateTime = System.currentTimeMillis();
+        addRecord();
+
     }
 
     /**
@@ -289,26 +315,70 @@ public class TestSendDataActivity extends AppCompatActivity implements
      * if the user is not requesting location updates. The Stop Updates button is enabled if the
      * user is requesting location updates.
      */
-    private void setButtonsEnabledState() {
+    private void changeTrackingState() {
         if (mRequestingLocationUpdates) {
-            mStartUpdatesButton.setEnabled(false);
-            mStopUpdatesButton.setEnabled(true);
+//            mStartUpdatesButton.setEnabled(false);
+//            mStopUpdatesButton.setEnabled(true);
+            mRequestingLocationUpdates = false;
+            stopLocationUpdates();
+            updateUiThread.interrupt();
+            this.startTrackingButton.setText("START TRACKING");
+
+
         } else {
-            mStartUpdatesButton.setEnabled(true);
-            mStopUpdatesButton.setEnabled(false);
+//            mStartUpdatesButton.setEnabled(true);
+//            mStopUpdatesButton.setEnabled(false);
+            mRequestingLocationUpdates = true;
+            startLocationUpdates();
+            beginUiUpdates();
+            this.startTrackingButton.setText("STOP TRACKING");
         }
+        updateUI();
+    }
+
+    protected void beginUiUpdates(){
+        updateUiThread = new Thread(){
+            @Override
+            public void run(){
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(100);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // update TextView here
+                                updateUI();
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+        updateUiThread.start();
     }
 
     /**
      * Updates the latitude, the longitude, and the last location time in the UI.
      */
     private void updateUI() {
-        mLatitudeTextView.setText(String.format("%s: %f", mLatitudeLabel,
-                mCurrentLocation.getLatitude()));
-        mLongitudeTextView.setText(String.format("%s: %f", mLongitudeLabel,
-                mCurrentLocation.getLongitude()));
-        mLastUpdateTimeTextView.setText(String.format("%s: %s", mLastUpdateTimeLabel,
-                mLastUpdateTime));
+        long timeElapsed;
+        if(runningRecordArrayList.isEmpty()){
+            timeElapsed = 0;
+        }else{
+            timeElapsed = System.currentTimeMillis() -
+                    runningRecordArrayList.get(0).getTime();
+        }
+        long milliseconds = timeElapsed;
+        int seconds = (int) (milliseconds / 1000) % 60 ;
+        int minutes = (int) ((milliseconds / (1000*60)) % 60);
+        timeValueTextView.setText(String.format("%02d : %02d",
+                minutes,
+                seconds));
+        milesValueTextView.setText(String.format("%.2f",totalDistanceRun*METERS_TO_MILES_CONSTANT));
+        // pace = min/mile
+        paceValueTextView.setText(String.format("%.2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));
+
     }
 
     /**
@@ -321,26 +391,63 @@ public class TestSendDataActivity extends AppCompatActivity implements
 
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-        sendData(DateFormat.getTimeInstance().format(new Date()),
-                DateFormat.getDateInstance().format(new Date()),
-                mCurrentLocation.getLatitude(),
-                mCurrentLocation.getLongitude());
+        this.sendData();
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
     }
 
-    public void sendData(String time, String date, double latitude, double longitude) {
+    public void sendData() {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(RUNNING_RECORDS);
-        RunningRecords r = new RunningRecords(time, date, latitude, longitude);
-        final DatabaseReference pushReference = myRef.push();
-        pushReference.setValue(r);
+        String key = ""+this.runningRecordArrayList.get(0).getTime();
+
+        // Add run records
+        DatabaseReference runsRef = database.getReference(RUNNING_RECORDS);
+        runsRef.child(key).setValue(this.runningRecordArrayList);
+
+        // Add run summary
+        DatabaseReference userRef = database.getReference(USERS).child(SAMPLE_USER_KEY);
+        RunSummary runSummary = new RunSummary(
+                mLastUpdateTime - runningRecordArrayList.get(0).getTime(),
+                totalDistanceRun);
+        userRef.child(key).setValue(runSummary);
     }
+
+    public void addRecord(){
+        RunningRecord r = new RunningRecord(
+                this.mLastUpdateTime,
+                -1,
+                -1);
+        try{
+            r = new RunningRecord(
+                    this.mLastUpdateTime,
+                    mCurrentLocation.getLatitude(),
+                    mCurrentLocation.getLongitude());
+        } catch (NullPointerException e){
+            Toast.makeText(this, "addRecord:NullPointer",Toast.LENGTH_SHORT);
+        } finally {
+            runningRecordArrayList.add(r);
+            if (this.runningRecordArrayList.size()>1){
+                RunningRecord prev = this.runningRecordArrayList.get(
+                        this.runningRecordArrayList.size()-2);
+                Location prevLoc = new Location(mCurrentLocation);
+                prevLoc.setLatitude(prev.getLatitude());
+                prevLoc.setLongitude(prev.getLongitude());
+                this.totalDistanceRun += prevLoc.distanceTo(mCurrentLocation);
+        }
+
+
+        }
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
+
+
+
     }
 
     @Override
@@ -350,9 +457,12 @@ public class TestSendDataActivity extends AppCompatActivity implements
         // connection to GoogleApiClient intact.  Here, we resume receiving
         // location updates if the user has requested them.
 
+
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
+
         }
+
     }
 
     @Override
@@ -369,6 +479,7 @@ public class TestSendDataActivity extends AppCompatActivity implements
         mGoogleApiClient.disconnect();
 
         super.onStop();
+        updateUiThread.interrupt();
     }
 
     /**
@@ -400,8 +511,7 @@ public class TestSendDataActivity extends AppCompatActivity implements
                 return;
             }
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-            mLastUpdateDay = DateFormat.getDateInstance().format(new Date());
+            mLastUpdateTime = System.currentTimeMillis();
             try{
                 updateUI();
             } catch (Exception e){
@@ -423,12 +533,9 @@ public class TestSendDataActivity extends AppCompatActivity implements
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
-        mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        mLastUpdateTime = System.currentTimeMillis();
         updateUI();
-        sendData(mLastUpdateTime,
-                mLastUpdateDay,
-                mCurrentLocation.getLatitude(),
-                mCurrentLocation.getLongitude());
+        addRecord();
         Toast.makeText(this, "Location changed",
                 Toast.LENGTH_SHORT).show();
     }
@@ -455,9 +562,16 @@ public class TestSendDataActivity extends AppCompatActivity implements
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);
-        savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, mLastUpdateTime);
-        savedInstanceState.putString(LAST_UPDATED_DAY_STRING_KEY,mLastUpdateDay);
+        savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, ""+mLastUpdateTime);
+
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle outState){
+        updateValuesFromBundle(outState);
+        //TODO: update ui from outstate!!
+        updateUI();
     }
 
     public boolean checkLocationPermission(){

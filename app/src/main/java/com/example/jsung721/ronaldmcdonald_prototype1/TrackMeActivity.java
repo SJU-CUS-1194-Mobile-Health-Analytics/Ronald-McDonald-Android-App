@@ -17,6 +17,7 @@ public class TrackMeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
+
         Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
 
         trackMeModeSpinner = (Spinner)findViewById(R.id.spinner_track_me_mode);
@@ -50,7 +51,7 @@ public class TrackMeActivity extends AppCompatActivity {
         StartTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TrackMeActivity.this, TestSendDataActivity.class);
+                Intent intent = new Intent(TrackMeActivity.this, TrackMeSendDataActivity.class);
                 startActivity(intent);
             }
         });
