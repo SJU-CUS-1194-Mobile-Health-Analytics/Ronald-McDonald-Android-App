@@ -14,14 +14,29 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
 
 public class GraphsActivity extends AppCompatActivity {
     Spinner graphsTimeSpinner, graphsStatSpinner, graphsMeasureSpinner;
     ArrayAdapter <CharSequence> graphsTimeAdapter, graphsStatAdapter, graphsMeasureAdapter;
-    @Override
+    public FirebaseDatabase database;
+    public DatabaseReference ref;
+    LineGraphSeries <DataPoint> series;
+    private int count;
+    ArrayList<DataPoint> points;
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphs);
+        count = 0;
         Button GraphsBack_Button = (Button) findViewById(R.id.button_graphs_to_profile);
 
         graphsTimeSpinner = (Spinner) findViewById(R.id.spinner_graphs_time);
@@ -39,15 +54,44 @@ public class GraphsActivity extends AppCompatActivity {
         graphsMeasureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         graphsMeasureSpinner.setAdapter(graphsMeasureAdapter);
 
+            GraphView graph = (GraphView) findViewById(R.id.graph);
+            graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(10);
 
-        GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setMinX(10);
+            graph.getViewport().setMaxX(10);
+
+            // enable scaling and scrolling
+            graph.getViewport().setScalable(true);
+            graph.getViewport().setScalableY(true);
+            series = new LineGraphSeries<>();
+
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReferenceFromUrl("https://myfitnesstracker-4c9c0.firebaseio.com/users/userkey1");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                UserInfo u = new UserInfo();
+                Iterable <DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot child:children) {
+                    u.setDistance(child.child("totalDistanceRun").getValue(Integer.class));
+                    series.appendData(new DataPoint(count,u.getDistance()),true,5);
+                    count++;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
+
         graph.addSeries(series);
 
         graphsTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
