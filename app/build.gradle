@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            debuggable true
+        }
     }
 }
 
@@ -38,7 +41,6 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-location:9.2.0'
     compile 'com.google.android.gms:play-services-maps:9.2.0'
-
     compile 'com.google.firebase:firebase-database:9.2.0'
     compile 'com.google.firebase:firebase-storage:9.2.0'
     compile 'com.google.firebase:firebase-auth:9.2.0'
