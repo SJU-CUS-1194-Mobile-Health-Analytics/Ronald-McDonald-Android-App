@@ -1,14 +1,12 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
 
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +22,6 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -33,16 +30,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+
+import edu.stjohns.cus1194.stride.data.RunningRecord;
+import edu.stjohns.cus1194.stride.data.TimestampedLocation;
 
 
 public class MapsActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,
@@ -273,12 +265,12 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
         }
     }
 
-    protected void addPolylinePath(ArrayList<RunningRecord> runningRecordArrayList){
+    protected void addPolylinePath(RunningRecord runningRecord){
         // Instantiates a new Polyline object and adds points to define a rectangle
         final PolylineOptions pathOptions = new PolylineOptions();
-        for (RunningRecord r: runningRecordArrayList){
-            if(r.getLatitude()>0 && r.getLongitude()>0)
-                pathOptions.add(new LatLng(r.getLatitude(), r.getLongitude()));
+        for (TimestampedLocation t: runningRecord.getRunningPath()){
+            if(t.getLatitude()>0 && t.getLongitude()>0)
+                pathOptions.add(new LatLng(t.getLatitude(), t.getLongitude()));
         }
 
         // Get back the mutable Polyline

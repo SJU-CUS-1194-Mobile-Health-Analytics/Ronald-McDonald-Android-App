@@ -1,29 +1,9 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
-/**
- * Created by yzhan265 on 3/14/2017.
- */
-/**
- * Copyright 2014 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,9 +24,16 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import edu.stjohns.cus1194.stride.data.RunSummary;
+import edu.stjohns.cus1194.stride.data.RunningRecord;
+import edu.stjohns.cus1194.stride.data.TimestampedLocation;
+import edu.stjohns.cus1194.stride.data.UserProfile;
+import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
+import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
+import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
 
 /**
  * Getting Location Updates.
@@ -83,7 +70,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000*10;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -96,13 +83,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    // Keys for storing activity ui in Bundle
-    protected final static String LAST_UPDATED_TIME_ELAPSED_STRING_KEY = "last-time-elapsed-string-key";
-    protected final static String LAST_UPDATED_PACE = "last-updated-pace-string-key";
-    protected final static String LAST_UPDATED_MILES_RUN = "last-updated-miles-run-key";
-    // Keys for intent
-    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
-
 
     /**
      * Provides the entry point to Google Play services.
@@ -115,17 +95,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     protected LocationRequest mLocationRequest;
 
     /**
-     * Stores the types of location services the client is interested in using. Used for checking
-     * settings to determine if the device has optimal location settings.
-     */
-    protected LocationSettingsRequest mLocationSettingsRequest;
-
-
-    /**
      * Represents a geographical location.
      */
     protected Location mCurrentLocation;
-
 
     /**
      * Tracks the status of the location updates request. Value changes when the user presses the
@@ -138,26 +110,19 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     protected long mLastUpdateTime;
 
-    /**
-     * Database connection variables
-     *
-     */
-    private DatabaseReference mDatabase;
-    private String date;
-    private String time;
-    protected final String RUNNING_RECORDS = "running records";
-    protected final String USERS = "users";
-    protected String SAMPLE_USER_KEY = "userkey1";
-
-    protected ArrayList<RunningRecord> runningRecordArrayList;
+    // Variables for the run currently being tracked
+    protected RunningRecord runningRecord;
     protected long totalDistanceRun;
+
+    // Firebase user
+    private FirebaseUser mUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_test_send_data);
-
         setContentView(R.layout.track_me);
+
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
 
@@ -183,7 +148,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
             public void onClick(View v)
             {
                 Intent trackMeToMenuIntent = new Intent(TrackMeSendDataActivity.this, StrideMainMenuActivity.class);
-                trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
+                //trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
                 startActivity(trackMeToMenuIntent);
 
             }
@@ -203,12 +168,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         timeValueTextView = (TextView) findViewById(R.id.text_track_me_time_value);
         paceValueTextView = (TextView) findViewById(R.id.text_track_me_pace_value);
 
-
-
-
         mRequestingLocationUpdates = false;
         mLastUpdateTime = 0;
-        runningRecordArrayList = new ArrayList<RunningRecord>();
+        runningRecord = new RunningRecord();
 
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
@@ -303,7 +265,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         checkLocationPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-        runningRecordArrayList = new ArrayList<RunningRecord>();
+        runningRecord = new RunningRecord();
         totalDistanceRun = 0;
         mLastUpdateTime = System.currentTimeMillis();
         addRecord();
@@ -363,11 +325,10 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     private void updateUI() {
         long timeElapsed;
-        if(runningRecordArrayList.isEmpty()){
+        if(runningRecord.getRunningPath().isEmpty()){
             timeElapsed = 0;
         }else{
-            timeElapsed = System.currentTimeMillis() -
-                    runningRecordArrayList.get(0).getTime();
+            timeElapsed = System.currentTimeMillis() - runningRecord.getRunningPath().get(0).getTime();
         }
         long milliseconds = timeElapsed;
         int seconds = (int) (milliseconds / 1000) % 60 ;
@@ -391,63 +352,62 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
-        this.sendData();
+        if (runningRecord.getRunningPath().size()>0) {
+            this.sendData();
+        }
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
     }
 
     public void sendData() {
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String key = ""+this.runningRecordArrayList.get(0).getTime();
+        // User id
+        String userId = mUser.getUid();
 
-        // Add run records
-        DatabaseReference runsRef = database.getReference(RUNNING_RECORDS);
-        runsRef.child(key).setValue(this.runningRecordArrayList);
+        // Add runningRecord to the DB
+        String runId = RunningRecordsDBAccess.addRunningRecord(runningRecord);
 
-        // Add run summary
-        DatabaseReference userRef = database.getReference(USERS).child(SAMPLE_USER_KEY);
-        RunSummary runSummary = new RunSummary(
-                mLastUpdateTime - runningRecordArrayList.get(0).getTime(),
-                totalDistanceRun);
-        userRef.child(key).setValue(runSummary);
+        // Add runSummary to the DB
+        long totalTimeElapsed = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
+        RunSummary runSummary = new RunSummary(totalTimeElapsed, totalDistanceRun);
+        RunSummariesByUserDBAccess.addRunForUser(userId, runId, runSummary);
+
+        // Add userProfile to the DB
+        UserProfile userProfile = new UserProfile(21, 68, 154);
+        UserProfileDBAccess.setUserProfileById(userId, userProfile);
+
+        // Reset the runningRecord variable
+        runningRecord = new RunningRecord();
     }
 
-    public void addRecord(){
-        RunningRecord r = new RunningRecord(
+    public void addRecord() {
+        TimestampedLocation t = new TimestampedLocation(
                 this.mLastUpdateTime,
                 -1,
                 -1);
-        try{
-            r = new RunningRecord(
+        try {
+            t = new TimestampedLocation(
                     this.mLastUpdateTime,
                     mCurrentLocation.getLatitude(),
                     mCurrentLocation.getLongitude());
-        } catch (NullPointerException e){
-            Toast.makeText(this, "addRecord:NullPointer",Toast.LENGTH_SHORT);
+        } catch (NullPointerException e) {
+            Toast.makeText(this, "addRecord:NullPointer", Toast.LENGTH_SHORT);
         } finally {
-            runningRecordArrayList.add(r);
-            if (this.runningRecordArrayList.size()>1){
-                RunningRecord prev = this.runningRecordArrayList.get(
-                        this.runningRecordArrayList.size()-2);
+            runningRecord.getRunningPath().add(t);
+            if (runningRecord.getRunningPath().size() > 1) {
+                TimestampedLocation prev = runningRecord.getRunningPath().get(
+                        runningRecord.getRunningPath().size() - 2);
                 Location prevLoc = new Location(mCurrentLocation);
                 prevLoc.setLatitude(prev.getLatitude());
                 prevLoc.setLongitude(prev.getLongitude());
                 this.totalDistanceRun += prevLoc.distanceTo(mCurrentLocation);
-        }
-
-
+            }
         }
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
         mGoogleApiClient.connect();
-
-
-
     }
 
     @Override
@@ -457,12 +417,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // connection to GoogleApiClient intact.  Here, we resume receiving
         // location updates if the user has requested them.
 
-
         if (mGoogleApiClient.isConnected() && mRequestingLocationUpdates) {
             startLocationUpdates();
-
         }
-
     }
 
     @Override
