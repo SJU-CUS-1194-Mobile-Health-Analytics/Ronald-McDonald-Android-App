@@ -364,7 +364,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         String userId = mUser.getUid();
 
         // Add runningRecord to the DB
-        String runId = RunningRecordsDBAccess.addRunningRecord(runningRecord);
+        String runId = "" + runningRecord.getRunningPath().get(0).getTime();
+        RunningRecordsDBAccess.addRunningRecord(runId, runningRecord);
 
         // Add runSummary to the DB
         long totalTimeElapsed = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
