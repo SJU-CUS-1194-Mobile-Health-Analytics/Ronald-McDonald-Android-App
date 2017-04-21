@@ -17,12 +17,9 @@ public class RunningRecordsDBAccess {
      * @param runningRecord - the RunningRecord to be added
      * @return the id assigned to the newly stored RunningRecord
      */
-    public static String addRunningRecord(RunningRecord runningRecord) {
+    public static void addRunningRecord(String runId, RunningRecord runningRecord) {
         DatabaseReference runningRecordsRef = getRunningRecordsRef();
-        DatabaseReference runningRecordRef = runningRecordsRef.push();
-        String runningRecordId = runningRecordRef.getKey();
-        runningRecordRef.setValue(runningRecord);
-        return runningRecordId;
+        runningRecordsRef.child(runId).setValue(runningRecord);
     }
 
     /**
