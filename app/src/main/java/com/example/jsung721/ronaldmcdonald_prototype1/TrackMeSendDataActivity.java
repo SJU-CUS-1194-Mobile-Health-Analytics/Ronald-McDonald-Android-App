@@ -29,6 +29,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.stjohns.cus1194.stride.data.RunSummary;
+import edu.stjohns.cus1194.stride.data.UserProfile;
+import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
+import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
+
 /**
  * Getting Location Updates.
  *
@@ -114,30 +119,20 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     protected long mLastUpdateTime;
 
-    /*
-     * Database connection variables
-     *
-     *
-    private DatabaseReference mDatabase;
-    private String date;
-    private String time;*/
     protected final String RUNNING_RECORDS = "running records";
     protected final String USERS = "users";
-    protected String USER_KEY = "default_user";
 
     protected ArrayList<RunningRecord> runningRecordArrayList;
     protected long totalDistanceRun;
+
+    private FirebaseUser mUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (mUser!=null) {
-            USER_KEY = mUser.getUid();
-        }
-        Toast.makeText(this, "User Key: " + USER_KEY,Toast.LENGTH_LONG).show();
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
 
@@ -377,22 +372,25 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     }
 
     public void sendData() {
+        // User id
+        String userId = mUser.getUid();
+
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        String key = ""+this.runningRecordArrayList.get(0).getTime();
+        String runId = ""+this.runningRecordArrayList.get(0).getTime();
 
         // Add run records
         DatabaseReference runsRef = database.getReference(RUNNING_RECORDS);
-        runsRef.child(key).setValue(this.runningRecordArrayList);
+        runsRef.child(runId).setValue(this.runningRecordArrayList);
 
         // Add run summary
-        DatabaseReference usersRef = database.getReference(USERS);
-        DatabaseReference currentUserRef = usersRef.child(USER_KEY);
+        long totalTimeElapsed = mLastUpdateTime - runningRecordArrayList.get(0).getTime();
+        RunSummary runSummary = new RunSummary(totalTimeElapsed, totalDistanceRun);
+        RunSummariesByUserDBAccess.addRunForUser(userId, runId, runSummary);
 
-        RunSummary runSummary = new RunSummary(
-                mLastUpdateTime - runningRecordArrayList.get(0).getTime(),
-                totalDistanceRun);
-        currentUserRef.child(key).setValue(runSummary);
+        //Add user profile
+        UserProfile userProfile = new UserProfile(21, 68, 154);
+        UserProfileDBAccess.setUserProfileById(userId, userProfile);
     }
 
     public void addRecord(){
