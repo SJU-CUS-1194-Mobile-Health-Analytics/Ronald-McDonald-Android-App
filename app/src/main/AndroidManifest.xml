@@ -38,9 +38,6 @@
         <activity android:name=".TrackMeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DailyLogActivity" />
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
         <activity android:name=".TrackMeSendDataActivity"></activity>
         <activity android:name=".TestReceiveDataActivity"></activity>
         <activity android:name=".SignInSignOutActivity"></activity>
