@@ -10,14 +10,25 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.ArrayList;
 
 
 public class GraphsActivity extends AppCompatActivity {
     Spinner graphsTimeSpinner, graphsStatSpinner, graphsMeasureSpinner;
     ArrayAdapter <CharSequence> graphsTimeAdapter, graphsStatAdapter, graphsMeasureAdapter;
+    public FirebaseDatabase database;
+    public DatabaseReference ref;
+    LineGraphSeries<DataPoint> series;
+    private int count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,17 +50,41 @@ public class GraphsActivity extends AppCompatActivity {
         graphsMeasureAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         graphsMeasureSpinner.setAdapter(graphsMeasureAdapter);
 
+        count = 1;
 
         GraphView graph = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                new DataPoint(0, 1),
-                new DataPoint(1, 5),
-                new DataPoint(2, 3),
-                new DataPoint(3, 2),
-                new DataPoint(4, 6)
+
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(10);
+        graph.getViewport().setMinX(10);
+        graph.getViewport().setMaxX(10);
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setYAxisBoundsManual(true);
+       
+
+        series = new LineGraphSeries<>();
+        database = FirebaseDatabase.getInstance();
+        ref = database.getReferenceFromUrl("https://myfitnesstracker-4c9c0.firebaseio.com/users/userkey1");
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserInfo u = new UserInfo();
+                Iterable <DataSnapshot> children = dataSnapshot.getChildren();
+                for (DataSnapshot child:children) {
+                    u.setDistance(child.child("totalDistanceRun").getValue(Integer.class));
+                    series.appendData(new DataPoint(count,u.getDistance()), true,5);
+                    count++;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
         });
         graph.addSeries(series);
-
         graphsTimeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
