@@ -13,6 +13,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import edu.stjohns.cus1194.stride.data.RunningRecord;
+
 /**
  * Created by yzhan265 on 3/29/2017.
  */
