@@ -17,8 +17,7 @@
         android:id="@+id/image_profile_picture"
         android:src = "@drawable/portrait"
         android:gravity="center"
-        android:layout_marginTop="33dp"
-        android:layout_below="@+id/text_user_profile"
+        android:layout_alignTop="@+id/button_profile_to_menu"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -40,21 +39,21 @@
         android:text="Total Miles: "
         android:textSize="20dp"
         android:textColor="@color/maroon"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:layout_below="@+id/button_profile_to_daily_log"
-        android:layout_toStartOf="@+id/text_profile_total_miles_value"
-        android:layout_marginEnd="16dp" />
+        android:layout_toStartOf="@+id/image_profile_picture" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_profile_total_miles_value"
         android:hint = "Miles"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:textColorHint="@color/dark_gray"
         android:layout_alignBaseline="@+id/text_profile_total_miles"
         android:layout_alignBottom="@+id/text_profile_total_miles"
-        android:layout_alignEnd="@+id/button_profile_to_daily_log" />
+        android:layout_toEndOf="@+id/image_profile_picture" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,7 +62,7 @@
         android:text="Total Time: "
         android:textSize="20dp"
         android:textColor="@color/maroon"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="16dp"
         android:layout_below="@+id/text_profile_total_miles"
         android:layout_alignStart="@+id/text_profile_total_miles" />
 
@@ -73,10 +72,10 @@
         android:id="@+id/text_profile_total_time_value"
         android:hint = "Time"
         android:textSize="20dp"
+        android:textColor="@color/black"
         android:textColorHint="@color/dark_gray"
-        android:layout_alignBaseline="@+id/text_profile_total_time"
-        android:layout_alignBottom="@+id/text_profile_total_time"
-        android:layout_alignStart="@+id/text_profile_total_miles_value" />
+        android:layout_above="@+id/text_profile_avg_pace"
+        android:layout_alignEnd="@+id/text_profile_total_miles_value" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -85,20 +84,20 @@
         android:text="Average Pace: "
         android:textSize="20dp"
         android:textColor="@color/maroon"
+        android:layout_marginTop="12dp"
         android:layout_below="@+id/text_profile_total_time"
-        android:layout_toStartOf="@+id/text_profile_total_time_value"
-        android:layout_marginTop="24dp" />
+        android:layout_alignStart="@+id/text_profile_total_time" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_profile_avg_pace_value"
         android:hint = "Pace"
+        android:textColor="@color/black"
         android:textSize="20dp"
         android:textColorHint="@color/dark_gray"
-        android:layout_alignBaseline="@+id/text_profile_avg_pace"
-        android:layout_alignBottom="@+id/text_profile_avg_pace"
-        android:layout_alignEnd="@+id/button_profile_to_daily_log" />
+        android:layout_above="@+id/text_profile_calories_burned"
+        android:layout_alignEnd="@+id/text_profile_total_time_value" />
 
     <Button
         android:layout_width="match_parent"
@@ -132,5 +131,28 @@
         android:layout_below="@+id/image_profile_picture"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_calories_burned"
+        android:text="Calories Burned"
+        android:textSize="20dp"
+        android:textColor="@color/maroon"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/text_profile_avg_pace"
+        android:layout_alignStart="@+id/text_profile_avg_pace" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_calories_burned_value"
+        android:hint="Calories"
+        android:textColorHint="@color/dark_gray"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:layout_alignBaseline="@+id/text_profile_calories_burned"
+        android:layout_alignBottom="@+id/text_profile_calories_burned"
+        android:layout_alignStart="@+id/text_profile_total_miles_value" />
 
 </RelativeLayout>
