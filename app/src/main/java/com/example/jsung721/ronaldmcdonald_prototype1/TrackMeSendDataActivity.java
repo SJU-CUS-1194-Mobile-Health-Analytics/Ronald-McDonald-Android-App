@@ -333,9 +333,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         long milliseconds = timeElapsed;
         int seconds = (int) (milliseconds / 1000) % 60 ;
         int minutes = (int) ((milliseconds / (1000*60)) % 60);
-        timeValueTextView.setText(String.format("%02d : %02d",
-                minutes,
-                seconds));
+        timeValueTextView.setText(String.format("%02d : %02d", minutes, seconds));
         milesValueTextView.setText(String.format("%.2f",totalDistanceRun*METERS_TO_MILES_CONSTANT));
         // pace = min/mile
         paceValueTextView.setText(String.format("%.2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));

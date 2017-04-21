@@ -60,7 +60,10 @@ public class ProfileActivity extends AppCompatActivity {
                 }
 
                 profileTotalMilesValueTextView.setText("" + u.getDistance() + " Miles");
-                profileTotalTimeValueTextView.setText("" + u.getTime() + " Sec");
+                int seconds = (int) (u.getTime() / 1000) % 60;
+                int minutes = (int) ((u.getTime()/(1000*60)) / 60);
+                //int hours = (int)(( 60);
+                profileTotalTimeValueTextView.setText((String.format("%02d : %02d : %02d",minutes,seconds)));
                 profileAveragePaceValueTextView.setText("" + (u.getDistance()/u.getTime()) + " Mi/sec");
                 profileCaloriesBurnedValueTextView.setText("" + u.getCalories() + " Cal");
 
