@@ -1,29 +1,9 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
-/**
- * Created by yzhan265 on 3/14/2017.
- */
-/**
- * Copyright 2014 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +24,8 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
 
-import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -83,7 +64,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000*10;
+    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     /**
      * The fastest rate for active location updates. Exact. Updates will never be more frequent
@@ -96,10 +77,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
-    // Keys for storing activity ui in Bundle
-    protected final static String LAST_UPDATED_TIME_ELAPSED_STRING_KEY = "last-time-elapsed-string-key";
-    protected final static String LAST_UPDATED_PACE = "last-updated-pace-string-key";
-    protected final static String LAST_UPDATED_MILES_RUN = "last-updated-miles-run-key";
     // Keys for intent
     protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
 
@@ -114,11 +91,10 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     protected LocationRequest mLocationRequest;
 
-    /**
+    /*
      * Stores the types of location services the client is interested in using. Used for checking
      * settings to determine if the device has optimal location settings.
-     */
-    protected LocationSettingsRequest mLocationSettingsRequest;
+    protected LocationSettingsRequest mLocationSettingsRequest;*/
 
 
     /**
@@ -138,16 +114,16 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     protected long mLastUpdateTime;
 
-    /**
+    /*
      * Database connection variables
      *
-     */
+     *
     private DatabaseReference mDatabase;
     private String date;
-    private String time;
+    private String time;*/
     protected final String RUNNING_RECORDS = "running records";
     protected final String USERS = "users";
-    protected String SAMPLE_USER_KEY = "userkey1";
+    protected String USER_KEY = "default_user";
 
     protected ArrayList<RunningRecord> runningRecordArrayList;
     protected long totalDistanceRun;
@@ -155,9 +131,13 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_test_send_data);
-
         setContentView(R.layout.track_me);
+
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (mUser!=null) {
+            USER_KEY = mUser.getUid();
+        }
+        Toast.makeText(this, "User Key: " + USER_KEY,Toast.LENGTH_LONG).show();
 
         Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
 
@@ -208,7 +188,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = 0;
-        runningRecordArrayList = new ArrayList<RunningRecord>();
+        runningRecordArrayList = new ArrayList<>();
 
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
@@ -303,7 +283,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         checkLocationPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
-        runningRecordArrayList = new ArrayList<RunningRecord>();
+        runningRecordArrayList = new ArrayList<>();
         totalDistanceRun = 0;
         mLastUpdateTime = System.currentTimeMillis();
         addRecord();
@@ -406,11 +386,13 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         runsRef.child(key).setValue(this.runningRecordArrayList);
 
         // Add run summary
-        DatabaseReference userRef = database.getReference(USERS).child(SAMPLE_USER_KEY);
+        DatabaseReference usersRef = database.getReference(USERS);
+        DatabaseReference currentUserRef = usersRef.child(USER_KEY);
+
         RunSummary runSummary = new RunSummary(
                 mLastUpdateTime - runningRecordArrayList.get(0).getTime(),
                 totalDistanceRun);
-        userRef.child(key).setValue(runSummary);
+        currentUserRef.child(key).setValue(runSummary);
     }
 
     public void addRecord(){

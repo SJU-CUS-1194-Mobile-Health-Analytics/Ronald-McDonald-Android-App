@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,18 +19,20 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class TestReceiveDataActivity extends AppCompatActivity {
     protected final String RUNNING_RECORDS = "running records";
-    protected final String USERS = "users";
-    protected String SAMPLE_USER_KEY = "userkey1";
+    protected String USER_KEY = "default_user";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_receive_data);
 
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        USER_KEY = mUser.getUid() + "_" + mUser.getEmail();
+
         final TextView textView = (TextView) findViewById(R.id.text_test_receive_data);
         // Get a reference to our posts
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference(RUNNING_RECORDS).child(SAMPLE_USER_KEY);
+        DatabaseReference ref = database.getReference(RUNNING_RECORDS).child(USER_KEY);
 
         // Attach a listener to read the data at our posts reference
         ref.addChildEventListener(new ChildEventListener() {

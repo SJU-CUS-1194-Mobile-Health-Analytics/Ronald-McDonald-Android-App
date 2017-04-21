@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -15,7 +18,11 @@ public class ProfileActivity extends AppCompatActivity {
         Button profileToMenuButton = (Button) findViewById(R.id.button_profile_to_menu);
         Button profileToGraphsButton = (Button) findViewById(R.id.button_profile_to_graphs);
         Button profileToDailyLogButton = (Button) findViewById(R.id.button_profile_to_daily_log);
-        
+
+        String userName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+
+        TextView profileName = (TextView) findViewById(R.id.text_user_profile);
+        profileName.setText(userName);
 
         profileToMenuButton.setOnClickListener(new View.OnClickListener()
         {
