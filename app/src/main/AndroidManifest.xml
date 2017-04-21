@@ -35,12 +35,12 @@
 
         <activity android:name=".ProfileActivity" />
         <activity android:name=".GraphsActivity" />
-        <activity android:name=".TrackMeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DailyLogActivity" />
-        <activity android:name=".TrackMeSendDataActivity"></activity>
-        <activity android:name=".TestReceiveDataActivity"></activity>
-        <activity android:name=".SignInSignOutActivity"></activity>
+        <activity android:name=".TrackMeSendDataActivity" />
+        <activity android:name=".TestReceiveDataActivity" />
+        <activity android:name=".SignInSignOutActivity" />
+        <activity android:name=".TestPastRunActivity"></activity>
     </application>
 
 </manifest>

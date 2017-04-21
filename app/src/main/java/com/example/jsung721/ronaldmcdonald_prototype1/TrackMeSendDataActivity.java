@@ -1,5 +1,8 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -22,8 +25,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.ArrayList;
-
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -72,12 +75,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
-    /**
-     * The fastest rate for active location updates. Exact. Updates will never be more frequent
-     * than this value.
-     */
-    public static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
-            UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
     // Keys for storing activity state in the Bundle.
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
@@ -116,6 +113,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
     // Firebase user
     private FirebaseUser mUser;
+
+    protected MapsFragment mapsFragment;
+    protected Polyline prevPolyline;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -179,6 +179,15 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // API.
         checkLocationPermission();
         buildGoogleApiClient();
+
+        // Build map fragment
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        mapsFragment = new MapsFragment();
+        fragmentTransaction
+                .add(R.id.frame_track_me_fragment_map, mapsFragment)
+                .commit();
+
     }
 
     /**
@@ -251,7 +260,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
 
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
@@ -279,8 +288,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
      */
     private void changeTrackingState() {
         if (mRequestingLocationUpdates) {
-//            mStartUpdatesButton.setEnabled(false);
-//            mStopUpdatesButton.setEnabled(true);
             mRequestingLocationUpdates = false;
             stopLocationUpdates();
             updateUiThread.interrupt();
@@ -288,8 +295,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
 
         } else {
-//            mStartUpdatesButton.setEnabled(true);
-//            mStopUpdatesButton.setEnabled(false);
             mRequestingLocationUpdates = true;
             startLocationUpdates();
             beginUiUpdates();
@@ -304,7 +309,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
             public void run(){
                 try {
                     while (!isInterrupted()) {
-                        Thread.sleep(100);
+                        Thread.sleep(1000);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -499,6 +504,10 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         addRecord();
         Toast.makeText(this, "Location changed",
                 Toast.LENGTH_SHORT).show();
+
+        // update polyline
+        prevPolyline.remove();
+        prevPolyline  = mapsFragment.addPolylinePath(runningRecord);
     }
 
     @Override

@@ -66,8 +66,6 @@ public class StrideMainMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-//                Intent menuToTrackMeIntent = new Intent(StrideMainMenuActivity.this, TrackMeActivity.class);
-//                startActivity(menuToTrackMeIntent);
 
                 Intent menuToTrackMeSendDataActivity = new Intent(StrideMainMenuActivity.this, TrackMeSendDataActivity.class);
                 startActivity(menuToTrackMeSendDataActivity);

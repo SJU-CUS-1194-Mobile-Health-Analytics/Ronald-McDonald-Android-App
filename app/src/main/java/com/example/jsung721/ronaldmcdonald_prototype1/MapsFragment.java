@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -31,13 +32,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.util.ArrayList;
-
 import edu.stjohns.cus1194.stride.data.RunningRecord;
 import edu.stjohns.cus1194.stride.data.TimestampedLocation;
+import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
 
 
-public class MapsActivity extends Fragment implements GoogleApiClient.ConnectionCallbacks,
+public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -47,26 +47,12 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
     private Marker mCurrLocationMarker;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    // receive coordinates from
-    private double myLatitude;
-    private double myLongitude;
+    protected Polyline polyline;
 
-    // database info
-    protected final String RUNNING_RECORDS = "running records";
-    protected final String USERS = "users";
-    protected String SAMPLE_USER_KEY = "userkey1";
-
-    // Keys for intent
-    protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Intent receivedIntent = getIntent();
-//        myLongitude = Double.parseDouble(receivedIntent.getExtras().getString("Longitude"));
-//        myLatitude = Double.parseDouble(receivedIntent.getExtras().getString("Latitude"));
-
-//        setContentView(R.layout.activity_maps);
         checkLocationPermission();
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -75,10 +61,11 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
 
     }
 
-    public static MapsActivity newInstance(){
-        MapsActivity fragment = new MapsActivity();
+    public static MapsFragment newInstance(){
+        MapsFragment fragment = new MapsFragment();
         return  fragment;
     }
+
 
     @Nullable
     @Override
@@ -88,6 +75,9 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
         View view = inflater.inflate(R.layout.activity_maps, null, false);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+//        getFragmentManager()
+//                .findFragmentById(R.id.map);
+//        getMapAsync(this);
         mapFragment.getMapAsync(this);
         return view;
     }
@@ -119,21 +109,6 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
             mMap.setMyLocationEnabled(true);
         }
 
-        //Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mCurrLocationMarker = mMap.addMarker(new MarkerOptions().position(sydney).title("My Position"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        Toast.makeText(getActivity(),"map ready, default location: Sydney (lat:"
-                + mCurrLocationMarker.getPosition().latitude
-                +",long:"+mCurrLocationMarker.getPosition().longitude+")",
-                Toast.LENGTH_SHORT).show();
-        try{
-//            ArrayList<RunningRecord> runningRecordArrayList = (ArrayList<RunningRecord>) getIntent().getSerializableExtra(INTENT_RUNNING_RECORDS_KEY);
-//            addPolylinePath(runningRecordArrayList);
-
-        } catch (Exception e){
-
-        }
     }
 
     @Override
@@ -265,7 +240,8 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
         }
     }
 
-    protected void addPolylinePath(RunningRecord runningRecord){
+
+    protected Polyline addPolylinePath(RunningRecord runningRecord){
         // Instantiates a new Polyline object and adds points to define a rectangle
         final PolylineOptions pathOptions = new PolylineOptions();
         for (TimestampedLocation t: runningRecord.getRunningPath()){
@@ -274,7 +250,8 @@ public class MapsActivity extends Fragment implements GoogleApiClient.Connection
         }
 
         // Get back the mutable Polyline
-        Polyline polyline = mMap.addPolyline(pathOptions);
+        polyline = mMap.addPolyline(pathOptions);
+        return polyline;
 
     }
 }
