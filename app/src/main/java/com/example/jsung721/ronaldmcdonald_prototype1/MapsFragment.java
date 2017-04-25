@@ -225,6 +225,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     }
 
 
+    /**
+     * add polyline path and start and end markers to path
+     * @param runningRecord
+     * @return
+     */
     protected Polyline addPolylinePath(RunningRecord runningRecord){
         // Instantiates a new Polyline object and adds points to define a rectangle
         final PolylineOptions pathOptions = new PolylineOptions();

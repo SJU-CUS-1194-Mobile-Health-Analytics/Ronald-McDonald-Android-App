@@ -28,11 +28,18 @@ public class TestPastRunActivity extends AppCompatActivity {
         fragmentTransaction
                 .add(R.id.frame_track_me_fragment_map, mapsFragment)
                 .commit();
+
+        /**
+         * Create your RunningRecord object here.
+         */
+        // Sample data
         RunningRecord runningRecord = new RunningRecord();
         ArrayList<TimestampedLocation> timestampedLocations = new ArrayList<>();
         timestampedLocations.add(new TimestampedLocation(1,40.7336, 73.8124));
         timestampedLocations.add(new TimestampedLocation(2, 40.7363, 73.8161));
         runningRecord.setRunningPath(timestampedLocations);
+
+        // add polyline to map
         Polyline polyline = mapsFragment.addPolylinePath(runningRecord);
     }
 }
