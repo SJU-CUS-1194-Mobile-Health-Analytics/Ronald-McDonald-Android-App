@@ -234,7 +234,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         // Instantiates a new Polyline object and adds points to define a rectangle
         final PolylineOptions pathOptions = new PolylineOptions();
         for (TimestampedLocation t: runningRecord.getRunningPath()){
-//            if(t.getLatitude()>0 && t.getLongitude()>0)
                 pathOptions.add(new LatLng(t.getLatitude(), t.getLongitude()));
         }
 
@@ -252,26 +251,16 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                 .title("Start")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-        if(markerStart != null){
-            markerStart.remove();
-
-        }
+        if(markerStart != null){markerStart.remove();}
         markerStart = mMap.addMarker(markerStartOptions);
 
-        if(markerEnd != null){
-            markerEnd.remove();
-
-        }
+        if(markerEnd != null){markerEnd.remove();}
         markerEnd = mMap.addMarker(markerEndOptions);
 
-
-//        pathOptions.add(new LatLng(40.7,-73.8));
-//        pathOptions.add(new LatLng(40.9, -73.9));
-        if(polyline != null){
-            polyline.remove();
-        }
+        if(polyline != null){polyline.remove();}
         // Get back the mutable Polyline
         polyline = mMap.addPolyline(pathOptions);
+
         return polyline;
 
     }

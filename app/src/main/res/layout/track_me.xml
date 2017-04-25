@@ -119,13 +119,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true" />
 
-    <!--fragment android:name="com.example.jsung721.ronaldmcdonald_prototype1.MapsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/spinner_track_me_mode"
-        android:layout_above="@id/text_track_me_miles"
-        android:id="@+id/fragment_track_me_map"
-        /-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
