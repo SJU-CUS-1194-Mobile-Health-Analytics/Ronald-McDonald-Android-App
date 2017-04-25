@@ -1,7 +1,6 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,7 +24,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -115,7 +113,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     private FirebaseUser mUser;
 
     protected MapsFragment mapsFragment;
-    protected Polyline prevPolyline;
+    protected Polyline polyline;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -181,7 +179,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         buildGoogleApiClient();
 
         // Build map fragment
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         mapsFragment = new MapsFragment();
         fragmentTransaction
@@ -271,6 +269,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     protected void startLocationUpdates() {
         // The final argument to {@code requestLocationUpdates()} is a LocationListener
         // (http://developer.android.com/reference/com/google/android/gms/location/LocationListener.html).
+
+
         checkLocationPermission();
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
@@ -278,7 +278,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         totalDistanceRun = 0;
         mLastUpdateTime = System.currentTimeMillis();
         addRecord();
-
     }
 
     /**
@@ -362,6 +361,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         }
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
+
     }
 
     public void sendData() {
@@ -394,10 +394,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
                     this.mLastUpdateTime,
                     mCurrentLocation.getLatitude(),
                     mCurrentLocation.getLongitude());
+            runningRecord.getRunningPath().add(t);
         } catch (NullPointerException e) {
             Toast.makeText(this, "addRecord:NullPointer", Toast.LENGTH_SHORT);
         } finally {
-            runningRecord.getRunningPath().add(t);
+
             if (runningRecord.getRunningPath().size() > 1) {
                 TimestampedLocation prev = runningRecord.getRunningPath().get(
                         runningRecord.getRunningPath().size() - 2);
@@ -505,9 +506,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         Toast.makeText(this, "Location changed",
                 Toast.LENGTH_SHORT).show();
 
-        // update polyline
-        prevPolyline.remove();
-        prevPolyline  = mapsFragment.addPolylinePath(runningRecord);
+        polyline = mapsFragment.addPolylinePath(this.runningRecord);
     }
 
     @Override

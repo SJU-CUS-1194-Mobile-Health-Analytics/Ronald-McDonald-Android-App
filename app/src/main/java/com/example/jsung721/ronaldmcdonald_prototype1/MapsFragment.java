@@ -44,10 +44,12 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Location mLastLocation;
-    private Marker mCurrLocationMarker;
+    protected Marker markerEnd;
+    protected Marker markerStart;
+    protected Polyline polyline;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    protected Polyline polyline;
+//    protected Polyline polyline;
 
 
     @Override
@@ -75,9 +77,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         View view = inflater.inflate(R.layout.activity_maps, null, false);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
-//        getFragmentManager()
-//                .findFragmentById(R.id.map);
-//        getMapAsync(this);
         mapFragment.getMapAsync(this);
         return view;
     }
@@ -140,25 +139,10 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         Toast.makeText(getActivity(), "Location changed",Toast.LENGTH_SHORT).show();
 
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
-        }
-
-        //Place current location marker
-        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-
-        Toast.makeText(getActivity(),"current location: (lat:"
-                        + mCurrLocationMarker.getPosition().latitude
-                        +",long:"+mCurrLocationMarker.getPosition().longitude+")",
-                Toast.LENGTH_SHORT).show();
 
         //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                mLastLocation.getLatitude(), mLastLocation.getLongitude())));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
 
         //stop location updates
@@ -245,10 +229,42 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         // Instantiates a new Polyline object and adds points to define a rectangle
         final PolylineOptions pathOptions = new PolylineOptions();
         for (TimestampedLocation t: runningRecord.getRunningPath()){
-            if(t.getLatitude()>0 && t.getLongitude()>0)
+//            if(t.getLatitude()>0 && t.getLongitude()>0)
                 pathOptions.add(new LatLng(t.getLatitude(), t.getLongitude()));
         }
 
+        // start marker
+        MarkerOptions markerStartOptions = new MarkerOptions()
+                .position(pathOptions.getPoints().get(0))
+                .title("Start")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                .anchor((float)0.5,(float)0.5)
+//                .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.presence_online));
+
+        // end marker
+        MarkerOptions markerEndOptions = new MarkerOptions()
+                .position(pathOptions.getPoints().get(pathOptions.getPoints().size()-1))
+                .title("Start")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+        if(markerStart != null){
+            markerStart.remove();
+
+        }
+        markerStart = mMap.addMarker(markerStartOptions);
+
+        if(markerEnd != null){
+            markerEnd.remove();
+
+        }
+        markerEnd = mMap.addMarker(markerEndOptions);
+
+
+//        pathOptions.add(new LatLng(40.7,-73.8));
+//        pathOptions.add(new LatLng(40.9, -73.9));
+        if(polyline != null){
+            polyline.remove();
+        }
         // Get back the mutable Polyline
         polyline = mMap.addPolyline(pathOptions);
         return polyline;

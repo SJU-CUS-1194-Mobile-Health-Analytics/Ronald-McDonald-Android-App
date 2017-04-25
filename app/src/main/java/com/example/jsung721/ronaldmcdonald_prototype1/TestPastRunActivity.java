@@ -22,7 +22,7 @@ public class TestPastRunActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_past_run);
 
         // Build map fragment
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         mapsFragment = new MapsFragment();
         fragmentTransaction
