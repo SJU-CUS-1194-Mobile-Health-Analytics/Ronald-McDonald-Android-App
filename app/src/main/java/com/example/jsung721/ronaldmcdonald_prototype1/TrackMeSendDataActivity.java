@@ -506,6 +506,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         Toast.makeText(this, "Location changed",
                 Toast.LENGTH_SHORT).show();
 
+        // add polyline
         polyline = mapsFragment.addPolylinePath(this.runningRecord);
     }
 
