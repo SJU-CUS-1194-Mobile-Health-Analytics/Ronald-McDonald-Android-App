@@ -15,11 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity android:name=".StrideMainMenuActivity">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -35,12 +38,12 @@
 
         <activity android:name=".ProfileActivity" />
         <activity android:name=".GraphsActivity" />
-        <activity android:name=".TrackMeActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DailyLogActivity" />
-        <activity android:name=".TrackMeSendDataActivity"></activity>
-        <activity android:name=".TestReceiveDataActivity"></activity>
-        <activity android:name=".SignInSignOutActivity"></activity>
+        <activity android:name=".TrackMeSendDataActivity" >
+
+        </activity>
+        <activity android:name=".SignInSignOutActivity" />
     </application>
 
 </manifest>
