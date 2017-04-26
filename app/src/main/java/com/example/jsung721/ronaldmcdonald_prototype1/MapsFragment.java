@@ -2,6 +2,7 @@ package com.example.jsung721.ronaldmcdonald_prototype1;
 
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 import edu.stjohns.cus1194.stride.data.RunningRecord;
 import edu.stjohns.cus1194.stride.data.TimestampedLocation;
@@ -136,14 +139,13 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(getActivity(), "Location changed",Toast.LENGTH_SHORT).show();
 
         mLastLocation = location;
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
                 mLastLocation.getLatitude(), mLastLocation.getLongitude())));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -226,13 +228,15 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
 
     /**
-     * add polyline path and start and end markers to path
+     * This method is for active running.
+     * add polyline path and start marker to path
      * @param runningRecord
      * @return
      */
     protected Polyline addPolylinePath(RunningRecord runningRecord){
         // Instantiates a new Polyline object and adds points to define a rectangle
-        final PolylineOptions pathOptions = new PolylineOptions();
+        final PolylineOptions pathOptions = new PolylineOptions()
+                .color(Color.BLUE);
         for (TimestampedLocation t: runningRecord.getRunningPath()){
                 pathOptions.add(new LatLng(t.getLatitude(), t.getLongitude()));
         }
@@ -245,11 +249,55 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 //                .anchor((float)0.5,(float)0.5)
 //                .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.presence_online));
 
+        if(markerStart != null){markerStart.remove();}
+        markerStart = mMap.addMarker(markerStartOptions);
+
+        if(polyline != null){polyline.remove();}
+        // Get back the mutable Polyline
+        polyline = mMap.addPolyline(pathOptions);
+
+        return polyline;
+
+    }
+
+    /**
+     * This method is for plotting polylines for a previous run.
+     * @param runningRecord
+     */
+    protected void addCompletedPolylinePath(RunningRecord runningRecord){
+
+        ArrayList<TimestampedLocation> path = runningRecord.getRunningPath();
+        long min = -1;
+        long max = -1;
+
+        for (int i = 1; i<path.size();i++){
+            if (min < 0 || min > path.get(i).getTime()-path.get(i-1).getTime()){
+                min = path.get(i).getTime()-path.get(i-1).getTime();
+            }
+            if (max < 0 || max < path.get(i).getTime()-path.get(i-1).getTime()){
+                max = path.get(i).getTime()-path.get(i-1).getTime();
+            }
+        }
+
+        for (int i = 1; i<path.size();i++){
+            mMap.addPolyline(new PolylineOptions()
+                    .add(new LatLng(path.get(i-1).getLatitude(), path.get(i-1).getLongitude()))
+                    .add(new LatLng(path.get(i).getLatitude(), path.get(i).getLongitude()))
+                    .color(getSpeedColor(path.get(i).getTime()-path.get(i-1).getTime(), min, max)));
+        }
+
+        // start marker
+        MarkerOptions markerStartOptions = new MarkerOptions()
+                .position(new LatLng(path.get(0).getLatitude(), path.get(0).getLongitude()))
+                .title("Start")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+
         // end marker
         MarkerOptions markerEndOptions = new MarkerOptions()
-                .position(pathOptions.getPoints().get(pathOptions.getPoints().size()-1))
+                .position(new LatLng(path.get(path.size()-1).getLatitude(), path.get(path.size()-1).getLongitude()))
                 .title("Start")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         if(markerStart != null){markerStart.remove();}
         markerStart = mMap.addMarker(markerStartOptions);
@@ -258,10 +306,26 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         markerEnd = mMap.addMarker(markerEndOptions);
 
         if(polyline != null){polyline.remove();}
-        // Get back the mutable Polyline
-        polyline = mMap.addPolyline(pathOptions);
 
-        return polyline;
+    }
 
+    /**
+     * Calculates what the color of the line segment should be
+     * @param curTime
+     * @param minTime
+     * @param maxTime
+     * @return
+     */
+
+    protected int getSpeedColor(long curTime, long minTime, long maxTime){
+
+//        Red = {255, 0,0};
+//        Yellow = {255,255,0};
+//        Green = {0,255,0};
+        int Red = (int)Math.round(254*(1-curTime*1.0/(1.0*maxTime - minTime)));
+        int Green = (int)Math.round(254*(curTime*1.0/(1.0*maxTime - minTime)));
+        // alpha, red, green, blue
+        int RGB = android.graphics.Color.argb(200, Red, Green, 0);
+        return RGB;
     }
 }
