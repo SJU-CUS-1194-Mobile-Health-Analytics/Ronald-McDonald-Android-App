@@ -393,8 +393,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         } finally {
             runningRecord.getRunningPath().add(t);
             if (runningRecord.getRunningPath().size() > 1) {
-                TimestampedLocation prev = runningRecord.getRunningPath().get(
-                        runningRecord.getRunningPath().size() - 2);
+                TimestampedLocation prev = runningRecord.getRunningPath().get(runningRecord.getRunningPath().size() - 2);
                 Location prevLoc = new Location(mCurrentLocation);
                 prevLoc.setLatitude(prev.getLatitude());
                 prevLoc.setLongitude(prev.getLongitude());

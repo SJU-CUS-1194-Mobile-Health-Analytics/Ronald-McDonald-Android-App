@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">RonaldMcDonald_Prototype1</string>
     <string name="Select_Time"> Select Time Frame:</string>
-    <string name="Select_Stat"> Select Statistic </string>
-    <string name="Select_Measure">Select Measure</string>
+    <string name="Select_Stat"> See Progress for:  </string>
+    <string name="Select_Measure">See High/Low/Avg for: </string>
     <string name="Back"> Back </string>
 
     <string-array name="Times">
@@ -17,8 +17,9 @@
         <item> Pace </item>
     </string-array>
     <string-array name="Measure">
-        <item>Total</item>
-        <item>Average</item>
+        <item>Distance</item>
+        <item>Time</item>
+        <item>Pace</item>
     </string-array>
     <string-array name="Track_Mode">
         <item>Race Mode</item>
