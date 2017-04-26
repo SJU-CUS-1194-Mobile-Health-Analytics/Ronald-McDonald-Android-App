@@ -155,4 +155,69 @@
         android:layout_alignBottom="@+id/text_profile_calories_burned"
         android:layout_alignStart="@+id/text_profile_total_miles_value" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_age"
+        android:text="Age: "
+        android:textColor="@color/dark_gray"
+        android:textSize="15dp"
+        android:layout_alignBaseline="@+id/button_profile_to_menu"
+        android:layout_alignBottom="@+id/button_profile_to_menu"
+        android:layout_toEndOf="@+id/button_profile_to_daily_log" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_age_value"
+        android:textSize="15dp"
+        android:hint="age"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/light_gray"
+        android:layout_alignBaseline="@+id/text_profile_age"
+        android:layout_alignBottom="@+id/text_profile_age"
+        android:layout_toEndOf="@+id/text_profile_calories_burned_value" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_height"
+        android:textSize="15dp"
+        android:textColor="@color/dark_gray"
+        android:text="Height:"
+        android:layout_below="@+id/button_profile_to_menu"
+        android:layout_alignEnd="@+id/text_profile_age" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_height_value"
+        android:textSize="15dp"
+        android:textColorHint="@color/light_gray"
+        android:hint="heightInInches"
+        android:textColor="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_height"
+        android:layout_alignBottom="@+id/text_profile_height"
+        android:layout_alignStart="@+id/text_profile_weight_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_weight"
+        android:textSize="15dp"
+        android:textColor="@color/dark_gray"
+        android:text="Weight"
+        android:layout_above="@+id/button_profile_to_daily_log"
+        android:layout_alignStart="@+id/text_profile_height" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_profile_weight_value"
+        android:textSize="15dp"
+        android:hint="weight"
+        android:textColorHint="@color/light_gray"
+        android:textColor="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_weight"
+        android:layout_alignBottom="@+id/text_profile_weight"
+        android:layout_alignStart="@+id/text_profile_age_value" />
 </RelativeLayout>

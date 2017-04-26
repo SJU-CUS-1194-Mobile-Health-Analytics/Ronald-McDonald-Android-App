@@ -45,7 +45,6 @@
         android:background="@color/white"
         android:layout_alignBaseline="@+id/text_graphs"
         android:layout_alignBottom="@+id/text_graphs"
-        android:layout_alignStart="@+id/text_graphs_time"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
@@ -54,10 +53,10 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintHorizontal_bias="0.075"
-        app:layout_constraintVertical_bias="0.017" />
+        app:layout_constraintHorizontal_bias="0.028"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_graphs_time"
@@ -75,8 +74,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.084"
-        app:layout_constraintVertical_bias="0.35" />
+        app:layout_constraintHorizontal_bias="0.033"
+        app:layout_constraintVertical_bias="0.352" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -96,8 +95,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.894"
-        app:layout_constraintVertical_bias="0.267" />
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintVertical_bias="0.346" />-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -116,8 +115,8 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        app:layout_constraintHorizontal_bias="0.124"
-        app:layout_constraintVertical_bias="0.276" />
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintVertical_bias="0.188" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -127,7 +126,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         android:entries ="@array/Stats"
         android:layout_alignBottom="@+id/text_graphs_statistics"
-        android:layout_alignEnd="@+id/spinner_graphs_time"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -136,8 +134,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.927"
-        app:layout_constraintVertical_bias="0.352" />
+        app:layout_constraintHorizontal_bias="0.885"
+        app:layout_constraintVertical_bias="0.169" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -147,7 +145,6 @@
         android:textSize="15dp"
         android:textColor="#B71C1C"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/spinner_graphs_time"
         android:layout_marginEnd="11dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="24dp"
@@ -157,8 +154,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.162"
-        app:layout_constraintVertical_bias="0.442" />
+        app:layout_constraintHorizontal_bias="0.106"
+        app:layout_constraintVertical_bias="0.661" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -168,7 +165,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.Light"
         android:entries = "@array/Measure"
         android:layout_alignBottom="@+id/text_graphs_measure"
-        android:layout_alignStart="@+id/spinner_graphs_time"
         android:layout_alignEnd="@+id/spinner_graphs_statistics"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
@@ -178,22 +174,36 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.906"
-        app:layout_constraintVertical_bias="0.437" />
+        app:layout_constraintHorizontal_bias="0.841"
+        app:layout_constraintVertical_bias="0.645" />
 
     <com.jjoe64.graphview.GraphView
-        android:layout_width="303dp"
-        android:layout_height="194dp"
+        android:layout_width="228dp"
+        android:layout_height="148dp"
         android:id="@+id/graph"
         android:layout_alignStart="@+id/text_graphs_measure"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.363"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
-        app:layout_constraintVertical_bias="0.973" />
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <com.jjoe64.graphview.GraphView
+        android:layout_height="148dp"
+        android:layout_width="228dp"
+        android:id="@+id/graph2"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="1.0" />
+
     </android.support.constraint.ConstraintLayout>
