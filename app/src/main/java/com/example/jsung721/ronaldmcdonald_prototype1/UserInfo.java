@@ -77,6 +77,7 @@ public class UserInfo
 
     public int getCalories() {
         minutes = (int) (totalTimeElapsed/(1000*60));
+        if (totalDistanceRun==0) { totalDistanceRun=1; }
         int METcalc = minutes/totalDistanceRun;
         int METmeasure = 1;
         if(METcalc <= 4)

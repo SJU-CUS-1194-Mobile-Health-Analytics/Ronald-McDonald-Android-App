@@ -36,8 +36,6 @@ public class SignInSignOutActivity extends AppCompatActivity implements
 
     // Widgets
     private Button logInButton;
-    private Button logOutButton;
-    private TextView firebaseUserStatus;
 
     // Firebase Authentication
     private FirebaseAuth mAuth;
@@ -77,23 +75,14 @@ public class SignInSignOutActivity extends AppCompatActivity implements
         logInButton = (Button) findViewById(R.id.activity_sign_in_sign_out_log_in_button);
         logInButton.setOnClickListener(this);
 
-        // log out button
-        logOutButton = (Button) findViewById(R.id.activity_sign_in_sign_out_log_out_button);
-        logOutButton.setOnClickListener(this);
-
-        // user status
-        firebaseUserStatus = (TextView) findViewById(R.id.activity_sign_in_sign_out_firebase_user_status);
-
         updateUI();
     }
 
     private void updateUI() {
-        // Firebase user status
         if (isLoggedInWithFirebase()) {
-            String name = mUser.getDisplayName();
-            firebaseUserStatus.setText(name + " is logged in.");
+            logInButton.setText("Log Out");
         } else {
-            firebaseUserStatus.setText("User is not logged in.");
+            logInButton.setText("Log In");
         }
     }
 
@@ -175,6 +164,8 @@ public class SignInSignOutActivity extends AppCompatActivity implements
                             Toast.makeText(SignInSignOutActivity.this, "Authentication with Firebase failed.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(SignInSignOutActivity.this, "Firebase Sign In succeeded! " + mUser.getDisplayName() + " is logged in with Firebase", Toast.LENGTH_SHORT).show();
+                            Intent SignInToMainMenuIntent = new Intent(SignInSignOutActivity.this, StrideMainMenuActivity.class);
+                            startActivity(SignInToMainMenuIntent);
                         }
                     }
                 });
@@ -218,9 +209,11 @@ public class SignInSignOutActivity extends AppCompatActivity implements
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.activity_sign_in_sign_out_log_in_button) {
-            logIn();
-        } else if (i == R.id.activity_sign_in_sign_out_log_out_button) {
-            logOut();
+            if (isLoggedInWithFirebase()) {
+                logOut();
+            } else {
+                logIn();
+            }
         }
     }
 }

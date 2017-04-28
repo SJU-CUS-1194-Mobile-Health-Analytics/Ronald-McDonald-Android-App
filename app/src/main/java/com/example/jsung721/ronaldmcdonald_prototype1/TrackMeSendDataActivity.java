@@ -27,6 +27,9 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.stjohns.cus1194.stride.data.RunSummary;
 import edu.stjohns.cus1194.stride.data.RunningRecord;
@@ -35,6 +38,7 @@ import edu.stjohns.cus1194.stride.data.UserProfile;
 import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
 import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
 import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
+import edu.stjohns.cus1194.stride.utils.CalorieCalculator;
 
 /**
  * Getting Location Updates.
@@ -53,13 +57,19 @@ import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
 public class TrackMeSendDataActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    // User info
+    private FirebaseUser mUser;
+    private UserProfile userProfile;
+
     // UI elements
+    protected Button trackMeBackButton;
     protected Spinner trackMeModeSpinner;
     protected ArrayAdapter<CharSequence> trackMeModeAdapter;
     protected Button startTrackingButton;
     protected TextView milesValueTextView;
     protected TextView timeValueTextView;
     protected TextView paceValueTextView;
+
     public final double METERS_TO_MILES_CONSTANT = 0.000621371;
     protected Thread updateUiThread;
 
@@ -68,50 +78,35 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
     protected static final String TAG = "location-updates-sample";
 
-    /**
-     * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-     */
-    public static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
-
+    // The desired interval for location updates. Inexact. Updates may be more or less frequent.
+    protected static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
 
     // Keys for storing activity state in the Bundle.
     protected final static String REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates-key";
     protected final static String LOCATION_KEY = "location-key";
     protected final static String LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
 
-    /**
-     * Provides the entry point to Google Play services.
-     */
+    // Provides the entry point to Google Play services.
     protected GoogleApiClient mGoogleApiClient;
 
-    /**
-     * Stores parameters for requests to the FusedLocationProviderApi.
-     */
+    //Stores parameters for requests to the FusedLocationProviderApi.
     protected LocationRequest mLocationRequest;
 
-    /**
-     * Represents a geographical location.
-     */
+    // Represents a geographical location.
     protected Location mCurrentLocation;
 
-    /**
-     * Tracks the status of the location updates request. Value changes when the user presses the
-     * Start Updates and Stop Updates buttons.
-     */
+    // Tracks the status of the location updates request.
+    // Value changes when the user presses the Start Updates and Stop Updates buttons.
     protected Boolean mRequestingLocationUpdates;
 
-    /**
-     * Time when the location was updated represented as a String.
-     */
+    // Time when the location was updated represented as a String.
     protected long mLastUpdateTime;
 
     // Variables for the run currently being tracked
     protected RunningRecord runningRecord;
     protected long totalDistanceRun;
 
-    // Firebase user
-    private FirebaseUser mUser;
-
+    // Google Maps
     protected MapsFragment mapsFragment;
     protected Polyline polyline;
 
@@ -120,51 +115,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        Button trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
-
-        trackMeModeSpinner = (Spinner)findViewById(R.id.spinner_track_me_mode);
-        trackMeModeAdapter = ArrayAdapter.createFromResource(this,R.array.Track_Mode,android.R.layout.simple_spinner_item);
-        trackMeModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        trackMeModeSpinner.setAdapter(trackMeModeAdapter);
-
-        trackMeModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        trackMeBackButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent trackMeToMenuIntent = new Intent(TrackMeSendDataActivity.this, StrideMainMenuActivity.class);
-                //trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
-                startActivity(trackMeToMenuIntent);
-
-            }
-        });
-
-        startTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
-        startTrackingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(TrackMeSendDataActivity.this, TrackMeSendDataActivity.class);
-//                startActivity(intent);
-                changeTrackingState();
-            }
-        });
-
-        milesValueTextView = (TextView)findViewById(R.id.text_track_me_miles_value);
-        timeValueTextView = (TextView) findViewById(R.id.text_track_me_time_value);
-        paceValueTextView = (TextView) findViewById(R.id.text_track_me_pace_value);
+        initUserInfo();
+        initUI();
 
         mRequestingLocationUpdates = false;
         mLastUpdateTime = 0;
@@ -186,6 +138,81 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
                 .add(R.id.frame_track_me_fragment_map, mapsFragment)
                 .commit();
 
+    }
+
+    private void initUserInfo() {
+        // Init FirebaseUser Object
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Init UserProfile Object
+        // Note that database reads are performed asynchronously, so we should always check that
+        // userProfile != null before we do anything that requires it
+        userProfile = null;
+        UserProfileDBAccess.getUserProfileRefById(mUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot userProfileSnapshot) {
+                if (userProfileSnapshot != null) {
+                    userProfile = userProfileSnapshot.getValue(UserProfile.class);
+                } else {
+                    System.out.println("Failed to retrieve a UserProfile object with the given UserId. ");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Request to get UserProfile from database was cancelled. ");
+            }
+        });
+    }
+
+    private void initUI() {
+        // Button to go back to the main menu
+        trackMeBackButton = (Button) findViewById(R.id.button_track_me_to_menu);
+        trackMeBackButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent trackMeToMenuIntent = new Intent(TrackMeSendDataActivity.this, StrideMainMenuActivity.class);
+                //trackMeToMenuIntent.putParcelableArrayListExtra(INTENT_RUNNING_RECORDS_KEY, runningRecordArrayList);
+                startActivity(trackMeToMenuIntent);
+
+            }
+        });
+
+        // Spinner for trackMeMode
+        trackMeModeSpinner = (Spinner)findViewById(R.id.spinner_track_me_mode);
+        trackMeModeAdapter = ArrayAdapter.createFromResource(this,R.array.Track_Mode,android.R.layout.simple_spinner_item);
+        trackMeModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        trackMeModeSpinner.setAdapter(trackMeModeAdapter);
+        trackMeModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // Button to start/stop tracking
+        startTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
+        startTrackingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // check that the userProfile object has been retrieved from the database
+                if (userProfile != null) {
+                    changeTrackingState();
+                }
+            }
+        });
+
+        // TextViews
+        milesValueTextView = (TextView) findViewById(R.id.text_track_me_miles_value);
+        timeValueTextView = (TextView) findViewById(R.id.text_track_me_time_value);
+        paceValueTextView = (TextView) findViewById(R.id.text_track_me_pace_value);
     }
 
     /**
@@ -359,7 +386,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         }
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
 
-
     }
 
     public void sendData() {
@@ -372,11 +398,13 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
         // Add runSummary to the DB
         long totalTimeElapsed = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
-        RunSummary runSummary = new RunSummary(totalTimeElapsed, totalDistanceRun);
+        RunSummary runSummary = new RunSummary(totalTimeElapsed, totalDistanceRun, 0.0);
+        double calories = CalorieCalculator.calculateCalories(userProfile, runSummary);
+        runSummary.setTotalCalories(calories);
         RunSummariesByUserDBAccess.addRunForUser(userId, runId, runSummary);
 
-        // Add userProfile to the DB
-        UserProfile userProfile = new UserProfile(21, 68, 154);
+        // Update user's historical stats
+        userProfile.updateUserStats(runSummary);
         UserProfileDBAccess.setUserProfileById(userId, userProfile);
 
         // Reset the runningRecord variable
@@ -384,12 +412,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     }
 
     public void addRecord() {
-        TimestampedLocation t = new TimestampedLocation(
-                this.mLastUpdateTime,
-                -1,
-                -1);
         try {
-            t = new TimestampedLocation(
+            TimestampedLocation t = new TimestampedLocation(
                     this.mLastUpdateTime,
                     mCurrentLocation.getLatitude(),
                     mCurrentLocation.getLongitude());
@@ -397,7 +421,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         } catch (NullPointerException e) {
             Toast.makeText(this, "addRecord:NullPointer", Toast.LENGTH_SHORT);
         } finally {
-
             if (runningRecord.getRunningPath().size() > 1) {
                 TimestampedLocation prev = runningRecord.getRunningPath().get(runningRecord.getRunningPath().size() - 2);
                 Location prevLoc = new Location(mCurrentLocation);
@@ -444,7 +467,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         mGoogleApiClient.disconnect();
 
         super.onStop();
-        updateUiThread.interrupt();
+        if (updateUiThread != null) {
+            updateUiThread.interrupt();
+        }
     }
 
     /**
@@ -522,7 +547,6 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // onConnectionFailed.
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
     }
-
 
     /**
      * Stores activity data in the Bundle.
