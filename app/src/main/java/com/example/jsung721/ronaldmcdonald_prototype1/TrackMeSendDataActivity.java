@@ -505,7 +505,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
                 Toast.LENGTH_SHORT).show();
 
         // add polyline
-        polyline = mapsFragment.addPolylinePath(this.runningRecord);
+        mapsFragment.addPolylinePath(this.runningRecord);
     }
 
     @Override
