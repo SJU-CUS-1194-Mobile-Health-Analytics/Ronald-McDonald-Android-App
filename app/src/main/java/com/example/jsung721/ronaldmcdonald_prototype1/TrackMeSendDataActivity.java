@@ -467,7 +467,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         mGoogleApiClient.disconnect();
 
         super.onStop();
-        updateUiThread.interrupt();
+        if (updateUiThread != null) {
+            updateUiThread.interrupt();
+        }
     }
 
     /**

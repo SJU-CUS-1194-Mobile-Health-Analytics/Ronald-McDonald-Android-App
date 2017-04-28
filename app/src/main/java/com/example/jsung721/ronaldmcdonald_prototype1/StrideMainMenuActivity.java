@@ -10,41 +10,15 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
-
-
-public class StrideMainMenuActivity extends AppCompatActivity {
-
-    private String mUserName;
+public class StrideMainMenuActivity extends BaseActivity {
 
     // Keys for intent
     protected final static String INTENT_RUNNING_RECORDS_KEY = "intent-running-records-key";
-
-    // Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.stride_main_menu);
-
-        mUserName = "anonymous";
-
-        // Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        if(mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInSignOutActivity.class));
-            finish();
-            return;
-        } else {
-            mUserName = mFirebaseUser.getDisplayName();
-        }
-
-        Toast.makeText(getApplicationContext(), "Logged in as: " + mUserName, Toast.LENGTH_LONG).show();
 
         Button menuToProfileButton = (Button) findViewById(R.id.button_menu_to_profile);
         Button menuToTrackMeButton = (Button) findViewById(R.id.button_menu_to_track_me);
