@@ -41,7 +41,7 @@ public class GraphsActivity extends AppCompatActivity
     public DatabaseReference ref;
     public DatabaseReference runSummariesRef;
     public String userID;
-    public UserInfo u;
+    //public UserInfo u;
     public DataPoint [] newData;
     public DataPoint [] newData2;
     public ArrayList <Integer> data;
@@ -59,12 +59,14 @@ public class GraphsActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphs);
+
+        /*
         Button GraphsBack_Button = (Button) findViewById(R.id.button_graphs_to_profile);
 
       /*  graphsTimeSpinner = (Spinner) findViewById(R.id.spinner_graphs_time);
         graphsTimeAdapter = ArrayAdapter.createFromResource(this,R.array.Times,android.R.layout.simple_spinner_item);
         graphsTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        graphsTimeSpinner.setAdapter(graphsTimeAdapter);*/
+        graphsTimeSpinner.setAdapter(graphsTimeAdapter);* /
 
         graphsStatSpinner = (Spinner) findViewById(R.id.spinner_graphs_statistics);
         graphsStatAdapter = ArrayAdapter.createFromResource(this,R.array.Stats,android.R.layout.simple_spinner_item);
@@ -93,7 +95,7 @@ public class GraphsActivity extends AppCompatActivity
         database = FirebaseDatabase.getInstance();
         ref = database.getReferenceFromUrl("https://myfitnesstracker-4c9c0.firebaseio.com/");
         runSummariesRef = ref.child("RUN SUMMARIES BY USER").child(userID);
-        u = new UserInfo();
+        //u = new UserInfo();
         series = new LineGraphSeries<>();
         val = "totalDistanceRun";
 
@@ -161,8 +163,8 @@ public class GraphsActivity extends AppCompatActivity
                            count = 1;
                            for (DataSnapshot child: children){
 
-                               u.setTime(child.child(val).getValue(Integer.class));
-                               newData [count-1] = new DataPoint(count, u.getMinutes());
+                               //u.setTime(child.child(val).getValue(Integer.class));
+                               //newData [count-1] = new DataPoint(count, u.getMinutes());
                                count++;
                            }
                            series.resetData(newData);
@@ -186,10 +188,10 @@ public class GraphsActivity extends AppCompatActivity
                            newData = new DataPoint [(int)dataSnapshot.getChildrenCount()];
                            count = 1;
                            for (DataSnapshot child: children){
-                               u.setTotalDistanceRun(child.child("totalDistanceRun").getValue(Integer.class));
-                               u.setTime(child.child("totalTimeElapsed").getValue(Integer.class));
+                               //u.setTotalDistanceRun(child.child("totalDistanceRun").getValue(Integer.class));
+                               //u.setTime(child.child("totalTimeElapsed").getValue(Integer.class));
 
-                               newData [count-1] = new DataPoint((double)count,u.getPace());
+                               //newData [count-1] = new DataPoint((double)count,u.getPace());
                                count++;
                            }
                            series.resetData(newData);
@@ -330,9 +332,9 @@ public class GraphsActivity extends AppCompatActivity
                             count = 0;
                             for (DataSnapshot child: children){
 
-                                u.setTotalDistanceRun(child.child("totalDistanceRun").getValue(Integer.class));
-                                u.setTime((child.child("totalTimeElapsed").getValue(Integer.class)));
-                                data2.add(u.getPace());
+                                //u.setTotalDistanceRun(child.child("totalDistanceRun").getValue(Integer.class));
+                                //u.setTime((child.child("totalTimeElapsed").getValue(Integer.class)));
+                                //data2.add(u.getPace());
                             }
                             high2 = data2.get(0);
                             low2 = data2.get(0);
@@ -381,7 +383,7 @@ public class GraphsActivity extends AppCompatActivity
                 startActivity(graphsToProfileIntent);
 
             }
-        });
+        });*/
     }
 //    public void startTestSendDataActivity(View view) {
 //        Intent launch = new Intent(this, TestSendDataActivity.class);

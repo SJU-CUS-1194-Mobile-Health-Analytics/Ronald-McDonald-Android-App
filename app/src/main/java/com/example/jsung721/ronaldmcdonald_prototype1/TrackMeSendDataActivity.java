@@ -38,7 +38,6 @@ import edu.stjohns.cus1194.stride.data.UserProfile;
 import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
 import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
 import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
-import edu.stjohns.cus1194.stride.utils.CalorieCalculator;
 
 /**
  * Getting Location Updates.
@@ -397,10 +396,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         RunningRecordsDBAccess.addRunningRecord(runId, runningRecord);
 
         // Add runSummary to the DB
-        long totalTimeElapsed = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
-        RunSummary runSummary = new RunSummary(totalTimeElapsed, totalDistanceRun, 0.0);
-        double calories = CalorieCalculator.calculateCalories(userProfile, runSummary);
-        runSummary.setTotalCalories(calories);
+        long totalTimeElapsedInMillis = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
+        RunSummary runSummary = new RunSummary(totalTimeElapsedInMillis, totalDistanceRun, userProfile.getWeight());
         RunSummariesByUserDBAccess.addRunForUser(userId, runId, runSummary);
 
         // Update user's historical stats
