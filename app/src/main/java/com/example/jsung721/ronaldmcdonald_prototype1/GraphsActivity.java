@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
@@ -29,29 +30,37 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.BaseSeries;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import edu.stjohns.cus1194.stride.data.RunSummary;
+import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
 
 import static android.R.attr.data;
 
 
 public class GraphsActivity extends AppCompatActivity
 {
-    Spinner graphsTimeSpinner, graphsStatSpinner, graphsMeasureSpinner;
-    ArrayAdapter <CharSequence> graphsTimeAdapter, graphsStatAdapter, graphsMeasureAdapter;
-    public FirebaseDatabase database;
+    Spinner graphsStatSpinner, graphsMeasureSpinner;
+    ArrayAdapter <CharSequence> graphsStatAdapter, graphsMeasureAdapter;
     public DatabaseReference ref;
     public DatabaseReference runSummariesRef;
+    public RunSummariesByUserDBAccess rs;
     public String userID;
     public UserInfo u;
     public DataPoint [] newData;
     public DataPoint [] newData2;
     public ArrayList <Integer> data;
     public ArrayList <Double> data2;
+    public ArrayList <RunSummary> runSummaryData;
     public String val;
     public int high, low, total;
     public double high2, low2, total2;
     LineGraphSeries<DataPoint> series;
     BarGraphSeries <DataPoint> series2;
     private int count;
+    private Date d1;
+
     GraphView graph;
     GraphView graph2;
 
@@ -60,11 +69,6 @@ public class GraphsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.graphs);
         Button GraphsBack_Button = (Button) findViewById(R.id.button_graphs_to_profile);
-
-      /*  graphsTimeSpinner = (Spinner) findViewById(R.id.spinner_graphs_time);
-        graphsTimeAdapter = ArrayAdapter.createFromResource(this,R.array.Times,android.R.layout.simple_spinner_item);
-        graphsTimeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        graphsTimeSpinner.setAdapter(graphsTimeAdapter);*/
 
         graphsStatSpinner = (Spinner) findViewById(R.id.spinner_graphs_statistics);
         graphsStatAdapter = ArrayAdapter.createFromResource(this,R.array.Stats,android.R.layout.simple_spinner_item);
@@ -88,27 +92,23 @@ public class GraphsActivity extends AppCompatActivity
         graph.getViewport().setScrollable(true); // enables horizontal scrolling
         graph.getViewport().setScrollableY(true); // enables vertical scrolling
 
-
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReferenceFromUrl("https://myfitnesstracker-4c9c0.firebaseio.com/");
-        runSummariesRef = ref.child("RUN SUMMARIES BY USER").child(userID);
-        u = new UserInfo();
+        rs = new RunSummariesByUserDBAccess();
+        ref = rs.getRunsByUserRef(userID);
         series = new LineGraphSeries<>();
-        val = "totalDistanceRun";
+        val = "";
 
-        runSummariesRef.addValueEventListener(new ValueEventListener() {
+
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                newData = new DataPoint [(int)dataSnapshot.getChildrenCount()];
-                count = 1;
+                runSummaryData = new ArrayList <RunSummary>();
                 for (DataSnapshot child: children){
 
-                    newData [count-1] = new DataPoint(count,child.child(val).getValue(Integer.class));
-                    count++;
+                    runSummaryData.add(child.getValue(RunSummary.class));
                 }
-                series.resetData(newData);
+
             }
 
             @Override
@@ -116,90 +116,47 @@ public class GraphsActivity extends AppCompatActivity
 
             }
         });
-        graph.addSeries(series);
 
        graphsStatSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
            @Override
            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                String value = parent.getItemAtPosition(position).toString();
-               val = "totalDistanceRun";
-               if (value.equalsIgnoreCase("Meters Run"))
+               if (value.equalsIgnoreCase("Miles Run"))
                {
                    graph.getGridLabelRenderer().setVerticalAxisTitle("Miles Run");
-                   val = "totalDistanceRun";
-                   runSummariesRef.addValueEventListener(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(DataSnapshot dataSnapshot) {
-                           Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                           newData = new DataPoint [(int)dataSnapshot.getChildrenCount()];
-                           count = 1;
-                           for (DataSnapshot child: children){
+                   newData = new DataPoint [runSummaryData.size()];
 
-                               newData [count-1] = new DataPoint(count,child.child(val).getValue(Integer.class));
-                               count++;
-                           }
-                           series.resetData(newData);
-                       }
+                   for (int i = 0; i < runSummaryData.size();i++){
 
-                       @Override
-                       public void onCancelled(DatabaseError databaseError) {
-
-                       }
-                   });
+                       newData[i] = new DataPoint(i, runSummaryData.get(i).getTotalDistanceRun());
+                   }
+                   series.resetData(newData);
                    graph.getViewport().setMaxY(15.0);
                    graph.addSeries(series);
                }
                else if(value.equalsIgnoreCase("Time"))
                {
                    graph.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
-                   val = "totalTimeElapsed";
-                   runSummariesRef.addValueEventListener(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(DataSnapshot dataSnapshot) {
-                           Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                           newData = new DataPoint [(int)dataSnapshot.getChildrenCount()];
-                           count = 1;
-                           for (DataSnapshot child: children){
+                   for (int i = 0; i < runSummaryData.size();i++){
 
-                               u.setTime(child.child(val).getValue(Integer.class));
-                               newData [count-1] = new DataPoint(count, u.getMinutes());
-                               count++;
-                           }
-                           series.resetData(newData);
-                       }
-
-                       @Override
-                       public void onCancelled(DatabaseError databaseError) {
-
-                       }
-                   });
+                       int minutes = ((int)runSummaryData.get(i).getTotalTimeElapsed()/1000)/60;
+                       newData[i] = new DataPoint(i,minutes );
+                   }
+                   series.resetData(newData);
                    graph.getViewport().setMaxY(20.0);
                    graph.addSeries(series);
                }
                else if(value.equalsIgnoreCase("Pace"))
                {
                    graph.getGridLabelRenderer().setVerticalAxisTitle("Pace");
-                   runSummariesRef.addValueEventListener(new ValueEventListener() {
-                       @Override
-                       public void onDataChange(DataSnapshot dataSnapshot) {
-                           Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                           newData = new DataPoint [(int)dataSnapshot.getChildrenCount()];
-                           count = 1;
-                           for (DataSnapshot child: children){
-                               u.setTotalDistanceRun(child.child("totalDistanceRun").getValue(Integer.class));
-                               u.setTime(child.child("totalTimeElapsed").getValue(Integer.class));
+                   for (int i = 0; i < runSummaryData.size();i++){
 
-                               newData [count-1] = new DataPoint((double)count,u.getPace());
-                               count++;
-                           }
-                           series.resetData(newData);
-                       }
-
-                       @Override
-                       public void onCancelled(DatabaseError databaseError) {
-
-                       }
-                   });
+                       int minutes = ((int)runSummaryData.get(i).getTotalTimeElapsed()/1000)/60;
+                       int distance = (int)runSummaryData.get(i).getTotalDistanceRun();
+                       int avgPace = minutes/distance;
+                       newData[i] = new DataPoint(i,avgPace);
+                   }
+                   series.resetData(newData);
                    graph.getViewport().setMaxY(2.0);
                    graph.addSeries(series);
                }
@@ -235,41 +192,7 @@ public class GraphsActivity extends AppCompatActivity
                 if (value.equalsIgnoreCase("Distance"))
                 {
                     val = "totalDistanceRun";
-                    graph2.getGridLabelRenderer().setVerticalAxisTitle("Miles Run");
-                    runSummariesRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                            data = new ArrayList<Integer>();
-                            count = 0;
-                            for (DataSnapshot child: children){
 
-                                data.add(child.child(val).getValue(Integer.class));
-                            }
-                            high = data.get(0);
-                            low = data.get(0);
-                            total = 0;
-
-                            for (int i = 0; i < data.size(); i++)
-                            {
-                                if (data.get(i)>high)
-                                    high = data.get(i);
-                                if (data.get(i)< low)
-                                    low = data.get(i);
-                                total = total + data.get(i);
-                            }
-                            newData2 = new DataPoint[3];
-                            newData2 [0] = new DataPoint(0,high);
-                            newData2 [1] = new DataPoint(10,low);
-                            newData2 [2] = new DataPoint(20,total/data.size());
-                            series2.resetData(newData2);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                     graph2.getViewport().setMaxX(20);
                     graph2.getViewport().setMaxY((double)high +5.0);
                     graph2.addSeries(series2);
@@ -280,7 +203,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
                     val = "totalTimeElapsed";
-                    runSummariesRef.addValueEventListener(new ValueEventListener() {
+                    ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Iterable <DataSnapshot> children = dataSnapshot.getChildren();
@@ -322,7 +245,7 @@ public class GraphsActivity extends AppCompatActivity
                 else if(value.equalsIgnoreCase("Pace"))
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Pace");
-                    runSummariesRef.addValueEventListener(new ValueEventListener() {
+                    ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Iterable <DataSnapshot> children = dataSnapshot.getChildren();

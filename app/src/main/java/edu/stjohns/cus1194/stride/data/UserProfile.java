@@ -13,7 +13,6 @@ public class UserProfile {
     private int age; // to keep it simple, we won't calculate age based on birth date
     private int heightInInches;
     private double weight;
-
     // Instance variables for lifetime user stats
     private long lifetimeTotalMiles;
     private long lifetimeTotalTime;
@@ -62,7 +61,7 @@ public class UserProfile {
     public long getLifetimeTotalTime() {
         return lifetimeTotalTime;
     }
-    public double getTotalCalories() {
+    public double getLifetimeTotalCalories() {
         return lifetimeTotalCalories;
     }
 
@@ -76,14 +75,8 @@ public class UserProfile {
     public void setWeight(double weight) {
         this.weight = weight;
     }
-    public void setLifetimeTotalMiles(long lifetimeTotalMiles) {
-        this.lifetimeTotalMiles = lifetimeTotalMiles;
-    }
-    public void setLifetimeTotalTime(long lifetimeTotalTime) {
-        this.lifetimeTotalTime = lifetimeTotalTime;
-    }
-    public void setLifetimeTotalCalories(double lifetimeTotalCalories) {
-        this.lifetimeTotalCalories = lifetimeTotalCalories;
-    }
+    public void setLifetimeTotalMiles(long lifetimeTotalMiles) {this.lifetimeTotalMiles = lifetimeTotalMiles;}
+    public void setLifetimeTotalTime(long lifetimeTotalTime) {this.lifetimeTotalTime = lifetimeTotalTime;}
+    public void setLifetimeTotalCalories(double lifetimeTotalCalories) {this.lifetimeTotalCalories = lifetimeTotalCalories;}
 
 }

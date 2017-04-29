@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import edu.stjohns.cus1194.stride.data.UserProfile;
+import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -28,12 +30,9 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView profileHeightValueTextView;
     private TextView profileWeightValueTextView;
     private String userID;
-    private int count;
-    private UserInfo u;
-    public FirebaseDatabase database;
-    public DatabaseReference databaseRef;
-    public DatabaseReference runSummariesUserIDRef;
-    public DatabaseReference userProfileRef;
+    private UserProfile u;
+    public DatabaseReference ref;
+    private UserProfileDBAccess userProfileReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,54 +58,25 @@ public class ProfileActivity extends AppCompatActivity {
         profileHeightValueTextView = (TextView) findViewById(R.id.text_profile_height_value);
         profileWeightValueTextView = (TextView) findViewById(R.id.text_profile_weight_value);
 
+        userProfileReference = new UserProfileDBAccess();
+        ref = userProfileReference.getUserProfileRefById(userID);
+        u = new UserProfile();
 
-        database = FirebaseDatabase.getInstance();
-        databaseRef = database.getReferenceFromUrl("https://myfitnesstracker-4c9c0.firebaseio.com/");
-        runSummariesUserIDRef = databaseRef.child("RUN SUMMARIES BY USER").child(userID);
-        userProfileRef = databaseRef.child("USER PROFILES").child(userID);
-        u = new UserInfo();
-        count = 1;
-
-        userProfileRef.addValueEventListener(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                u.setAge(dataSnapshot.child("age").getValue(Integer.class));
-                u.setHeightInInches(dataSnapshot.child("heightInInches").getValue(Integer.class));
-                u.setWeight(dataSnapshot.child("weight").getValue(Integer.class));
-
+                u = dataSnapshot.getValue(UserProfile.class);
+                int seconds = (int) (u.getLifetimeTotalTime() / 1000) % 60;
+                int minutes = (int) ((u.getLifetimeTotalTime()/(1000*60)) %60);
+                int hours = (int)((u.getLifetimeTotalTime() /(1000*60*60) % 60));
+                double avgpace = (double)minutes/(double)u.getLifetimeTotalMiles();
                 profileAgeValueTextView.setText(""+ u.getAge());
                 profileHeightValueTextView.setText(""+u.getHeightInInches());
                 profileWeightValueTextView.setText(""+u.getWeight());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        runSummariesUserIDRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Iterable <DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child:children)
-                {
-                    u.setTotalDistanceRun(u.getTotalDistanceRun() + child.child("totalDistanceRun").getValue(Integer.class));
-                    u.setTime(u.getTime() + child.child("totalTimeElapsed").getValue(Integer.class));
-                    count++;
-
-                }
-
-                u.setCount(count);
-                profileTotalMilesValueTextView.setText("" + u.getTotalDistanceRun() + " Miles");
-                int seconds = (int) (u.getTime() / 1000) % 60;
-                int minutes = (int) ((u.getTime()/(1000*60)) %60);
-                int hours = (int)((u.getTime() /(1000*60*60) % 60));
+                profileTotalMilesValueTextView.setText("" + u.getLifetimeTotalMiles() + " miles");
                 profileTotalTimeValueTextView.setText((String.format("%02d : %02d : %02d",hours,minutes,seconds)));
-                double avgpace = (double)u.getTotalDistanceRun()/(double)u.getMinutes();
-                profileAveragePaceValueTextView.setText("" + String.format("%.2f",avgpace) + " m/min");
-                profileCaloriesBurnedValueTextView.setText("" + u.getCalories() + " Cal");
+                profileAveragePaceValueTextView.setText(String.format("%.2f",avgpace) + " min/Mi");
+                profileCaloriesBurnedValueTextView.setText("" + u.getLifetimeTotalCalories() +" cal");
 
             }
 
