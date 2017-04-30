@@ -26,6 +26,8 @@ public class UserProfile {
     private double lifetimeTotalCalories;
     private long lifetimeLongestRunByDistance;
     private long lifetimeLongestRunByTime;
+    private double lifetimeHighestCaloriesBurned;
+
 
     // Default Constructor
     public UserProfile() {
@@ -37,6 +39,7 @@ public class UserProfile {
         this.lifetimeTotalCalories = 0.0;
         this.lifetimeLongestRunByDistance = 0;
         this.lifetimeLongestRunByTime = 0;
+        this.lifetimeHighestCaloriesBurned = 0.0;
     }
 
     // Constructor With Arguments
@@ -49,6 +52,7 @@ public class UserProfile {
         this.lifetimeTotalCalories = 0.0;
         this.lifetimeLongestRunByDistance = 0;
         this.lifetimeLongestRunByTime = 0;
+        this.lifetimeHighestCaloriesBurned = 0.0;
     }
 
     // Method to update a user's stats based on a newly completed run
@@ -63,6 +67,10 @@ public class UserProfile {
         }
         if (runTime > lifetimeLongestRunByTime) {
             lifetimeLongestRunByTime = runTime;
+        }
+        if (runSummary.getTotalCalories() > lifetimeHighestCaloriesBurned)
+        {
+            lifetimeHighestCaloriesBurned = runSummary.getTotalCalories();
         }
     }
 
@@ -92,6 +100,7 @@ public class UserProfile {
     public long getLifetimeLongestRunByTime() {
         return lifetimeLongestRunByTime;
     }
+    public double getLifetimeHighestCaloriesBurned() {return lifetimeHighestCaloriesBurned;}
 
     // Setters
     public void setAge(int age) {
@@ -119,7 +128,9 @@ public class UserProfile {
     public void setLifetimeLongestRunByTime(long lifetimeLongestRunByTime) {
         this.lifetimeLongestRunByTime = lifetimeLongestRunByTime;
     }
-
+    public void setLifetimeHighestCaloriesBurned(double lifetimeHighestCaloriesBurned) {
+        this.lifetimeHighestCaloriesBurned = lifetimeHighestCaloriesBurned;
+    }
     // Helper Methods
 
     /**

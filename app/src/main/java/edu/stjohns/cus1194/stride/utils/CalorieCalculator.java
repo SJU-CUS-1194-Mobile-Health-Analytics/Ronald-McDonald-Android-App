@@ -7,9 +7,7 @@ public class CalorieCalculator {
 
     public static double calculateCalories(UserProfile user, RunSummary run) {
         double calories = 0.0;
-
-        double minutes = run.getTotalTimeElapsed()/(1000*60);
-        double METcalc = minutes/run.getTotalDistanceRun();
+        double METcalc = run.calculateMinutes()/run.calculateMiles();
         int METmeasure;
         if(METcalc <= 4)
             METmeasure = 23;

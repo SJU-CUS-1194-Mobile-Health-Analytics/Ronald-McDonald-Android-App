@@ -116,7 +116,7 @@ public class ProfileActivity extends BaseActivity {
         profileWeightValueTextView.setText(""+userProfile.getWeight());
         profileTotalMilesValueTextView.setText("" + (((int)(userProfile.calculateLifetimeTotalMiles()*100))/100.00) + " Miles");
         profileTotalTimeValueTextView.setText(userProfile.printLifetimeRunningDuration());
-        profileAveragePaceValueTextView.setText(userProfile.printLifetimePacePerMile());
+        profileAveragePaceValueTextView.setText(userProfile.printLifetimePacePerMile() + " min/mi");
         profileCaloriesBurnedValueTextView.setText("" + userProfile.getLifetimeTotalCalories() + " Cal");
     }
 
