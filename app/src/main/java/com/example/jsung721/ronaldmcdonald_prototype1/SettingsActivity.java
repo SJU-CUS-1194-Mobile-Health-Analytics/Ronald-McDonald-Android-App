@@ -12,8 +12,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-        Button settingsBackButton = (Button) findViewById(R.id.button_settings_to_menu);
 
+        Button settingsBackButton = (Button) findViewById(R.id.button_settings_to_menu);
         settingsBackButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -25,7 +25,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         Button signOutButton = (Button) findViewById(R.id.button_settings_log_out);
-
         signOutButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -33,6 +32,15 @@ public class SettingsActivity extends AppCompatActivity {
             {
                 Intent settingsLogOutIntent = new Intent(SettingsActivity.this, SignInSignOutActivity.class);
                 startActivity(settingsLogOutIntent);
+            }
+        });
+
+        Button editProfileButton = (Button) findViewById(R.id.button_settings_edit_user);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent settingsEditProfileIntent = new Intent(SettingsActivity.this, EditProfileActivity.class);
+                startActivity(settingsEditProfileIntent);
             }
         });
 
