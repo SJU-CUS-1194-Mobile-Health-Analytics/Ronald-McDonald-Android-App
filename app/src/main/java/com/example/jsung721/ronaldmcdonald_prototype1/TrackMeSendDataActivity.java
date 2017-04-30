@@ -409,24 +409,23 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     }
 
     public void addRecord() {
-        try {
+        if(mCurrentLocation != null && mCurrentLocation.getAccuracy() <= 5){
             TimestampedLocation t = new TimestampedLocation(
                     this.mLastUpdateTime,
                     mCurrentLocation.getLatitude(),
                     mCurrentLocation.getLongitude());
             runningRecord.getRunningPath().add(t);
-        } catch (NullPointerException e) {
-            Toast.makeText(this, "addRecord:NullPointer", Toast.LENGTH_SHORT);
-        } finally {
-            if (runningRecord.getRunningPath().size() > 1) {
-                TimestampedLocation prev = runningRecord.getRunningPath().get(runningRecord.getRunningPath().size() - 2);
-                Location prevLoc = new Location(mCurrentLocation);
-                prevLoc.setLatitude(prev.getLatitude());
-                prevLoc.setLongitude(prev.getLongitude());
-                this.totalDistanceRun += prevLoc.distanceTo(mCurrentLocation);
-            }
+        }
+
+        if (runningRecord.getRunningPath().size() > 1) {
+            TimestampedLocation prev = runningRecord.getRunningPath().get(runningRecord.getRunningPath().size() - 2);
+            Location prevLoc = new Location(mCurrentLocation);
+            prevLoc.setLatitude(prev.getLatitude());
+            prevLoc.setLongitude(prev.getLongitude());
+            this.totalDistanceRun += prevLoc.distanceTo(mCurrentLocation);
         }
     }
+
 
     @Override
     protected void onStart() {
@@ -527,7 +526,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
                 Toast.LENGTH_SHORT).show();
 
         // add polyline
-        mapsFragment.addPolylinePath(this.runningRecord);
+        if(runningRecord.getRunningPath().size() >= 2) {
+            mapsFragment.addPolylinePath(this.runningRecord);
+        }
     }
 
     @Override
