@@ -1,9 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/white"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.EditProfileActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_profile_username_textview"
+        android:text="[Username]"
+        android:textSize="30dp"
+        android:textColor="@color/maroon"
+        android:fontFamily="sans-serif-smallcaps"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_profile_age"
+        android:text="[Age]"
+        android:inputType="number"
+        android:textColor="@color/dark_gray"
+        android:textSize="20sp"
+        android:layout_below="@+id/edit_profile_username_textview" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_profile_height"
+        android:textSize="20sp"
+        android:text="[Height]"
+        android:inputType="number"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/light_gray"
+        android:layout_below="@+id/edit_profile_age" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_profile_weight"
+        android:textSize="20sp"
+        android:text="[Weight]"
+        android:inputType="numberDecimal"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/light_gray"
+        android:layout_below="@+id/edit_profile_height" />
+
+    <Button
+        android:id="@+id/edit_profile_save_changes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Save Changes"
+        android:textColor="@color/dark_gray"
+        android:layout_below="@+id/edit_profile_weight" />
+
+</RelativeLayout>
