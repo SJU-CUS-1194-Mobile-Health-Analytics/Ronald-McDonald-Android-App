@@ -23,6 +23,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/edit_profile_age_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Age: "
+        android:textColor="@color/dark_gray"
+        android:textSize="20sp"
+        android:layout_below="@+id/edit_profile_username_textview" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +40,17 @@
         android:inputType="number"
         android:textColor="@color/dark_gray"
         android:textSize="20sp"
-        android:layout_below="@+id/edit_profile_username_textview" />
+        android:layout_below="@+id/edit_profile_age_textview"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/edit_profile_height_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Height: "
+        android:textColor="@color/dark_gray"
+        android:textSize="20sp"
+        android:layout_below="@+id/edit_profile_age" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +61,17 @@
         android:inputType="number"
         android:textColor="@color/dark_gray"
         android:textColorHint="@color/light_gray"
-        android:layout_below="@+id/edit_profile_age" />
+        android:layout_below="@+id/edit_profile_height_textview"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:id="@+id/edit_profile_weight_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight: "
+        android:textColor="@color/dark_gray"
+        android:textSize="20sp"
+        android:layout_below="@+id/edit_profile_height" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -53,7 +82,8 @@
         android:inputType="numberDecimal"
         android:textColor="@color/dark_gray"
         android:textColorHint="@color/light_gray"
-        android:layout_below="@+id/edit_profile_height" />
+        android:layout_below="@+id/edit_profile_weight_textview"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/edit_profile_save_changes"
