@@ -25,8 +25,10 @@ public class ProfileActivity extends BaseActivity {
     private TextView profileHeightValueTextView;
     private TextView profileWeightValueTextView;
 
+
     // UserProfile Object for logged in user
     private UserProfile userProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,9 @@ public class ProfileActivity extends BaseActivity {
         profileHeightValueTextView = (TextView) findViewById(R.id.text_profile_height_value);
         profileWeightValueTextView = (TextView) findViewById(R.id.text_profile_weight_value);
 
+
         Button profileToMenuButton = (Button) findViewById(R.id.button_profile_to_menu);
+
         profileToMenuButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -112,7 +116,7 @@ public class ProfileActivity extends BaseActivity {
         profileWeightValueTextView.setText(""+userProfile.getWeight());
         profileTotalMilesValueTextView.setText("" + (((int)(userProfile.calculateLifetimeTotalMiles()*100))/100.00) + " Miles");
         profileTotalTimeValueTextView.setText(userProfile.printLifetimeRunningDuration());
-        profileAveragePaceValueTextView.setText(userProfile.printLifetimePacePerMile());
+        profileAveragePaceValueTextView.setText(userProfile.printLifetimePacePerMile() + " min/mi");
         profileCaloriesBurnedValueTextView.setText("" + userProfile.getLifetimeTotalCalories() + " Cal");
     }
 

@@ -20,13 +20,14 @@ public class UserProfile {
     private int age; // to keep it simple, we won't calculate age based on birth date
     private int heightInInches;
     private double weight;
-
     // Instance variables for lifetime user stats
     private long lifetimeTotalDistanceInMeters;
     private long lifetimeTotalTimeInMillis;
     private double lifetimeTotalCalories;
     private long lifetimeLongestRunByDistance;
     private long lifetimeLongestRunByTime;
+    private double lifetimeHighestCaloriesBurned;
+
 
     // Default Constructor
     public UserProfile() {
@@ -38,6 +39,7 @@ public class UserProfile {
         this.lifetimeTotalCalories = 0.0;
         this.lifetimeLongestRunByDistance = 0;
         this.lifetimeLongestRunByTime = 0;
+        this.lifetimeHighestCaloriesBurned = 0.0;
     }
 
     // Constructor With Arguments
@@ -50,6 +52,7 @@ public class UserProfile {
         this.lifetimeTotalCalories = 0.0;
         this.lifetimeLongestRunByDistance = 0;
         this.lifetimeLongestRunByTime = 0;
+        this.lifetimeHighestCaloriesBurned = 0.0;
     }
 
     // Method to update a user's stats based on a newly completed run
@@ -64,6 +67,10 @@ public class UserProfile {
         }
         if (runTime > lifetimeLongestRunByTime) {
             lifetimeLongestRunByTime = runTime;
+        }
+        if (runSummary.getTotalCalories() > lifetimeHighestCaloriesBurned)
+        {
+            lifetimeHighestCaloriesBurned = runSummary.getTotalCalories();
         }
     }
 
@@ -93,6 +100,7 @@ public class UserProfile {
     public long getLifetimeLongestRunByTime() {
         return lifetimeLongestRunByTime;
     }
+    public double getLifetimeHighestCaloriesBurned() {return lifetimeHighestCaloriesBurned;}
 
     // Setters
     public void setAge(int age) {
@@ -104,6 +112,7 @@ public class UserProfile {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+
     public void setLifetimeTotalDistanceInMeters(long lifetimeTotalDistanceInMeters) {
         this.lifetimeTotalDistanceInMeters = lifetimeTotalDistanceInMeters;
     }
@@ -119,7 +128,9 @@ public class UserProfile {
     public void setLifetimeLongestRunByTime(long lifetimeLongestRunByTime) {
         this.lifetimeLongestRunByTime = lifetimeLongestRunByTime;
     }
-
+    public void setLifetimeHighestCaloriesBurned(double lifetimeHighestCaloriesBurned) {
+        this.lifetimeHighestCaloriesBurned = lifetimeHighestCaloriesBurned;
+    }
     // Helper Methods
 
     /**
@@ -227,5 +238,6 @@ public class UserProfile {
 
         return (minutesString + secondsString);
     }
+
 
 }
