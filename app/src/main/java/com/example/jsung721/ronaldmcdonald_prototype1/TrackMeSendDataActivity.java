@@ -24,6 +24,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -114,6 +116,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
+        // Kick off the process of building a GoogleApiClient and requesting the LocationServices
+        // API.
+        checkLocationPermission();
+        buildGoogleApiClient();
+
         initUserInfo();
         initUI();
 
@@ -124,10 +131,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
 
-        // Kick off the process of building a GoogleApiClient and requesting the LocationServices
-        // API.
-        checkLocationPermission();
-        buildGoogleApiClient();
+
 
         // Build map fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -314,8 +318,8 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     private void changeTrackingState() {
         if (mRequestingLocationUpdates) {
             mRequestingLocationUpdates = false;
-            stopLocationUpdates();
             updateUiThread.interrupt();
+            stopLocationUpdates();
             this.startTrackingButton.setText("START TRACKING");
 
 
@@ -357,6 +361,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         long timeElapsed;
         if(runningRecord.getRunningPath().isEmpty()){
             timeElapsed = 0;
+            totalDistanceRun = 0;
         }else{
             timeElapsed = System.currentTimeMillis() - runningRecord.getRunningPath().get(0).getTime();
         }
@@ -366,7 +371,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         timeValueTextView.setText(String.format("%02d : %02d", minutes, seconds));
         milesValueTextView.setText(String.format("%.2f",totalDistanceRun*METERS_TO_MILES_CONSTANT));
         // pace = min/mile
-        paceValueTextView.setText(String.format("%.2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));
+        if (totalDistanceRun > 0){
+            paceValueTextView.setText(String.format("%.2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));
+        } else {
+            paceValueTextView.setText("0.00");
+        }
 
     }
 
@@ -383,7 +392,10 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         if (runningRecord.getRunningPath().size()>0) {
             this.sendData();
         }
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        }
 
     }
 
@@ -409,7 +421,10 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
     }
 
     public void addRecord() {
-        if(mCurrentLocation != null && mCurrentLocation.getAccuracy() <= 5){
+        if(mCurrentLocation != null){
+            Toast.makeText(this,
+                    "Location Accuracy: hasAccuracy:"+mCurrentLocation.hasAccuracy()+" "+mCurrentLocation.getAccuracy(),
+                    Toast.LENGTH_SHORT).show();
             TimestampedLocation t = new TimestampedLocation(
                     this.mLastUpdateTime,
                     mCurrentLocation.getLatitude(),
@@ -486,22 +501,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // moves to a new location, and then changes the device orientation, the original location
         // is displayed as the activity is re-created.
         if (mCurrentLocation == null) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            mLastUpdateTime = System.currentTimeMillis();
-            try{
+            if (checkLocationPermission()){
+                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                mLastUpdateTime = System.currentTimeMillis();
+                moveMapCamera();
                 updateUI();
-            } catch (Exception e){
-                Toast.makeText(this, "mCurrentLocation is null",Toast.LENGTH_SHORT);
             }
         }
 
@@ -522,13 +526,20 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         mLastUpdateTime = System.currentTimeMillis();
         updateUI();
         addRecord();
-        Toast.makeText(this, "Location changed",
-                Toast.LENGTH_SHORT).show();
+
+        //move map camera
+       moveMapCamera();
 
         // add polyline
         if(runningRecord.getRunningPath().size() >= 2) {
             mapsFragment.addPolylinePath(this.runningRecord);
         }
+    }
+
+    private void moveMapCamera(){
+        mapsFragment.mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
+        mapsFragment.mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
     }
 
     @Override
