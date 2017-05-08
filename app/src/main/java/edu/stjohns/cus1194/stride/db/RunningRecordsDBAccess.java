@@ -1,6 +1,5 @@
 package edu.stjohns.cus1194.stride.db;
 
-import android.provider.ContactsContract;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

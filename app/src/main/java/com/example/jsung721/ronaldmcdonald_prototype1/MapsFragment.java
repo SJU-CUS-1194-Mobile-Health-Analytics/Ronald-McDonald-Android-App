@@ -92,7 +92,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        this.mMap = googleMap;
 
         //Initialize Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -110,15 +110,18 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     }
 
 
-    protected void moveMapCamera(Location mCurrentLocation){
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
-                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+    protected void moveMapCamera(Location location){
+        if (location != null) {
+            moveMapCamera(new LatLng(location.getLatitude(), location.getLongitude()));
+        }
     }
 
     protected void moveMapCamera(LatLng latLng){
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+
+        if (latLng != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -188,10 +191,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         }
 
         for (int i = 1; i<path.size();i++){
-            mMap.addPolyline(new PolylineOptions()
+            this.mMap.addPolyline(new PolylineOptions()
                     .add(new LatLng(path.get(i-1).getLatitude(), path.get(i-1).getLongitude()))
                     .add(new LatLng(path.get(i).getLatitude(), path.get(i).getLongitude()))
                     .color(getSpeedColor(path.get(i).getTime()-path.get(i-1).getTime(), min, max)));
+            Log.d("polyline color",getSpeedColor(path.get(i).getTime()-path.get(i-1).getTime(), min, max)+"");
         }
 
         // start marker
@@ -204,7 +208,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         // end marker
         MarkerOptions markerEndOptions = new MarkerOptions()
                 .position(new LatLng(path.get(path.size()-1).getLatitude(), path.get(path.size()-1).getLongitude()))
-                .title("Start")
+                .title("End")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         if(markerStart != null){markerStart.remove();}
@@ -215,8 +219,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
         if(polyline != null){polyline.remove();}
 
-        moveMapCamera(new LatLng(path.get(0).getLatitude(),path.get(0).getLongitude()));
-
+        moveMapCamera(new LatLng(path.get(0).getLatitude(), path.get(0).getLongitude()));
     }
 
     /**
@@ -235,7 +238,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         int Red = (int)Math.round(254*(1-curTime*1.0/(1.0*maxTime - minTime)));
         int Green = (int)Math.round(254*(curTime*1.0/(1.0*maxTime - minTime)));
         // alpha, red, green, blue
-        int RGB = android.graphics.Color.argb(200, Red, Green, 0);
+        int RGB = android.graphics.Color.argb(100, Red, Green, 0);
         return RGB;
     }
 

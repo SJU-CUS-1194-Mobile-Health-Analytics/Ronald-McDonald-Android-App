@@ -116,10 +116,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.track_me);
 
-        // Kick off the process of building a GoogleApiClient and requesting the LocationServices
-        // API.
-        checkLocationPermission();
-        buildGoogleApiClient();
+
 
         initUserInfo();
         initUI();
@@ -131,6 +128,11 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         // Update values using data stored in the Bundle.
         updateValuesFromBundle(savedInstanceState);
 
+
+        // Kick off the process of building a GoogleApiClient and requesting the LocationServices
+        // API.
+        checkLocationPermission();
+        buildGoogleApiClient();
 
 
         // Build map fragment
@@ -372,9 +374,9 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         milesValueTextView.setText(String.format("%.2f",totalDistanceRun*METERS_TO_MILES_CONSTANT));
         // pace = min/mile
         if (totalDistanceRun > 0){
-            paceValueTextView.setText(String.format("%.2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));
+            paceValueTextView.setText(String.format("%:2f",((double)milliseconds)/(60*1000.0*(totalDistanceRun*METERS_TO_MILES_CONSTANT))));
         } else {
-            paceValueTextView.setText("0.00");
+            paceValueTextView.setText("0:00");
         }
 
     }
