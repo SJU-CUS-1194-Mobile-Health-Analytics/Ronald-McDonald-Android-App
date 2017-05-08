@@ -17,6 +17,11 @@
         <activity
             android:name=".StrideMainMenuActivity"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <!--
@@ -35,18 +40,12 @@
         <activity android:name=".GraphsActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".DailyLogActivity" />
-        <activity android:name=".TrackMeSendDataActivity">
-
-        </activity>
+        <activity android:name=".TrackMeSendDataActivity" />
         <activity android:name=".SignInSignOutActivity" />
         <activity android:name=".EditProfileActivity"></activity>
         <activity android:name=".DisplayPastRunActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
