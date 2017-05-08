@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,6 +110,17 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     }
 
 
+    protected void moveMapCamera(Location mCurrentLocation){
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
+                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+    }
+
+    protected void moveMapCamera(LatLng latLng){
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+    }
+
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -158,6 +170,10 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
      */
     protected void addCompletedPolylinePath(RunningRecord runningRecord){
 
+        if (runningRecord.getRunningPath().size() <= 1){
+            Log.d("addCompletedPath","Error: path size ="+runningRecord.getRunningPath().size());
+            return;}
+
         ArrayList<TimestampedLocation> path = runningRecord.getRunningPath();
         long min = -1;
         long max = -1;
@@ -198,6 +214,8 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         markerEnd = mMap.addMarker(markerEndOptions);
 
         if(polyline != null){polyline.remove();}
+
+        moveMapCamera(new LatLng(path.get(0).getLatitude(),path.get(0).getLongitude()));
 
     }
 

@@ -10,27 +10,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.*;
-import com.google.android.gms.maps.model.*;
 
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.stjohns.cus1194.stride.data.RunningRecord;
 import edu.stjohns.cus1194.stride.data.TimestampedLocation;
 import edu.stjohns.cus1194.stride.data.UserProfile;
 
-import static edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess.getRunningRecordsRef;
+import static edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess.getRunningPathRefById;
 
 /**
  * Created by yzhan265 on 5/6/2017.
@@ -59,6 +53,7 @@ public class DisplayPastRunActivity extends AppCompatActivity {
 
     // running record
     protected RunningRecord runningRecord;
+    protected ArrayList<TimestampedLocation> runningRecordArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +71,11 @@ public class DisplayPastRunActivity extends AppCompatActivity {
 //        runId = bundle.get(FLAG_RUNNING_RECORD_ID).toString();
 
         // for testing
-        runId = "1493210656442";
+        runId = "1493580223711";
 
-        // get running record
-        runningRecord = getRunningRecordByKey(runId);
+        // plot running record
+        plotRunningRecordByKey(runId);
 
-        if (runningRecord.getRunningPath().size() > 1){
-            mapsFragment.addCompletedPolylinePath(runningRecord);
-        } else {
-            Toast.makeText(this, "Error: Running Record size",Toast.LENGTH_SHORT);
-        }
 
     }
 
@@ -127,25 +117,33 @@ public class DisplayPastRunActivity extends AppCompatActivity {
         paceValueTextView = (TextView) findViewById(R.id.text_track_me_pace_value);
     }
 
-    protected RunningRecord getRunningRecordByKey(String runId){
+    protected void plotRunningRecordByKey(String runId){
 
-        DatabaseReference runningRecordRef = getRunningRecordsRef().child(runId);
-        final RunningRecord runningRecord = new RunningRecord();
+        DatabaseReference runningRecordRef = getRunningPathRefById(runId);
+//        runningRecordArrayList = new ArrayList<TimestampedLocation>();
+        runningRecord = new RunningRecord();
+
         runningRecordRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<ArrayList<TimestampedLocation>> t = new GenericTypeIndicator<ArrayList<TimestampedLocation>>() {};
-                ArrayList<TimestampedLocation> timestampedLocationsList = dataSnapshot.getValue(t);
-                runningRecord.setRunningPath(timestampedLocationsList);
-                Log.d("getRunningRecordsByKey:",runningRecord.getRunningPath().get(0).getTime()+"");
+                Iterable <DataSnapshot> children = dataSnapshot.getChildren();
+                runningRecordArrayList = new ArrayList<TimestampedLocation>();
+                for (DataSnapshot child: children){
+
+//                    runningRecordArrayList.add(child.getValue(TimestampedLocation.class));
+                    runningRecord.addTimestampedLocation(child.getValue(TimestampedLocation.class));
+                    Log.d("timeStampedLocations",child.getValue(TimestampedLocation.class).getLatitude()+"");
+                }
+
+                mapsFragment.addCompletedPolylinePath(runningRecord);
+                Log.d("path size:", ""+runningRecord.getRunningPath().size());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("getRunningRecordsByKey:","databaseError");
+
             }
         });
-        return runningRecord;
     }
 
 

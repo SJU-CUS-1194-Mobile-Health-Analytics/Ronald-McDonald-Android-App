@@ -504,7 +504,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
             if (checkLocationPermission()){
                 mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                 mLastUpdateTime = System.currentTimeMillis();
-                moveMapCamera();
+                mapsFragment.moveMapCamera(mCurrentLocation);
                 updateUI();
             }
         }
@@ -528,7 +528,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         addRecord();
 
         //move map camera
-       moveMapCamera();
+       mapsFragment.moveMapCamera(mCurrentLocation);
 
         // add polyline
         if(runningRecord.getRunningPath().size() >= 2) {
@@ -536,11 +536,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
         }
     }
 
-    private void moveMapCamera(){
-        mapsFragment.mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
-                mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude())));
-        mapsFragment.mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
-    }
+
 
     @Override
     public void onConnectionSuspended(int cause) {
