@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RonaldMcDonald_Prototype1</string>
+    <string name="app_name">Stride</string>
     <string name="Select_Time"> Select Time Frame:</string>
     <string name="Select_Stat"> See Progress for:  </string>
     <string name="Select_Measure">See High/Low/Avg for: </string>

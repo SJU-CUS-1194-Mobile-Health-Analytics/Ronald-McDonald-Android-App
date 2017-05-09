@@ -21,7 +21,7 @@ public class BaseActivity extends AppCompatActivity {
         // Toast.makeText(getApplicationContext(), "Logged in as: " + mFirebaseUser.getDisplayName(), Toast.LENGTH_SHORT).show();
     }
 
-    private void initFirebaseUser() {
+    protected void initFirebaseUser() {
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
