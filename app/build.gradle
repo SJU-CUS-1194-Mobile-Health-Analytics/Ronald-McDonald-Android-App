@@ -47,6 +47,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:9.2.0'
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 }
 

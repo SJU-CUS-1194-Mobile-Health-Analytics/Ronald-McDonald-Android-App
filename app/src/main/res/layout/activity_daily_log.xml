@@ -6,33 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.DailyLogActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/daily_log_recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_daily_log"
-        android:text="Daily Log"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:textSize="40dp"
-        android:textColor="@color/maroon"
-        android:background="@color/white"
-        android:gravity="center"
-        android:layout_marginTop="29dp"
-        android:layout_marginStart="21dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/button_daily_log_to_profile" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_daily_log_to_profile"
-        android:text="@string/Back"
-        android:textSize="25dp"
-        android:textColor="@color/maroon"
-        android:background="@color/white"
-        android:layout_marginStart="26dp"
-        android:layout_alignBaseline="@+id/text_daily_log"
-        android:layout_alignBottom="@+id/text_daily_log"
-        android:layout_alignParentStart="true" />
+        android:scrollbars="vertical" />
 
 </RelativeLayout>
