@@ -239,7 +239,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Distance");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByDistance());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/(int)runSummaryData.size());
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/*(int)runSummaryData.size()*/);
 
                     series2.resetData(newData2);
                     graph2.addSeries(series2);
@@ -255,7 +255,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByTime());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/(int)runSummaryData.size());
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/*(int)runSummaryData.size()*/);
 
                     series2.resetData(newData2);
                     graph2.addSeries(series2);
@@ -266,7 +266,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Calories");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeHighestCaloriesBurned());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/runSummaryData.size());
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/*runSummaryData.size()*/);
 
 
 
