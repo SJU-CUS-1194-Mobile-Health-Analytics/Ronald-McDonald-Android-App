@@ -1,5 +1,8 @@
 package edu.stjohns.cus1194.stride.data;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class RunSummary {
 
     // Constants
@@ -10,25 +13,31 @@ public class RunSummary {
     private static final double MILLISECONDS_PER_HOUR = 1000*60*60;
 
     // Instance Variables
+    private long timeKey;
     private long totalTimeElapsedInMillis;
     private long totalDistanceRunInMeters;
     private double totalCalories;
 
     // Default Constructor
     public RunSummary() {
+        this.timeKey = 0;
         this.totalTimeElapsedInMillis = 0;
         this.totalDistanceRunInMeters = 0;
         this.totalCalories = 0;
     }
 
     // Constructor With Arguments
-    public RunSummary(long totalTimeElapsedInMillis, long totalDistanceRunInMeters, double userWeight) {
+    public RunSummary(long timeKey, long totalTimeElapsedInMillis, long totalDistanceRunInMeters, double userWeight) {
+        this.timeKey = timeKey;
         this.totalTimeElapsedInMillis = totalTimeElapsedInMillis;
         this.totalDistanceRunInMeters = totalDistanceRunInMeters;
         calculateCalories(userWeight);
     }
 
     // Getters
+    public long getTimeKey() {
+        return timeKey;
+    }
     public long getTotalTimeElapsedInMillis() {
         return totalTimeElapsedInMillis;
     }
@@ -40,6 +49,9 @@ public class RunSummary {
     }
 
     // Setters
+    public void setTimeKey(long timeKey) {
+        this.timeKey = timeKey;
+    }
     public void setTotalTimeElapsedInMillis(long totalTimeElapsedInMillis) {
         this.totalTimeElapsedInMillis = totalTimeElapsedInMillis;
     }
@@ -178,7 +190,7 @@ public class RunSummary {
      * @return String representation of the pace per mile of this run
      */
     public String printPacePerMile() {
-        return printPace(calculateMinutesPerMile());
+        return printPace(calculateMinutesPerMile()) + " per mile";
     }
 
     /**
@@ -201,5 +213,29 @@ public class RunSummary {
 
         return (minutesString + secondsString);
     }
+
+    /**
+     * @return String representation of the distance in miles
+     */
+    public String printDistanceInMiles() {
+        double miles = calculateMiles();
+        String milesString = String.format("%.2f", miles);
+        return milesString + " miles";
+    }
+
+    /**
+     * @return String representation of the date
+     */
+    public String printDate() {
+        Calendar myCalendar = Calendar.getInstance();
+        myCalendar.setTimeInMillis(timeKey);
+        int mYear = myCalendar.get(Calendar.YEAR);
+        String yearString = "" + mYear;
+        yearString = yearString.substring(2);
+        int mMonth = myCalendar.get(Calendar.MONTH)+1;
+        int mDay = myCalendar.get(Calendar.DAY_OF_MONTH);
+        return "" + mMonth + "/" + mDay + "/" + yearString;
+    }
+
 
 }

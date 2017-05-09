@@ -67,7 +67,7 @@ public class EditProfileActivity extends BaseActivity {
     }
 
     private void initDB() {
-        DatabaseReference userProfileRef = UserProfileDBAccess.getUserProfileRefById(mFirebaseUser.getUid());
+        final DatabaseReference userProfileRef = UserProfileDBAccess.getUserProfileRefById(mFirebaseUser.getUid());
         userProfileRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot userProfileSnapshot) {

@@ -25,6 +25,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.UUID;
+
+import edu.stjohns.cus1194.stride.data.UserProfile;
+import edu.stjohns.cus1194.stride.db.UserProfileDBAccess;
 
 public class SignInSignOutActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -164,8 +173,7 @@ public class SignInSignOutActivity extends AppCompatActivity implements
                             Toast.makeText(SignInSignOutActivity.this, "Authentication with Firebase failed.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(SignInSignOutActivity.this, "Firebase Sign In succeeded! " + mUser.getDisplayName() + " is logged in with Firebase", Toast.LENGTH_SHORT).show();
-                            Intent SignInToMainMenuIntent = new Intent(SignInSignOutActivity.this, StrideMainMenuActivity.class);
-                            startActivity(SignInToMainMenuIntent);
+                            initUserProfile();
                         }
                     }
                 });
@@ -196,6 +204,32 @@ public class SignInSignOutActivity extends AppCompatActivity implements
 
     private boolean isLoggedInWithFirebase() {
         return mUser!=null;
+    }
+
+    private void initUserProfile() {
+        final FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference userProfileRef = UserProfileDBAccess.getUserProfileRefById(mUser.getUid());
+        userProfileRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot userProfileSnapshot) {
+                if (userProfileSnapshot != null) {
+                    UserProfile userProfile = userProfileSnapshot.getValue(UserProfile.class);
+                    if (userProfile == null) {
+                        userProfile = new UserProfile(18,66,130);
+                        UserProfileDBAccess.setUserProfileById(mUser.getUid(), userProfile);
+                    }
+                    Intent SignInToMainMenuIntent = new Intent(SignInSignOutActivity.this, StrideMainMenuActivity.class);
+                    startActivity(SignInToMainMenuIntent);
+                } else {
+                    //do something
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error obtaining UserProfile data. DB Listener cancelled. ");
+            }
+        });
     }
 
     @Override

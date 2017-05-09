@@ -1,28 +1,66 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-public class DailyLogActivity extends AppCompatActivity {
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+import edu.stjohns.cus1194.stride.data.RunSummary;
+import edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess;
+
+public class DailyLogActivity extends BaseActivity {
+
+    private ArrayList<RunSummary> runSummaries;
+    private RecyclerView recyclerView;
+    private RunSummariesAdaptor runSummariesAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_log);
 
-        Button DailyLogBack_Button = (Button) findViewById(R.id.button_daily_log_to_profile);
+        runSummaries = new ArrayList<>();
 
-        DailyLogBack_Button.setOnClickListener(new View.OnClickListener()
-        {
+        recyclerView = (RecyclerView) findViewById(R.id.daily_log_recycler_view);
+
+
+        runSummariesAdaptor = new RunSummariesAdaptor(runSummaries);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                mLayoutManager.getOrientation());
+
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(runSummariesAdaptor);
+
+        DatabaseReference runSummariesRef = RunSummariesByUserDBAccess.getRunsByUserRef(mFirebaseUser.getUid());
+        runSummariesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
-            public void onClick(View v)
-            {
-                Intent DailyLog_to_History = new Intent(DailyLogActivity.this, ProfileActivity.class);
-                startActivity(DailyLog_to_History);
+            public void onDataChange(DataSnapshot runSummariesSnapshot) {
+                for (DataSnapshot runSummarySnapshot : runSummariesSnapshot.getChildren()) {
+                    RunSummary currentRun = (RunSummary) runSummarySnapshot.getValue(RunSummary.class);
+                    long timeKey = Long.parseLong(runSummarySnapshot.getKey());
+                    currentRun.setTimeKey(timeKey);
+                    RunSummariesByUserDBAccess.addRunForUser(mFirebaseUser.getUid(),""+timeKey, currentRun);
+                    runSummaries.add(0,currentRun);
+                }
+                runSummariesAdaptor.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Error obtaining run summaries from DB");
             }
         });
     }

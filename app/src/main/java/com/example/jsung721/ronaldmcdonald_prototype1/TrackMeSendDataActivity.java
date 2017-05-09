@@ -411,7 +411,7 @@ public class TrackMeSendDataActivity extends AppCompatActivity implements
 
         // Add runSummary to the DB
         long totalTimeElapsedInMillis = mLastUpdateTime - runningRecord.getRunningPath().get(0).getTime();
-        RunSummary runSummary = new RunSummary(totalTimeElapsedInMillis, totalDistanceRun, userProfile.getWeight());
+        RunSummary runSummary = new RunSummary(Long.parseLong(runId), totalTimeElapsedInMillis, totalDistanceRun, userProfile.getWeight());
         RunSummariesByUserDBAccess.addRunForUser(userId, runId, runSummary);
 
         // Update user's historical stats

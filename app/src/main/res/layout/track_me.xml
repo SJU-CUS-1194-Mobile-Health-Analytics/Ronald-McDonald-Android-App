@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_track_me_pace"
-        android:text="Current Pace: "
+        android:text="Average Pace: "
         android:textSize="25dp"
         android:textColor="@color/gray"
         android:textAlignment="center"
