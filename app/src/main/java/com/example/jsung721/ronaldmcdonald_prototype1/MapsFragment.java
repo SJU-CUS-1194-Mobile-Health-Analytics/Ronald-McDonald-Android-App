@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,12 +42,10 @@ import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
 
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, OnMapReadyCallback {
+        GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    protected GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-    private LocationRequest mLocationRequest;
-    private Location mLastLocation;
     protected Marker markerEnd;
     protected Marker markerStart;
     protected Polyline polyline;
@@ -58,11 +57,8 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkLocationPermission();
+//        checkLocationPermission();
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
-        }
 
     }
 
@@ -96,7 +92,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        this.mMap = googleMap;
 
         //Initialize Google Play Services
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -113,45 +109,19 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(1000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+    protected void moveMapCamera(Location location){
+        if (location != null) {
+            moveMapCamera(new LatLng(location.getLatitude(), location.getLongitude()));
         }
-        Toast.makeText(getActivity(), "connected: current location:", Toast.LENGTH_SHORT).show();
-
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
+    protected void moveMapCamera(LatLng latLng){
 
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        mLastLocation = location;
-
-        //move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
-                mLastLocation.getLatitude(), mLastLocation.getLongitude())));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        if (latLng != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
-
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -161,69 +131,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                 .addApi(LocationServices.API)
                 .build();
         mGoogleApiClient.connect();
-    }
-
-    public boolean checkLocationPermission(){
-        if (ContextCompat.checkSelfPermission(getActivity(),
-               android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Asking user if explanation is needed
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission was granted.
-                    if (ContextCompat.checkSelfPermission(getActivity(),
-                            android.Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-
-                } else {
-
-                    // Permission denied, Disable the functionality that depends on this permission.
-                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other permissions this app might request.
-            //You can add here other case statements according to your requirement.
-        }
     }
 
 
@@ -266,6 +173,10 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
      */
     protected void addCompletedPolylinePath(RunningRecord runningRecord){
 
+        if (runningRecord.getRunningPath().size() <= 1){
+            Log.d("addCompletedPath","Error: path size ="+runningRecord.getRunningPath().size());
+            return;}
+
         ArrayList<TimestampedLocation> path = runningRecord.getRunningPath();
         long min = -1;
         long max = -1;
@@ -280,10 +191,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         }
 
         for (int i = 1; i<path.size();i++){
-            mMap.addPolyline(new PolylineOptions()
+            this.mMap.addPolyline(new PolylineOptions()
                     .add(new LatLng(path.get(i-1).getLatitude(), path.get(i-1).getLongitude()))
                     .add(new LatLng(path.get(i).getLatitude(), path.get(i).getLongitude()))
                     .color(getSpeedColor(path.get(i).getTime()-path.get(i-1).getTime(), min, max)));
+            Log.d("polyline color",getSpeedColor(path.get(i).getTime()-path.get(i-1).getTime(), min, max)+"");
         }
 
         // start marker
@@ -296,7 +208,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         // end marker
         MarkerOptions markerEndOptions = new MarkerOptions()
                 .position(new LatLng(path.get(path.size()-1).getLatitude(), path.get(path.size()-1).getLongitude()))
-                .title("Start")
+                .title("End")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
 
         if(markerStart != null){markerStart.remove();}
@@ -307,6 +219,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
         if(polyline != null){polyline.remove();}
 
+        moveMapCamera(new LatLng(path.get(0).getLatitude(), path.get(0).getLongitude()));
     }
 
     /**
@@ -325,7 +238,22 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         int Red = (int)Math.round(254*(1-curTime*1.0/(1.0*maxTime - minTime)));
         int Green = (int)Math.round(254*(curTime*1.0/(1.0*maxTime - minTime)));
         // alpha, red, green, blue
-        int RGB = android.graphics.Color.argb(200, Red, Green, 0);
+        int RGB = android.graphics.Color.argb(100, Red, Green, 0);
         return RGB;
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

@@ -50,4 +50,8 @@ public class RunSummariesByUserDBAccess {
         return runsByUserRef;
     }
 
+    public static DatabaseReference getRunSummaryByRunId(String userId, String runId){
+        return getRunsByUserRef(userId).child(runId);
+    }
+
 }

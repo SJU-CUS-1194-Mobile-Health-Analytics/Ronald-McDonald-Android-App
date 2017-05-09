@@ -1,5 +1,6 @@
 package edu.stjohns.cus1194.stride.db;
 
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -11,6 +12,7 @@ public class RunningRecordsDBAccess {
 
     // Database User Profiles Reference Constant
     private static final String RUNNING_RECORDS = "RUNNING RECORDS";
+    private static final String runningPath = "runningPath";
 
     /**
      * Adds a RunningRecord to the Firebase DB
@@ -49,6 +51,16 @@ public class RunningRecordsDBAccess {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference runningRecordsRef = db.getReference(RUNNING_RECORDS);
         return runningRecordsRef;
+    }
+
+    public static DatabaseReference getRunningRefordRefById(String id){
+        DatabaseReference runningRecordRecordRef = getRunningRecordsRef().child(id);
+        return runningRecordRecordRef;
+    }
+
+    public static DatabaseReference getRunningPathRefById(String id){
+        DatabaseReference runningRecordRecordRef = getRunningRecordsRef().child(id).child(runningPath);
+        return runningRecordRecordRef;
     }
 
 }

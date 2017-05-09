@@ -33,7 +33,7 @@ public class TimestampedLocation {
     }
 
     // Setters
-    public void setTime(long Time) {
+    public void setTime(long time) {
         this.time = time;
     }
     public void setLongitude(double longitude) {
