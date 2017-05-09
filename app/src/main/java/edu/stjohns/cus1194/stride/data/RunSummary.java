@@ -183,14 +183,14 @@ public class RunSummary {
             secondsString = "0" + secondsString;
         }
 
-        return "Duration: " + (hoursString + minutesString + secondsString);
+        return (hoursString + minutesString + secondsString);
     }
 
     /**
      * @return String representation of the pace per mile of this run
      */
     public String printPacePerMile() {
-        return printPace(calculateMinutesPerMile());
+        return printPace(calculateMinutesPerMile()) + " per mile";
     }
 
     /**
@@ -220,7 +220,7 @@ public class RunSummary {
     public String printDistanceInMiles() {
         double miles = calculateMiles();
         String milesString = String.format("%.2f", miles);
-        return "Distance: " + milesString + " miles";
+        return milesString + " miles";
     }
 
     /**

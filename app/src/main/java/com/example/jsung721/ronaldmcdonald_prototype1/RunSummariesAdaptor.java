@@ -1,5 +1,7 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import edu.stjohns.cus1194.stride.data.RunSummary;
 public class RunSummariesAdaptor extends RecyclerView.Adapter<RunSummariesAdaptor.MyViewHolder> {
 
     private ArrayList<RunSummary> runSummaries;
+    private Context context;
 
     public RunSummariesAdaptor(ArrayList<RunSummary> runSummaries) {
         this.runSummaries = runSummaries;
@@ -23,7 +26,7 @@ public class RunSummariesAdaptor extends RecyclerView.Adapter<RunSummariesAdapto
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.daily_log_run_summary_view, parent, false);
-
+        context = itemView.getContext();
         return new MyViewHolder(itemView);
     }
 
@@ -31,8 +34,8 @@ public class RunSummariesAdaptor extends RecyclerView.Adapter<RunSummariesAdapto
     public void onBindViewHolder(MyViewHolder holder, int position) {
         RunSummary runSummary = runSummaries.get(position);
         holder.date.setText(runSummary.printDate());
-        holder.distance.setText("" + runSummary.printDistanceInMiles());
-        holder.time.setText(runSummary.printDuration());
+        holder.distance.setText("Distance: " + runSummary.printDistanceInMiles());
+        holder.time.setText("Duration: " + runSummary.printDuration());
     }
 
     @Override
@@ -57,7 +60,9 @@ public class RunSummariesAdaptor extends RecyclerView.Adapter<RunSummariesAdapto
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
                     long runKey = runSummaries.get(pos).getTimeKey();
-                    //TODO : Start activity to display details for the clicked run
+                    Intent displayPastRunIntent = new Intent((DailyLogActivity)context,DisplayPastRunActivity.class);
+                    displayPastRunIntent.putExtra(DisplayPastRunActivity.FLAG_RUNNING_RECORD_ID, ("" + runKey));
+                    context.startActivity(displayPastRunIntent);
                 }
             });
 
