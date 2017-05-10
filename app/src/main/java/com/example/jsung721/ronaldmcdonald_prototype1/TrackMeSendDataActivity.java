@@ -194,12 +194,12 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
     private void changeTrackingState() {
         if (mTrackingLocationUpdates) {
             mTrackingLocationUpdates = false;
-            totalDistanceRun = 0;
             updateUiThread.interrupt();
             this.startTrackingButton.setText("START TRACKING");
             if (runningRecord.getRunningPath().size() > 0) {
                 this.sendData();
             }
+            totalDistanceRun = 0;
         } else {
             mTrackingLocationUpdates = true;
             updateUiThread = createUiUpdatesThread();
@@ -362,9 +362,9 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
     public void onLocationChanged(Location location) {
         super.onLocationChanged(location);
 //        mCurrentLocation = location;
-        Toast.makeText(this,
-                "Location Accuracy: hasAccuracy:"+mCurrentLocation.hasAccuracy()+" "+mCurrentLocation.getAccuracy(),
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,
+//                "Location Accuracy: hasAccuracy:"+mCurrentLocation.hasAccuracy()+" "+mCurrentLocation.getAccuracy(),
+//                Toast.LENGTH_SHORT).show();
         if (mTrackingLocationUpdates) {
 //            mLastUpdateTime = System.currentTimeMillis();
             updateUI();
