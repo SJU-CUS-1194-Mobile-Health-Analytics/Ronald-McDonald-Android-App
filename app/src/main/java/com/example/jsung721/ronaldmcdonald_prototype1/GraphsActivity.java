@@ -263,7 +263,7 @@ public class GraphsActivity extends AppCompatActivity
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByTime());
                     newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/numberOfRuns);
-
+                    
                     series2.resetData(newData2);
                     // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
                     series2.setDrawValuesOnTop(true);

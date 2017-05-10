@@ -153,6 +153,9 @@ public class ProfileActivity extends BaseActivity {
         {
             profileProgressComment.setText("YOU DID IT! GREAT JOB!");
         }
+        else if (num > 100){
+            profileProgressComment.setText("YOU DID IT! \nGo to Settings to update your goal!");
+        }
         else
         {
             profileProgressComment.setText("");
