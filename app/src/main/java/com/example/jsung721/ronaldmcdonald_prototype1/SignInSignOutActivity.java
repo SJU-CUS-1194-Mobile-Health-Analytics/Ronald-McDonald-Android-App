@@ -215,7 +215,7 @@ public class SignInSignOutActivity extends AppCompatActivity implements
                 if (userProfileSnapshot != null) {
                     UserProfile userProfile = userProfileSnapshot.getValue(UserProfile.class);
                     if (userProfile == null) {
-                        userProfile = new UserProfile(18,66,130);
+                        userProfile = new UserProfile(18,66,130,100);
                         UserProfileDBAccess.setUserProfileById(mUser.getUid(), userProfile);
                     }
                     Intent SignInToMainMenuIntent = new Intent(SignInSignOutActivity.this, StrideMainMenuActivity.class);

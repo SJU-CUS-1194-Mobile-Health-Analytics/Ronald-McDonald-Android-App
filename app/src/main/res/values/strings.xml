@@ -2,15 +2,9 @@
     <string name="app_name">Stride</string>
     <string name="Select_Time"> Select Time Frame:</string>
     <string name="Select_Stat"> See Progress for:  </string>
-    <string name="Select_Measure">See High/Low/Avg for: </string>
+    <string name="Select_Measure">See High/Avg for: </string>
     <string name="Back"> Back </string>
 
-    <string-array name="Times">
-        <item>By Year</item>
-        <item>By Month</item>
-        <item>By Week</item>
-        <item>By Day</item>
-    </string-array>
     <string-array name="Stats">
         <item>Miles Run</item>
         <item> Time </item>
@@ -25,6 +19,10 @@
     <string-array name="Track_Mode">
         <item>Race Mode</item>
         <item>Practice Mode</item>
+    </string-array>
+    <string-array name="Goals">
+        <item>Distance</item>
+        <item>Calories</item>
     </string-array>
 
 

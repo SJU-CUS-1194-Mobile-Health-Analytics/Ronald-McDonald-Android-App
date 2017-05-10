@@ -22,6 +22,7 @@ public class EditProfileActivity extends BaseActivity {
     EditText ageEditText;
     EditText heightEditText;
     EditText weightEditText;
+    EditText goalEditText;
     Button saveChangesButton;
 
     // UserProfile Object for logged in user
@@ -43,6 +44,7 @@ public class EditProfileActivity extends BaseActivity {
         ageEditText = (EditText) findViewById(R.id.edit_profile_age);
         heightEditText = (EditText) findViewById(R.id.edit_profile_height);
         weightEditText = (EditText) findViewById(R.id.edit_profile_weight);
+        goalEditText = (EditText) findViewById(R.id.edit_profile_goal);
 
         saveChangesButton = (Button) findViewById(R.id.edit_profile_save_changes);
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
@@ -52,10 +54,12 @@ public class EditProfileActivity extends BaseActivity {
                     int age = Integer.parseInt(ageEditText.getText().toString());
                     int heightInInches = Integer.parseInt(heightEditText.getText().toString());
                     double weight = Double.parseDouble(weightEditText.getText().toString());
+                    int goal = Integer.parseInt(goalEditText.getText().toString());
 
                     userProfile.setAge(age);
                     userProfile.setHeightInInches(heightInInches);
                     userProfile.setWeight(weight);
+                    userProfile.setGoal(goal);
 
                     UserProfileDBAccess.setUserProfileById(mFirebaseUser.getUid(), userProfile);
 
@@ -90,6 +94,7 @@ public class EditProfileActivity extends BaseActivity {
         ageEditText.setText("" + userProfile.getAge());
         heightEditText.setText("" + userProfile.getHeightInInches());
         weightEditText.setText("" + userProfile.getWeight());
+        goalEditText.setText("" + userProfile.getGoal());
     }
 
 }
