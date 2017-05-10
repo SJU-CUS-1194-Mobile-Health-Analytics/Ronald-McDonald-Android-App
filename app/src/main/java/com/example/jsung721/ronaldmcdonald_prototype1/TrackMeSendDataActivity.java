@@ -77,6 +77,7 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
     protected boolean mTrackingLocationUpdates;
     protected boolean readyToTrack;
     protected final int RADIAL_ACCURACY_THRESHOLD = 25; // meters
+    protected final int WAIT_BEFORE_TRACKING = 5000; // milliseconds
 
     // Variables for the run currently being tracked
     protected RunningRecord runningRecord;
@@ -341,7 +342,7 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
             @Override
             public void run(){
                 try{
-                    Thread.sleep(5000);
+                    Thread.sleep(WAIT_BEFORE_TRACKING);
                     while(mCurrentLocation.getAccuracy() > RADIAL_ACCURACY_THRESHOLD) {
                         Thread.sleep(1000);
                     }
