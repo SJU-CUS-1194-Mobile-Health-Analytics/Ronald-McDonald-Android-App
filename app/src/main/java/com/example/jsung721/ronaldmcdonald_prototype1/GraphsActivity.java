@@ -235,11 +235,14 @@ public class GraphsActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String value = parent.getItemAtPosition(position).toString();
+                int numberOfRuns = runSummaryData.size();
+                if (numberOfRuns==0) {numberOfRuns =1;} //this is a bad hack... if the database hasn't responded yet, than we won't be displaying the average
                 if (value.equalsIgnoreCase("Distance"))
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Distance");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByDistance());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/*(int)runSummaryData.size()*/);
+                    Toast.makeText(GraphsActivity.this, "runs: " + numberOfRuns, Toast.LENGTH_SHORT).show();
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/numberOfRuns);
 
                     series2.resetData(newData2);
                     graph2.addSeries(series2);
@@ -255,7 +258,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByTime());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/*(int)runSummaryData.size()*/);
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/numberOfRuns);
 
                     series2.resetData(newData2);
                     graph2.addSeries(series2);
@@ -266,9 +269,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Calories");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeHighestCaloriesBurned());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/*runSummaryData.size()*/);
-
-
+                    newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/numberOfRuns);
 
                     series2.resetData(newData2);
                     graph2.addSeries(series2);
