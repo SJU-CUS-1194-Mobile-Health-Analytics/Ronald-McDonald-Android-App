@@ -242,7 +242,7 @@ public class GraphsActivity extends AppCompatActivity
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Distance");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByDistance());
                     Toast.makeText(GraphsActivity.this, "runs: " + numberOfRuns, Toast.LENGTH_SHORT).show();
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/numberOfRuns);
+                    newData2[1] = new DataPoint(2,(int)up.getLifetimeLongestRunByDistance()/numberOfRuns);
 
                     series2.resetData(newData2);
                     // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
@@ -262,7 +262,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Time Elapsed");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeLongestRunByTime());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/numberOfRuns);
+                    newData2[1] = new DataPoint(2,(int)up.getLifetimeLongestRunByTime()/numberOfRuns);
                     
                     series2.resetData(newData2);
                     // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
@@ -282,7 +282,7 @@ public class GraphsActivity extends AppCompatActivity
                 {
                     graph2.getGridLabelRenderer().setVerticalAxisTitle("Calories");
                     newData2[0] = new DataPoint(1,(int)up.getLifetimeHighestCaloriesBurned());
-                    newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/numberOfRuns);
+                    newData2[1] = new DataPoint(2,(int)up.getLifetimeTotalCalories()/numberOfRuns);
 
                     series2.resetData(newData2);
                     // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
