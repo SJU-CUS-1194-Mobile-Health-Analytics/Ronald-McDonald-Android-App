@@ -1,30 +1,18 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
 
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -38,28 +26,18 @@ import java.util.ArrayList;
 
 import edu.stjohns.cus1194.stride.data.RunningRecord;
 import edu.stjohns.cus1194.stride.data.TimestampedLocation;
-import edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess;
 
 
-public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     protected GoogleMap mMap;
-    private GoogleApiClient mGoogleApiClient;
     protected Marker markerEnd;
     protected Marker markerStart;
     protected Polyline polyline;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
-//    protected Polyline polyline;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        checkLocationPermission();
-
-
     }
 
     public static MapsFragment newInstance(){
@@ -67,8 +45,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         return  fragment;
     }
 
-
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,9 +59,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     /**
      * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -93,20 +66,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
-
-        //Initialize Google Play Services
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                buildGoogleApiClient();
-                mMap.setMyLocationEnabled(true);
-            }
-        }
-        else {
-            buildGoogleApiClient();
-            mMap.setMyLocationEnabled(true);
-        }
-
     }
 
 
@@ -122,15 +81,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
         }
-    }
-
-    protected synchronized void buildGoogleApiClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
     }
 
 
@@ -153,8 +103,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                 .position(pathOptions.getPoints().get(0))
                 .title("Start")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-//                .anchor((float)0.5,(float)0.5)
-//                .icon(BitmapDescriptorFactory.fromResource(android.R.drawable.presence_online));
 
         if(markerStart != null){markerStart.remove();}
         markerStart = mMap.addMarker(markerStartOptions);
@@ -232,28 +180,13 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     protected int getSpeedColor(long curTime, long minTime, long maxTime){
 
-//        Red = {255, 0,0};
+//        Red = {255, 0,0}; slowest
 //        Yellow = {255,255,0};
-//        Green = {0,255,0};
+//        Green = {0,255,0}; fastest
         int Red = (int)Math.round(254*(1-curTime*1.0/(1.0*maxTime - minTime)));
         int Green = (int)Math.round(254*(curTime*1.0/(1.0*maxTime - minTime)));
         // alpha, red, green, blue
-        int RGB = android.graphics.Color.argb(100, Red, Green, 0);
+        int RGB = android.graphics.Color.argb(50, Red, Green, 0);
         return RGB;
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 }

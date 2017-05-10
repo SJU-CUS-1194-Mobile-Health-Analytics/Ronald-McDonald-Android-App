@@ -25,6 +25,7 @@ import edu.stjohns.cus1194.stride.data.RunSummary;
 import edu.stjohns.cus1194.stride.data.RunningRecord;
 import edu.stjohns.cus1194.stride.data.TimestampedLocation;
 
+import static com.example.jsung721.ronaldmcdonald_prototype1.R.id.text_track_me_pace;
 import static edu.stjohns.cus1194.stride.db.RunSummariesByUserDBAccess.getRunSummaryByRunId;
 import static edu.stjohns.cus1194.stride.db.RunningRecordsDBAccess.getRunningPathRefById;
 
@@ -32,7 +33,6 @@ public class DisplayPastRunActivity extends BaseActivity {
 
     // Google Maps
     protected MapsFragment mapsFragment;
-    protected GoogleMap myMap;
 
     // UI elements
     protected Button trackMeBackButton;
@@ -41,6 +41,7 @@ public class DisplayPastRunActivity extends BaseActivity {
     protected TextView milesValueTextView;
     protected TextView timeValueTextView;
     protected TextView paceValueTextView;
+    protected TextView paceTextTextView;
 
     // constant for passing a run ID to this activity in the Intent
     public static final String FLAG_RUNNING_RECORD_ID = "RUNNING RECORD ID";
@@ -74,7 +75,6 @@ public class DisplayPastRunActivity extends BaseActivity {
                 try{
                     while (true){
                         if(mapsFragment.mMap != null){
-                            myMap = mapsFragment.mMap;
                             // plot running record
                             plotRunningRecordByKey("" + runSummary.getTimeKey());
                             break;
@@ -123,6 +123,9 @@ public class DisplayPastRunActivity extends BaseActivity {
         startTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
         startTrackingButton.setEnabled(false);
         startTrackingButton.setText("Run Date");
+        // Change: Label for pace
+        paceTextTextView = (TextView) findViewById(R.id.text_track_me_pace);
+        paceTextTextView.setText("Average Pace:");
 
         // TextViews
         milesValueTextView = (TextView) findViewById(R.id.text_track_me_miles_value);
