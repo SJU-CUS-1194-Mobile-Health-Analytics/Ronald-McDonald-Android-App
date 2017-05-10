@@ -1,5 +1,6 @@
 package com.example.jsung721.ronaldmcdonald_prototype1;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -73,7 +74,9 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
     protected static final String TAG = "location-updates-sample";
 
     // Value changes when the user presses the Start Updates and Stop Updates buttons.
-    protected Boolean mTrackingLocationUpdates;
+    protected boolean mTrackingLocationUpdates;
+    protected boolean readyToTrack;
+    protected final int RADIAL_ACCURACY_THRESHOLD = 25; // meters
 
     // Variables for the run currently being tracked
     protected RunningRecord runningRecord;
@@ -161,12 +164,14 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
 
         // Button to start/stop tracking
         startTrackingButton = (Button) findViewById(R.id.button_track_me_start_tracking);
-//        startTrackingButton.setEnabled(false);
+        startTrackingButton.setEnabled(true);
+//        startTrackingButton.setBackgroundColor(Color.GRAY);
         startTrackingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // check that the userProfile object has been retrieved from the database
-                if (userProfile != null) {
+                // check that there is sufficient accuracy of location before tracking begins
+                if (userProfile != null && readyToTrack) {
                     Toast.makeText(getApplicationContext(), "change tracking",Toast.LENGTH_SHORT).show();
                     changeTrackingState();
                 }
@@ -252,7 +257,6 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
 
     }
 
-
     private void sendData() {
         // User id
         String userId = mUser.getUid();
@@ -314,32 +318,40 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
      */
     @Override
     public void onConnected(Bundle connectionHint) {
-//        Log.i(TAG, "Connected to GoogleApiClient");
-//
-//        // If the initial location was never previously requested, we use
-//        // FusedLocationApi.getLastLocation() to get it. If it was previously requested, we store
-//        // its value in the Bundle and check for it in onCreate(). We
-//        // do not request it again unless the user specifically requests location updates by pressing
-//        // the Start Updates button.
-//        //
-//        // Because we cache the value of the initial location in the Bundle, it means that if the
-//        // user launches the activity,
-//        // moves to a new location, and then changes the device orientation, the original location
-//        // is displayed as the activity is re-created.
-//        if (mCurrentLocation == null) {
-//            if (checkLocationPermission()){
         super.onConnected(connectionHint);
         if(super.checkLocationPermission()) {
             mapsFragment.mMap.setMyLocationEnabled(true);
-//                mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             mLastUpdateTime = System.currentTimeMillis();
             mapsFragment.moveMapCamera(mCurrentLocation);
             updateUI();
+            waitForLocationPrecision();
         }
 //            }
 //        }
 
 //        startLocationUpdates();
+    }
+
+    /**
+     * wait for 5 seconds after a connection is established
+     * check if the accuracy of the current location is less than the threshold
+     */
+    protected void waitForLocationPrecision(){
+        Thread wait = new Thread(){
+            @Override
+            public void run(){
+                try{
+                    Thread.sleep(5000);
+                    while(mCurrentLocation.getAccuracy() > RADIAL_ACCURACY_THRESHOLD) {
+                        Thread.sleep(1000);
+                    }
+                    readyToTrack = true;
+                } catch (InterruptedException e){
+
+                }
+            }
+        };
+        wait.start();
     }
 
     /**
@@ -361,6 +373,7 @@ public class TrackMeSendDataActivity extends TrackMeBaseActivity {
         }
         //move map camera
         mapsFragment.moveMapCamera(mCurrentLocation);
+
 
 
     }
