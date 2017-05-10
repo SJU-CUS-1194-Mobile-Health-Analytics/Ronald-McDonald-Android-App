@@ -207,7 +207,7 @@ public class GraphsActivity extends AppCompatActivity
         graph2 = (GraphView) findViewById(R.id.graph2);
         graph2.getGridLabelRenderer().setVerticalAxisTitle("Miles Run");
         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph2);
-        staticLabelsFormatter.setHorizontalLabels(new String[] {"Best", "Average"});
+        staticLabelsFormatter.setHorizontalLabels(new String[] {"Best", "","","Average"});
         graph2.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
         series2 = new BarGraphSeries<>();
         graph2.getViewport().setXAxisBoundsManual(true);
@@ -245,14 +245,18 @@ public class GraphsActivity extends AppCompatActivity
                     newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByDistance()/numberOfRuns);
 
                     series2.resetData(newData2);
-                    graph2.addSeries(series2);
-                    series2.setSpacing(50);
-                    graph2.getViewport().setMinY(0);
-                    graph2.getViewport().setMaxY(10);
-                    graph2.getViewport().setMinX(0);
-                    graph2.getViewport().setMaxX(10);
+                    // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
                     series2.setDrawValuesOnTop(true);
                     series2.setValuesOnTopColor(Color.WHITE);
+                    series2.setSpacing(5);
+                    graph2.addSeries(series2);
+                    graph2.getViewport().setXAxisBoundsManual(true);
+                    graph2.getViewport().setYAxisBoundsManual(true);
+                    graph2.getViewport().setMinX(0.5);
+                    graph2.getViewport().setMaxX(2.5);
+                    graph2.getViewport().setMinY(0);
+                    graph2.getViewport().setMaxY(series2.getHighestValueY());
+
                 }
                 else if(value.equalsIgnoreCase("Time"))
                 {
@@ -261,9 +265,18 @@ public class GraphsActivity extends AppCompatActivity
                     newData2[1] = new DataPoint(10,(int)up.getLifetimeLongestRunByTime()/numberOfRuns);
 
                     series2.resetData(newData2);
-                    graph2.addSeries(series2);
+                    // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
                     series2.setDrawValuesOnTop(true);
                     series2.setValuesOnTopColor(Color.WHITE);
+                    series2.setSpacing(5);
+                    graph2.addSeries(series2);
+                    graph2.getViewport().setXAxisBoundsManual(true);
+                    graph2.getViewport().setYAxisBoundsManual(true);
+                    graph2.getViewport().setMinX(0.5);
+                    graph2.getViewport().setMaxX(2.5);
+                    graph2.getViewport().setMinY(0);
+                    graph2.getViewport().setMaxY(series2.getHighestValueY());
+
                 }
                 else if(value.equalsIgnoreCase("Calories"))
                 {
@@ -272,13 +285,17 @@ public class GraphsActivity extends AppCompatActivity
                     newData2[1] = new DataPoint(10,(int)up.getLifetimeTotalCalories()/numberOfRuns);
 
                     series2.resetData(newData2);
-                    graph2.addSeries(series2);
-                    graph2.getViewport().setMinY(0);
-                    graph2.getViewport().setMaxY(10);
-                    graph2.getViewport().setMinX(0);
-                    graph2.getViewport().setMaxX(10);
+                    // Shunt the viewport, per v3.1.3 to show the full width of the first and last bars.
                     series2.setDrawValuesOnTop(true);
                     series2.setValuesOnTopColor(Color.WHITE);
+                    series2.setSpacing(5);
+                    graph2.addSeries(series2);
+                    graph2.getViewport().setXAxisBoundsManual(true);
+                    graph2.getViewport().setYAxisBoundsManual(true);
+                    graph2.getViewport().setMinX(0.5);
+                    graph2.getViewport().setMaxX(2.5);
+                    graph2.getViewport().setMinY(0);
+                    graph2.getViewport().setMaxY(series2.getHighestValueY());
 
                 }
 

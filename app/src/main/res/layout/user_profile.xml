@@ -11,14 +11,18 @@
     android:background="@color/white"
     tools:context="com.example.jsung721.ronaldmcdonald_prototype1.ProfileActivity">
 
-    <ImageView
+    <TextView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/image_profile_picture"
-        android:src = "@drawable/portrait"
+        android:id="@+id/text_progress_percentage"
+        android:hint="0"
+        android:textColorHint="@color/light_gray"
+        android:textColor="@color/black"
+        android:textSize="50dp"
         android:gravity="center"
-        android:layout_alignTop="@+id/button_profile_to_menu"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/text_user_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -39,9 +43,9 @@
         android:text="Total Miles: "
         android:textSize="20dp"
         android:textColor="@color/maroon"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="16dp"
         android:layout_below="@+id/button_profile_to_daily_log"
-        android:layout_toStartOf="@+id/image_profile_picture" />
+        android:layout_toStartOf="@+id/spinner_profile_progress" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +57,7 @@
         android:textColorHint="@color/dark_gray"
         android:layout_alignBaseline="@+id/text_profile_total_miles"
         android:layout_alignBottom="@+id/text_profile_total_miles"
-        android:layout_toEndOf="@+id/image_profile_picture" />
+        android:layout_toEndOf="@+id/text_progress_percentage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -118,7 +122,6 @@
         android:textSize="20dp"
         android:textColor="@color/black"
         android:background="@color/white"
-        android:layout_marginTop="12dp"
         android:layout_below="@+id/text_user_profile"
         android:layout_alignParentStart="true" />
 
@@ -128,9 +131,9 @@
         android:id="@+id/button_profile_to_daily_log"
         android:text="Daily Log"
         android:textSize="25dp"
-        android:layout_below="@+id/image_profile_picture"
+        android:layout_below="@+id/text_progress_percentage"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp" />
+        android:layout_marginTop="29dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -162,8 +165,7 @@
         android:text="Age: "
         android:textColor="@color/dark_gray"
         android:textSize="15dp"
-        android:layout_alignBaseline="@+id/button_profile_to_menu"
-        android:layout_alignBottom="@+id/button_profile_to_menu"
+        android:layout_alignTop="@+id/text_progress_percentage"
         android:layout_toEndOf="@+id/button_profile_to_daily_log" />
 
     <TextView
@@ -184,8 +186,9 @@
         android:textSize="15dp"
         android:textColor="@color/dark_gray"
         android:text="Height:"
-        android:layout_below="@+id/button_profile_to_menu"
-        android:layout_alignEnd="@+id/text_profile_age" />
+        android:layout_below="@+id/text_profile_age"
+        android:layout_alignEnd="@+id/text_profile_age"
+        android:layout_marginTop="24dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -193,7 +196,7 @@
         android:id="@+id/text_profile_height_value"
         android:textSize="15dp"
         android:textColorHint="@color/light_gray"
-        android:hint="heightInInches"
+        android:hint="height"
         android:textColor="@color/dark_gray"
         android:layout_alignBaseline="@+id/text_profile_height"
         android:layout_alignBottom="@+id/text_profile_height"
@@ -206,7 +209,7 @@
         android:textSize="15dp"
         android:textColor="@color/dark_gray"
         android:text="Weight"
-        android:layout_above="@+id/button_profile_to_daily_log"
+        android:layout_alignBottom="@+id/text_progress_percentage"
         android:layout_alignStart="@+id/text_profile_height" />
 
     <TextView
@@ -220,4 +223,15 @@
         android:layout_alignBaseline="@+id/text_profile_weight"
         android:layout_alignBottom="@+id/text_profile_weight"
         android:layout_alignStart="@+id/text_profile_age_value" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_progress_comment"
+        android:textSize="15dp"
+        android:textColor="@color/dark_gray"
+        android:layout_alignBaseline="@+id/text_profile_height"
+        android:layout_alignBottom="@+id/text_profile_height"
+        android:layout_alignParentStart="true" />
+
 </RelativeLayout>

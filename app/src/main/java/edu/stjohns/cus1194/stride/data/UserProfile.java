@@ -20,6 +20,7 @@ public class UserProfile {
     private int age; // to keep it simple, we won't calculate age based on birth date
     private int heightInInches;
     private double weight;
+    private int goal;
     // Instance variables for lifetime user stats
     private long lifetimeTotalDistanceInMeters;
     private long lifetimeTotalTimeInMillis;
@@ -34,6 +35,7 @@ public class UserProfile {
         this.age = 0;
         this.heightInInches = 0;
         this.weight = 0.0;
+        this.goal = 100;
         this.lifetimeTotalDistanceInMeters = 0;
         this.lifetimeTotalTimeInMillis = 0;
         this.lifetimeTotalCalories = 0.0;
@@ -43,10 +45,11 @@ public class UserProfile {
     }
 
     // Constructor With Arguments
-    public UserProfile(int age, int heightInInches, double weight) {
+    public UserProfile(int age, int heightInInches, double weight, int goal) {
         this.age = age;
         this.heightInInches = heightInInches;
         this.weight = weight;
+        this.goal = goal;
         this.lifetimeTotalDistanceInMeters = 0;
         this.lifetimeTotalTimeInMillis = 0;
         this.lifetimeTotalCalories = 0.0;
@@ -84,6 +87,7 @@ public class UserProfile {
     public double getWeight() {
         return weight;
     }
+    public int getGoal(){return goal;}
 
     public long getLifetimeTotalDistanceInMeters() {
         return lifetimeTotalDistanceInMeters;
@@ -112,6 +116,7 @@ public class UserProfile {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+    public void setGoal(int goal){this.goal = goal;}
 
     public void setLifetimeTotalDistanceInMeters(long lifetimeTotalDistanceInMeters) {
         this.lifetimeTotalDistanceInMeters = lifetimeTotalDistanceInMeters;
